@@ -644,31 +644,12 @@ public class Spiel implements iBediener, Serializable {
 									&& testSpieler.isDame() == true
 									&& brettArray[coordX][coordY].getFigur() == null) {
 
-								switch (caseNumber) {
-								case 1: // OBEN LINKS
-									coordX--;
-									coordY++;
-									
-									break;
-								case 2: // OBEN RECHTS
-									coordX++;
-									coordY++;
-									
-									break;
-								case 3: // UNTEN LINKS
-									coordX--;
-									coordY--;
-								
-									break;
-								case 4: // UNTEN RECHTS
-									coordX++;
-									coordY--;
-								
-									break;
-									
+								    coordX+=a;
+									coordY+=b;
+														
 								}
 								
-							}
+							
 						
 						if (this.brettArray.length - (coordX) > 1
 								&& this.brettArray.length - (coordX) < this.brettArray.length
@@ -686,22 +667,23 @@ public class Spiel implements iBediener, Serializable {
 							
 						}
 						caseNumber++;
-						}
+						
 
 						if (testSpieler.getKannSpringen() == true) {//Erhöhe pro Stein der Schlagmöglichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungmög.
 							this.sprungKonflikt++;
 						}
+						}
 					}
-						
 				}
-			}
+				}
+			
 			if (spielerAktiv.getMussSpringen() == false) {
 				System.out
 				.println("Alle ihre Figuren sind im moment spielbar!");
 			}
-
 		}
-	}
+		}
+	
 
 	// #############################################################################
 	// ENDE SPIELER MUSS SPRINGEN
