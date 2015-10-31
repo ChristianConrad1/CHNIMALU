@@ -524,295 +524,174 @@ public class Spiel implements iBediener, Serializable {
 	
 	
 	//#############################################################		SPIELER MUSS SPRINGEN ()  	#######################################################################
-	//#########################		BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN - NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN######################
-	private void spielerMussSpringen(){ 
-		
-		//Bevor Spieler gewechselt wird und alles neu ï¿½berprï¿½ft wird, setze bei allen Steinen kannSchlagen auf false. Auch spielerA,B mussSpringen() wird auf false zurï¿½ckgesetzt. 
-			
-		this.sprungKonflikt=0;
-		
-		for(int i=0; i<this.brettArray.length; i++){
-			for(int j=0; j<this.brettArray[i].length; j++){
-				if(this.brettArray[i][j].getFigur()!=null){
+	//#########################		BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN - NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
+
+	private void spielerMussSpringen() {
+
+		// Bevor Spieler gewechselt wird und alles neu ï¿½berprï¿½ft wird, setze
+		// bei allen Steinen kannSchlagen auf false. Auch spielerA,B
+		// mussSpringen() wird auf false zurï¿½ckgesetzt.
+
+		this.sprungKonflikt = 0;
+
+		Spieler spielerAktiv = null;
+		FarbEnum farbeAktiv = null;
+		FarbEnum farbeGegner = null;
+
+		if (spielerA.getAktiv() == true) {
+			spielerAktiv = spielerA;
+			farbeAktiv = FarbEnum.schwarz;
+			farbeGegner = FarbEnum.weiss;
+		}
+		if (spielerB.getAktiv() == true) {
+			spielerAktiv = spielerB;
+			farbeAktiv = FarbEnum.weiss;
+			farbeGegner = FarbEnum.schwarz;
+		}
+
+		for (int i = 0; i < this.brettArray.length; i++) {
+			for (int j = 0; j < this.brettArray[i].length; j++) {
+				if (this.brettArray[i][j].getFigur() != null) {
 					spielerA.setMussSpringen(false);
 					spielerB.setMussSpringen(false);
-					this.brettArray[i][j].getFigur().setKannSpringen(false); //Kennt nun keine Spielfigur mehr, die Springen kann
+					this.brettArray[i][j].getFigur().setKannSpringen(false); // Kennt nun keine Figur mehr die springen kann
+
 				}
 			}
 		}
-		
-		//----------------------------------KANN SPIELER A MIT EINER FIGUR SPRINGEN??--------------------------
-		if(spielerA.getAktiv()==true){
-			
-		for(int i=0; i<this.brettArray.length; i++){
-			for(int j=0; j<this.brettArray[i].length; j++){
-				if(this.brettArray[i][j].getFigur()!=null && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.schwarz){
-					Spielfigur testSpieler=this.brettArray[i][j].getFigur();
-					
-		
 
-					int links=testSpieler.getPosition().getPosX()-1;
-					int rechts=testSpieler.getPosition().getPosX()+1;
-					int oben=testSpieler.getPosition().getPosY()+1;
-					int unten=testSpieler.getPosition().getPosY()-1;
-					
-					int n = 0;
-					
-					//Fall OBEN LINKS ist eine Figur die ich ueberspringen kann!
-					
-						while (this.brettArray.length-(links-n) > 1 && this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(oben+n) < brettArray.length && this.brettArray.length-(oben+n) > 1&&testSpieler.isDame() == true&&brettArray[links-n][oben+n].getFigur() == null) {
-							
-								n++;
-							}
-							
-							
-					
-							if (this.brettArray.length-(links-n) > 1 && this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(oben+n) < brettArray.length && this.brettArray.length-(oben+n) > 1 && brettArray[links-n][oben+n].getFigur() != null
-									&& brettArray[links-n-1][oben+n+1].getFigur() == null) {
-								if (brettArray[links-n][oben+n].getFigur().getFarbe() == FarbEnum.weiss) {
+		// ----------------------------------KANN SPIELER A MIT EINER FIGUR
+		// SPRINGEN??--------------------------
+		if (spielerAktiv.getAktiv() == true) {
 
+			for (int i = 0; i < this.brettArray.length; i++) {
+				for (int j = 0; j < this.brettArray[i].length; j++) {
+					if (this.brettArray[i][j].getFigur() != null
+							&& this.brettArray[i][j].getFigur().getFarbe() == farbeAktiv) {
+						Spielfigur testSpieler = this.brettArray[i][j]
+								.getFigur();
 
-								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-										.getFigur().setKannSpringen(true);
+						int links = testSpieler.getPosition().getPosX() - 1;
+						int rechts = testSpieler.getPosition().getPosX() + 1;
+						int oben = testSpieler.getPosition().getPosY() + 1;
+						int unten = testSpieler.getPosition().getPosY() - 1;
 
-								this.spielerA.setMussSpringen(true);
-								System.out.println(
-										"Sprungmoeglichkeit!");
-								
-							
-							}
+						// ----------------------------ALLE 4 FAELLE DER
+						// DIAGONALEN UEBERPRUEFUNG-------------------------
+
+						int coordX = 0;
+						int coordY = 0;
+						int a = 0;
+						int b = 0;
+						int caseNumber = 1;
 						
-				
-							}
-		
-		
-						//Fall OBEN RECHTS ist eine Figur die ich ueberspringen kann!
-						
-							while (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(oben+n) > 1 && this.brettArray.length-(oben+n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length  &&testSpieler.isDame() == true&&brettArray[rechts+n][oben+n].getFigur() == null) {
-								
-								n++;
-							}
+						while (caseNumber < 5) {
 							
+						switch (caseNumber) {
+						case 1: // OBEN LINKS
+							coordX = links;
+							coordY = oben;
+							a = -1;
+							b = 1;
+							break;
+
+						case 2: // OBEN RECHTS
+							coordX = rechts;
+							coordY = oben;
+							a = 1;
+							b = 1;
 							
-					
-							if (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(oben+n) > 1 && this.brettArray.length-(oben+n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length  && brettArray[rechts+n][oben+n].getFigur() != null
-									&& brettArray[rechts+n+1][oben+n+1].getFigur() == null) {
-								if (brettArray[rechts+n][oben+n].getFigur().getFarbe() == FarbEnum.weiss) {
+							break;
 
+						case 3: // UNTEN LINKS
+							coordX = links;
+							coordY = unten;
+							a = -1;
+							b = -1;
+							break;
 
-								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-										.getFigur().setKannSpringen(true);
-
-								this.spielerA.setMussSpringen(true);
-								System.out.println(
-										"Sprungmoeglichkeit!");
-							
-							}
-						
-				
-							}
-						//Fall UNTEN RECHTS ist eine Figur die ich ueberspringen kann!
-							
-							while (this.brettArray.length-(rechts+n) > 1 &&this.brettArray.length-(unten-n) > 1 && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length &&testSpieler.isDame() == true&&brettArray[rechts+n][unten-n].getFigur() == null) {
-								
-								n++;
-							}
-							
-							
-					
-							if (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(unten-n) < this.brettArray.length  && brettArray[rechts+n][unten-n].getFigur() != null
-									&& brettArray[rechts+n+1][unten-n-1].getFigur() == null) {
-								if (brettArray[rechts+n][unten-n].getFigur().getFarbe() == FarbEnum.weiss) {
-
-
-								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-										.getFigur().setKannSpringen(true);
-
-								this.spielerA.setMussSpringen(true);
-								System.out.println(
-										"Sprungmoeglichkeit!");
-								
-							}
-						
-				
-							}
-						//Fall UNTEN LINKS ist eine Figur die ich ueberspringen kann!
-							
-							while (this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(links-n) > 1 && this.brettArray.length-(unten-n)>1 &&testSpieler.isDame() == true&&brettArray[links-n][unten-n].getFigur() == null) {
-								
-								n++;
-							}
-							
-							
-					
-							if (this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(links-n) > 1 && this.brettArray.length-(unten-n)>1 && brettArray[links-n][unten-n].getFigur() != null
-									&& brettArray[links-n-1][unten-n-1].getFigur() == null) {
-								if (brettArray[links-n][unten-n].getFigur().getFarbe() == FarbEnum.weiss) {
-
-
-								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-										.getFigur().setKannSpringen(true);
-
-								this.spielerA.setMussSpringen(true);
-								System.out.println(
-										"Sprungmoeglichkeit!");
-								
-							}
-						
-				
-							}
-							if(testSpieler.getKannSpringen()==true){ //Erhoehe einmal sprungKonflikt sobald dieser Stein eine Springmï¿½glichkeit kennt. So ist garantiert dass bei 2 steinen 2 Springmï¿½gl. mï¿½glich sind!
-							this.sprungKonflikt++;
-							}
-					}
-				
-			
-
-			}
-		}
-		if(spielerA.getMussSpringen()==false) {
-			System.out.println("Alle ihre Figuren sind im moment spielbar!");
-		}
-		
-		}
-		
-		
-		//----------------------------------KANN SPIELER B MIT EINER FIGUR SPRINGEN??--------------------------
-		
-		if(spielerB.getAktiv()==true){
-			
-			for(int i=0; i<this.brettArray.length; i++){
-				for(int j=0; j<this.brettArray[i].length; j++){
-					if(this.brettArray[i][j].getFigur()!=null && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss){
-						Spielfigur testSpieler=this.brettArray[i][j].getFigur();
-						
-			
-
-						int links=testSpieler.getPosition().getPosX()-1;
-						int rechts=testSpieler.getPosition().getPosX()+1;
-						int oben=testSpieler.getPosition().getPosY()+1;
-						int unten=testSpieler.getPosition().getPosY()-1;
-						
-						int n = 0;
-						
-						//Fall OBEN LINKS ist eine Figur die ich ï¿½berspringen kann!
-						
-							while (this.brettArray.length-(links-n) > 1 && this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(oben+n) < brettArray.length && this.brettArray.length-(oben+n) > 1&&testSpieler.isDame() == true&&brettArray[links-n][oben+n].getFigur() == null) {
-								
-									n++;
-								}
-								
-								
-						
-								if (this.brettArray.length-(links-n) > 1 && this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(oben+n) < brettArray.length && this.brettArray.length-(oben+n) > 1 && brettArray[links-n][oben+n].getFigur() != null
-										&& brettArray[links-n-1][oben+n+1].getFigur() == null) {
-									if (brettArray[links-n][oben+n].getFigur().getFarbe() == FarbEnum.schwarz) {
-
-
-									brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-											.getFigur().setKannSpringen(true);
-
-									this.spielerB.setMussSpringen(true);
-									System.out.println(
-											"Sprungmoeglichkeit!");
-								
-								}
-							
-					
-								}
-			
-			
-							//Fall OBEN RECHTS ist eine Figur die ich ï¿½berspringen kann!
-							
-								while (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(oben+n) > 1 && this.brettArray.length-(oben+n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length  &&testSpieler.isDame() == true&&brettArray[rechts+n][oben+n].getFigur() == null) {
-									
-									n++;
-								}
-								
-								
-						
-								if (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(oben+n) > 1 && this.brettArray.length-(oben+n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length  && brettArray[rechts+n][oben+n].getFigur() != null
-										&& brettArray[rechts+n+1][oben+n+1].getFigur() == null) {
-									if (brettArray[rechts+n][oben+n].getFigur().getFarbe() == FarbEnum.schwarz) {
-
-
-									brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-											.getFigur().setKannSpringen(true);
-
-									this.spielerB.setMussSpringen(true);
-									System.out.println(
-											"Sprungmoeglichkeit!");
-									
-								}
-							
-					
-								}
-							//Fall UNTEN RECHTS ist eine Figur die ich ï¿½berspringen kann!
-								
-								while (this.brettArray.length-(rechts+n) > 1 &&this.brettArray.length-(unten-n) > 1 && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length &&testSpieler.isDame() == true&&brettArray[rechts+n][unten-n].getFigur() == null) {
-									
-									n++;
-								}
-								
-								
-						
-								if (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(unten-n) < this.brettArray.length  && brettArray[rechts+n][unten-n].getFigur() != null
-										&& brettArray[rechts+n+1][unten-n-1].getFigur() == null) {
-									if (brettArray[rechts+n][unten-n].getFigur().getFarbe() == FarbEnum.schwarz) {
-
-
-									brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-											.getFigur().setKannSpringen(true);
-
-									this.spielerB.setMussSpringen(true);
-									System.out.println(
-											"Sprungmoeglichkeit!");
-									
-								}
-							
-					
-								}
-							//Fall UNTEN LINKS ist eine Figur die ich ï¿½berspringen kann!
-								
-								while (this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(links-n) > 1 && this.brettArray.length-(unten-n)>1 &&testSpieler.isDame() == true&&brettArray[links-n][unten-n].getFigur() == null) {
-									
-									n++;
-								}
-								
-								
-						
-								if (this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(links-n) > 1 && this.brettArray.length-(unten-n)>1 && brettArray[links-n][unten-n].getFigur() != null
-										&& brettArray[links-n-1][unten-n-1].getFigur() == null) {
-									if (brettArray[links-n][unten-n].getFigur().getFarbe() == FarbEnum.schwarz) {
-
-
-									brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()]
-											.getFigur().setKannSpringen(true);
-
-									this.spielerB.setMussSpringen(true);
-									System.out.println(
-											"Sprungmoeglichkeit!");
-							
-								}
-							
-					
-								}
-								if(testSpieler.getKannSpringen()==true){ //Erhï¿½he einmal sprungKonflikt sobald dieser Stein eine Springmï¿½glichkeit kennt. So ist garantiert dass bei 2 steinen 2 Springmï¿½gl. mï¿½glich sind!
-									this.sprungKonflikt++;
-									}
+						case 4: // UNTEN RECHTS
+							coordX = rechts;
+							coordY = unten;
+							a = 1;
+							b = -1;
+							break;
 						}
-					
-					
 
+						
+
+							while (this.brettArray.length - (coordX) > 1
+									&& this.brettArray.length - (coordX) < this.brettArray.length
+									&& this.brettArray.length - (coordY) < brettArray.length
+									&& this.brettArray.length - (coordY) > 1
+									&& testSpieler.isDame() == true
+									&& brettArray[coordX][coordY].getFigur() == null) {
+
+								switch (caseNumber) {
+								case 1: // OBEN LINKS
+									coordX--;
+									coordY++;
+									
+									break;
+								case 2: // OBEN RECHTS
+									coordX++;
+									coordY++;
+									
+									break;
+								case 3: // UNTEN LINKS
+									coordX--;
+									coordY--;
+								
+									break;
+								case 4: // UNTEN RECHTS
+									coordX++;
+									coordY--;
+								
+									break;
+									
+								}
+								
+							}
+						
+						if (this.brettArray.length - (coordX) > 1
+								&& this.brettArray.length - (coordX) < this.brettArray.length
+								&& this.brettArray.length - (coordY) < brettArray.length
+								&& this.brettArray.length - (coordY) > 1
+								&& brettArray[coordX][coordY].getFigur() != null
+								&& brettArray[coordX + a][coordY + b]
+										.getFigur() == null) {
+							if (brettArray[coordX][coordY].getFigur()
+									.getFarbe() == farbeGegner) {
+
+								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()].getFigur() .setKannSpringen(true);
+
+								this.spielerAktiv.setMussSpringen(true);
+								System.out.println("Sprungmoeglichkeit!");
+
+							}
+							
+						}
+						caseNumber++;
+						}
+
+						if (testSpieler.getKannSpringen() == true) {//Erhöhe pro Stein der Schlagmöglichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungmög.
+							this.sprungKonflikt++;
+						}
+					}
+						
 				}
 			}
-
-			if (spielerB.getMussSpringen() == false) {
-				System.out.println("Alle ihre Figuren sind im moment spielbar!");
+			if (spielerAktiv.getMussSpringen() == false) {
+				System.out
+				.println("Alle ihre Figuren sind im moment spielbar!");
 			}
-		}
 
+		}
 	}
+
+	// #############################################################################
+	// ENDE SPIELER MUSS SPRINGEN
+	// ##################################################
 	
 	//############################################################################# ENDE SPIELER MUSS SPRINGEN ##################################################
 	
