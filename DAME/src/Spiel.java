@@ -244,7 +244,9 @@ public class Spiel implements iBediener, Serializable {
 										aktiveSpielfigur.setKannSpringen(false);
 
 										spielerMussSpringen(); //ueberprueft nochmals alle Steine auf moegliche Spruenge
-
+											
+										
+										//HIER MUSS NOCH EIN BUG GEFIXT WERDEN BEIM DOPPELT SPRINGEN! noch nicht ueberschrieben
 										aktiveSpielfigur = brettArray[links - 1][oben + 1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg
 										links = aktiveSpielfigur.getPosition().getPosX() - 1;
 										oben = aktiveSpielfigur.getPosition().getPosY() + 1;
