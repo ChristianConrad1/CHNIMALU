@@ -16,8 +16,8 @@ public class Spiel implements iBediener, Serializable {
 	private Spielfeld[][] brettArray;
 	private boolean spielende = false;
 	private final int reihen = 4;
-	private int sprungKonflikt=0; //Wenn 2 Steinchen springen kï¿½nnen, wird hier true gesetzt! Wird erhï¿½ht wenn ein steinchen springen kann, ab sprungKonflikt=2 haben wir einen Konflikt!
-	Scanner sc; //benï¿½tigen wir fï¿½r den Fall dass der Gegner ein gegnerisches Steinchen entfernen darf
+	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
+	Scanner sc; 
 
 	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
 		this.brett = brett;
@@ -34,7 +34,6 @@ public class Spiel implements iBediener, Serializable {
 			throw new NullPointerException("Spielbrett ist null!");
 		}
 		// schwarze Steine ([x])
-		// ausgeben------------------------------------------------------
 		int f = 0;
 		for (int n = 0; n < this.reihen; n++) {
 			for (; f < brettArray.length; f += 2) {
@@ -45,23 +44,10 @@ public class Spiel implements iBediener, Serializable {
 			else
 				f = 0;
 		}
-		// -----------------------------------------------------------------------------------
 		// weisse Steine ([o])
-		// ausgeben------------------------------------------------------
 		int x = 1;
-		for (int n = brettArray.length - 1; n > (brettArray.length - 1) - this.reihen; n--) { // (n-3)
-																								// da
-																								// rÃ¼ckwÃ¤rts
-																								// gezÃ¤hlt
-																								// wird,
-																								// muss
-																								// bei
-																								// Anpassung
-																								// der
-																								// Reihen
-																								// auch
-																								// angepasst
-																								// werden
+		for (int n = brettArray.length - 1; n > (brettArray.length - 1) - this.reihen; n--) { // (n-3) da rueckwaerts gezaehlt wird
+																						
 			for (; x < brettArray.length; x += 2) {
 				brettArray[x][n].setFigur(new Spielfigur(FarbEnum.weiss, brettArray[x][n]));
 			}
@@ -140,8 +126,7 @@ public class Spiel implements iBediener, Serializable {
 			farbeGegner = FarbEnum.schwarz;
 		}
 
-		// ------------------------------Wähle
-		// Spielfigur--------------------------
+		// ------------------------------Wähle Spielfigur--------------------------
 		try {
 			if (spielerAktiv.getAktiv() == true && spielerAktiv != null) {
 
@@ -160,9 +145,7 @@ public class Spiel implements iBediener, Serializable {
 
 		}
 
-		// ------------------------------------------------------ZIELFELD (Hier
-		// soll Stein als nächstes
-		// hin!)----------------------------------------------------------------------
+		// ------------------------------------------------------ZIELFELD (Hier soll Stein als nächstes hin!)----------------------------------------------------------------------
 
 		if (c < 0 | c > this.brettArray.length - 1) {
 			throw new RuntimeException(
@@ -244,80 +227,34 @@ public class Spiel implements iBediener, Serializable {
 							}
 							// -------------------------------------------------------SPRINGEN----------------------------------------------------
 
-							// ---------------------------------AUFÜHRUNG DER
-							// SPRUNG CASES:------------------------------------
+							// ---------------------------------AUFÜHRUNG DER SPRUNG CASES:------------------------------------
 							if (c == koordX && d == koordY) {
 								while (aktiveSpielfigur.getKannSpringen() == true) {
-									// Hat er das Feld links oben gewaehlt?
-									if (this.brettArray[koordX][koordY]
-											.getHatFigur() == true
-											&& this.brettArray[koordX][koordY]
-													.getFigur().getFarbe() == FarbEnum.weiss
-													&& this.brettArray[koordX1][koordY1]
-															.getHatFigur() == false) { // Ist
-										// das
-										// Feld
-										// bespringbar?
-										// ï¿½berspringe
-										// ich
-										// damit
-										// ein
-										// Gegnerstein?
+									if (this.brettArray[koordX][koordY].getHatFigur() == true&& this.brettArray[koordX][koordY].getFigur().getFarbe() == FarbEnum.weiss
+													&& this.brettArray[koordX1][koordY1].getHatFigur() == false) {
+										
+										
+										this.aktiveSpielfigur.getPosition().removeFigur();
+										this.brettArray[koordX][koordY].getFigur().getPosition().removeFigur();
+										this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
+										aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
+										System.out.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
 
-										this.aktiveSpielfigur.getPosition()
-										.removeFigur();
-										this.brettArray[koordX][koordY]
-												.getFigur().getPosition()
-												.removeFigur();
-										this.brettArray[koordX1][koordY1]
-												.setFigur(aktiveSpielfigur);
-										aktiveSpielfigur
-										.setPosition(this.brettArray[koordX1][koordY1]);
-										System.out
-										.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
-
-										spielerB.setMussSpringen(false);
+										spielerAktiv.setMussSpringen(false);
 										aktiveSpielfigur.setKannSpringen(false);
 
-										spielerMussSpringen(); // ï¿½berprï¿½ft
-										// nochmals alle
-										// Steine auf
-										// mï¿½gliche
-										// Sprï¿½nge
+										spielerMussSpringen(); //ueberprueft nochmals alle Steine auf moegliche Spruenge
 
-										aktiveSpielfigur = brettArray[links - 1][oben + 1]
-												.getFigur(); // weise neue
-										// Steinposition
-										// der aktuellen
-										// Spielfigur
-										// zu, damit im
-										// falle noch
-										// einer
-										// Schlagmï¿½glichkeit
-										// weiterspringt!
-										links = aktiveSpielfigur.getPosition()
-												.getPosX() - 1;
-										oben = aktiveSpielfigur.getPosition()
-												.getPosY() + 1;
+										aktiveSpielfigur = brettArray[links - 1][oben + 1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg
+										links = aktiveSpielfigur.getPosition().getPosX() - 1;
+										oben = aktiveSpielfigur.getPosition().getPosY() + 1;
 
-										spielerB.setMussSpringen(false);// Jetzt
-										// gilt
-										// ja
-										// nur:
-										// Nur
-										// der
-										// eine
-										// Stein
-										// interessiert
-										// uns
-										// ï¿½berhaupt!
+										spielerAktiv.setMussSpringen(false);
 										if (aktiveSpielfigur.getKannSpringen() == true) {
-											System.out
-											.println("Der selbe Stein konnte weitere Steine ï¿½berspringen!");
+											System.out.println("Der selbe Stein konnte weitere Steine ï¿½berspringen!");
 										}
 
-										System.out
-										.println("Sprung vollendet nach Links-Oben");
+										System.out.println("Sprung vollendet nach Links-Oben");
 
 									}
 								}
@@ -353,25 +290,10 @@ public class Spiel implements iBediener, Serializable {
 						}
 
 						if (spielerAktiv.getMussSpringen() == true) {
-							if (this.sprungKonflikt > 1) { // im Moment kï¿½nnen
-								// mehrere Figuren
-								// springen! (max
-								// 2?)
+							if (this.sprungKonflikt > 1) { //Im Moment haben wir 2 Steine die Springen koennen
 
 								spielerAktiv.setAktiv(false);
-								spielerGegner.setAktiv(true);// Hier nur
-								// Spielerwechsel
-								// fï¿½r
-								// Eingabe.
-								// Zugwechsel
-								// ist deutlich
-								// komplexer als
-								// ein einfacher
-								// temporï¿½rer
-								// Spielerwechsel!
-								// (scan vom
-								// Spielfeld
-								// etc)
+								spielerGegner.setAktiv(true);//Spielerwechsel fuer Eingabe, dann zueruck zum aktuellen Spieler!
 								System.out
 								.println("Sie hatten mehrere Steine mit Sprungmoeglichkeiten! Spieler B, Sie duerfen nun eines dieser Steinchen von Spieler A wï¿½hlen,so dass dieses vom Feld gelï¿½scht wird!");
 
@@ -389,45 +311,27 @@ public class Spiel implements iBediener, Serializable {
 									}
 								} else {
 									throw new RuntimeException(
-											"Wï¿½hlen sie bitte nur eine der Steine die in beim vorhergehenden Zug eine Sprungmï¿½glichkeit hatten, die von ihrem Gegner nicht wahrgenommen wurde!");
+											"Waehlen sie bitte nur eine der Steine die in beim vorhergehenden Zug eine Sprungmoeglichkeit hatten, die von ihrem Gegner nicht wahrgenommen wurde!");
 								}
 
-								spielerAktiv.setAktiv(true); // Die Eingabe
-								// wurde
-								// beendet. Der
-								// einfache
-								// Spielerwechsel
-								// ist nicht das
-								// gleiche, wie
-								// ein
-								// Zugwechsel!
+								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler!
 								spielerGegner.setAktiv(false);
 
 							} else {
-								// Gibt es nur eine Spielfigur die springen
-								// kann, suchen wir diese einfach in unserem
-								// Array
+								// Gibt es nur eine Spielfigur die springen kann, suchen wir diese einfach in unserem Array
 								for (int i = 0; i < this.brettArray.length; i++) {
 									for (int j = 0; j < this.brettArray[i].length; j++) {
 										if (this.brettArray[i][j].getFigur() != null
-												&& this.brettArray[i][j]
-														.getFigur().getFarbe() == FarbEnum.schwarz
-														&& this.brettArray[i][j]
-																.getFigur()
-																.getKannSpringen()) {
+												&& this.brettArray[i][j].getFigur().getFarbe() == FarbEnum.schwarz
+														&& this.brettArray[i][j].getFigur().getKannSpringen()) {
 
-											Spielfigur testSpieler = this.brettArray[i][j]
-													.getFigur();
+											Spielfigur testSpieler = this.brettArray[i][j].getFigur();
 
-											testSpieler.getPosition()
-											.removeFigur();
+											testSpieler.getPosition().removeFigur();
 
 											testSpieler = null;
-											System.out
-											.println("Jetzt wird bestraft!! Sie hatten eine Sprungmï¿½glichkeit! Diese wurde nicht wahrgenommen, der Stein wurde entfernt!"); // danach
-											// muss
-											// springen
-											// deaktivieren
+											System.out.println("Jetzt wird bestraft!! Sie hatten eine Sprungmoeglichkeit! Diese wurde nicht wahrgenommen, der Stein wurde entfernt!"); // danach
+											
 										}
 									}
 								}
@@ -439,32 +343,27 @@ public class Spiel implements iBediener, Serializable {
 						spielerWechsel();
 
 					}
-				
-
 					
 					else if(spielerB.getMussSpringen()==false){
-						throw new RuntimeException("Wï¿½hlen sie bitte ein Feld, auf das sie ziehen kï¿½nnen!");
+						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
 					}
-					
-			
 					
 				}
 					
 				else if(spielerB.getMussSpringen()==true){
-					throw new RuntimeException("Wï¿½hlen sie bitte eine Figur die springen kann, bzw ein Feld das bespringbar ist!!");
+					throw new RuntimeException("Waehlen sie bitte eine Figur die springen kann, bzw ein Feld das bespringbar ist!!");
 				
 				}
 				
 			}
 			
-	//}
-					
+			
 	}catch (Exception e) {
 		System.err.println(e);
 			
 	}
 		
-		isSpielende();		//Prueft ob beide Spieler noch Spielfiguren haben
+		isSpielende();	//Prueft ob beide Spieler noch Spielfiguren haben
 	
 	}
 
@@ -570,7 +469,7 @@ public class Spiel implements iBediener, Serializable {
 			throw new RuntimeException("Nicht diagonal");
 		}
 
-		//PrÃ¼fen, ob beide Spieler noch Spielfiguren haben---------------
+		//Pruefen ob beide Spieler noch Spielfiguren haben---------------
 		isSpielende();
 		//-------------------------------------------------------
 	}
@@ -625,7 +524,7 @@ public class Spiel implements iBediener, Serializable {
 	
 	
 	//#############################################################		SPIELER MUSS SPRINGEN ()  	#######################################################################
-	
+	//#########################		BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN - NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN######################
 	private void spielerMussSpringen(){ 
 		
 		//Bevor Spieler gewechselt wird und alles neu ï¿½berprï¿½ft wird, setze bei allen Steinen kannSchlagen auf false. Auch spielerA,B mussSpringen() wird auf false zurï¿½ckgesetzt. 
@@ -659,7 +558,7 @@ public class Spiel implements iBediener, Serializable {
 					
 					int n = 0;
 					
-					//Fall OBEN LINKS ist eine Figur die ich ï¿½berspringen kann!
+					//Fall OBEN LINKS ist eine Figur die ich ueberspringen kann!
 					
 						while (this.brettArray.length-(links-n) > 1 && this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(oben+n) < brettArray.length && this.brettArray.length-(oben+n) > 1&&testSpieler.isDame() == true&&brettArray[links-n][oben+n].getFigur() == null) {
 							
@@ -687,7 +586,7 @@ public class Spiel implements iBediener, Serializable {
 							}
 		
 		
-						//Fall OBEN RECHTS ist eine Figur die ich ï¿½berspringen kann!
+						//Fall OBEN RECHTS ist eine Figur die ich ueberspringen kann!
 						
 							while (this.brettArray.length-(rechts+n) > 1 && this.brettArray.length-(oben+n) > 1 && this.brettArray.length-(oben+n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length  &&testSpieler.isDame() == true&&brettArray[rechts+n][oben+n].getFigur() == null) {
 								
@@ -712,7 +611,7 @@ public class Spiel implements iBediener, Serializable {
 						
 				
 							}
-						//Fall UNTEN RECHTS ist eine Figur die ich ï¿½berspringen kann!
+						//Fall UNTEN RECHTS ist eine Figur die ich ueberspringen kann!
 							
 							while (this.brettArray.length-(rechts+n) > 1 &&this.brettArray.length-(unten-n) > 1 && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(rechts+n) < this.brettArray.length &&testSpieler.isDame() == true&&brettArray[rechts+n][unten-n].getFigur() == null) {
 								
@@ -737,7 +636,7 @@ public class Spiel implements iBediener, Serializable {
 						
 				
 							}
-						//Fall UNTEN LINKS ist eine Figur die ich ï¿½berspringen kann!
+						//Fall UNTEN LINKS ist eine Figur die ich ueberspringen kann!
 							
 							while (this.brettArray.length-(links-n) <this.brettArray.length && this.brettArray.length-(unten-n) < this.brettArray.length && this.brettArray.length-(links-n) > 1 && this.brettArray.length-(unten-n)>1 &&testSpieler.isDame() == true&&brettArray[links-n][unten-n].getFigur() == null) {
 								
@@ -762,7 +661,7 @@ public class Spiel implements iBediener, Serializable {
 						
 				
 							}
-							if(testSpieler.getKannSpringen()==true){ //Erhï¿½he einmal sprungKonflikt sobald dieser Stein eine Springmï¿½glichkeit kennt. So ist garantiert dass bei 2 steinen 2 Springmï¿½gl. mï¿½glich sind!
+							if(testSpieler.getKannSpringen()==true){ //Erhoehe einmal sprungKonflikt sobald dieser Stein eine Springmï¿½glichkeit kennt. So ist garantiert dass bei 2 steinen 2 Springmï¿½gl. mï¿½glich sind!
 							this.sprungKonflikt++;
 							}
 					}
