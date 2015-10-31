@@ -95,7 +95,7 @@ public class Spiel implements iBediener, Serializable {
 		int c = brett.getKoordX();
 		int d = brett.getKoordY();
 
-		//spielerMussSpringen();
+		spielerMussSpringen();
 
 		// Überprüfe ob unsere übergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
@@ -176,6 +176,8 @@ public class Spiel implements iBediener, Serializable {
 					int koordY = 0;
 					int koordX1 = 0;
 					int koordY1 = 0;
+					int Dx = 0; //Variable fuer X Verschiebung
+					int Dy = 0; //Variable fuer Y Verschiebung
 
 					// CASE: LINKS OBEN:
 					if (c == links && d == oben) {
@@ -183,6 +185,8 @@ public class Spiel implements iBediener, Serializable {
 						koordY = oben;
 						koordX1 = links - 1;
 						koordY1 = oben + 1;
+						Dx= -1; //Fuer die Verschiebung in oder entgegen X Richtung 
+						Dy= 1;	//Fuer die Verschiebung in oder entgegen Y Richtung
 					}
 					// CASE: RECHTS OBEN:
 					if (c == rechts && d == oben) {
@@ -190,6 +194,8 @@ public class Spiel implements iBediener, Serializable {
 						koordY = oben;
 						koordX1 = rechts + 1;
 						koordY1 = oben + 1;
+						Dx= 1; //Fuer die Verschiebung in oder entgegen X Richtung 
+						Dy= 1;	//Fuer die Verschiebung in oder entgegen Y Richtung
 					}
 					// CASE: LINKS UNTEN:
 					if (c == links && d == unten) {
@@ -197,6 +203,8 @@ public class Spiel implements iBediener, Serializable {
 						koordY = unten;
 						koordX1 = links - 1;
 						koordY1 = unten - 1;
+						Dx= -1; //Fuer die Verschiebung in oder entgegen X Richtung 
+						Dy= -1;	//Fuer die Verschiebung in oder entgegen Y Richtung
 					}
 					// CASE: RECHTS UTNEN:
 					if (c == rechts && d == unten) {
@@ -204,11 +212,12 @@ public class Spiel implements iBediener, Serializable {
 						koordY = unten;
 						koordX1 = rechts + 1;
 						koordY1 = unten - 1;
+						Dx= +1; //Fuer die Verschiebung in oder entgegen X Richtung 
+						Dy= -1;	//Fuer die Verschiebung in oder entgegen Y Richtung
 					}
-
-					if (spielerAktiv.getMussSpringen() == true
-							&& aktiveSpielfigur.getKannSpringen() == true) {
-
+			
+					if (spielerAktiv.getMussSpringen() == true) {
+						
 						if (aktiveSpielfigur.getKannSpringen() == true) {
 							// ----------------------------------SPRINGEN IN
 							// EINE VON VIER
@@ -230,7 +239,7 @@ public class Spiel implements iBediener, Serializable {
 							// ---------------------------------AUFÜHRUNG DER SPRUNG CASES:------------------------------------
 							if (c == koordX && d == koordY) {
 								while (aktiveSpielfigur.getKannSpringen() == true) {
-									if (this.brettArray[koordX][koordY].getHatFigur() == true&& this.brettArray[koordX][koordY].getFigur().getFarbe() == FarbEnum.weiss
+									if (this.brettArray[koordX][koordY].getHatFigur() == true&& this.brettArray[koordX][koordY].getFigur().getFarbe() == farbeGegner
 													&& this.brettArray[koordX1][koordY1].getHatFigur() == false) {
 										
 										
@@ -238,24 +247,33 @@ public class Spiel implements iBediener, Serializable {
 										this.brettArray[koordX][koordY].getFigur().getPosition().removeFigur();
 										this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
 										aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
+										
 										System.out.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
 
 										spielerAktiv.setMussSpringen(false);
 										aktiveSpielfigur.setKannSpringen(false);
 
 										spielerMussSpringen(); //ueberprueft nochmals alle Steine auf moegliche Spruenge
-											
 										
+																			
 										//HIER MUSS NOCH EIN BUG GEFIXT WERDEN BEIM DOPPELT SPRINGEN! noch nicht ueberschrieben
-										aktiveSpielfigur = brettArray[links - 1][oben + 1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg
-										links = aktiveSpielfigur.getPosition().getPosX() - 1;
-										oben = aktiveSpielfigur.getPosition().getPosY() + 1;
+										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg
+										System.out.println(aktiveSpielfigur);
+										System.out.println(aktiveSpielfigur.getPosition().getPosX() +" "+ aktiveSpielfigur.getPosition().getPosY());
+										koordX = aktiveSpielfigur.getPosition().getPosX() +Dx;
+										koordY = aktiveSpielfigur.getPosition().getPosY() +Dy;
+										koordX1 = koordX+Dx;
+										koordY1 = koordY+Dy;
+										
+										System.out.println(koordX);
+										System.out.println(koordY);
 
-										spielerAktiv.setMussSpringen(false);
+										
 										if (aktiveSpielfigur.getKannSpringen() == true) {
 											System.out.println("Der selbe Stein konnte weitere Steine ï¿½berspringen!");
 										}
 
+										System.out.println(aktiveSpielfigur.getKannSpringen());
 										System.out.println("Sprung vollendet nach Links-Oben");
 
 									}
@@ -304,10 +322,7 @@ public class Spiel implements iBediener, Serializable {
 								int x = brett.getKoordX();
 								int y = brett.getKoordY();
 								if (this.brettArray[x][y].getFigur() != null) {
-									if (this.brettArray[x][y].getFigur()
-											.getFarbe() == FarbEnum.schwarz
-											&& this.brettArray[x][y].getFigur()
-											.getKannSpringen()) {
+									if (this.brettArray[x][y].getFigur().getFarbe() == farbeAktiv&& this.brettArray[x][y].getFigur().getKannSpringen()) {
 										this.brettArray[x][y].removeFigur();
 
 									}
@@ -324,7 +339,7 @@ public class Spiel implements iBediener, Serializable {
 								for (int i = 0; i < this.brettArray.length; i++) {
 									for (int j = 0; j < this.brettArray[i].length; j++) {
 										if (this.brettArray[i][j].getFigur() != null
-												&& this.brettArray[i][j].getFigur().getFarbe() == FarbEnum.schwarz
+												&& this.brettArray[i][j].getFigur().getFarbe() == farbeAktiv
 														&& this.brettArray[i][j].getFigur().getKannSpringen()) {
 
 											Spielfigur testSpieler = this.brettArray[i][j].getFigur();
@@ -660,13 +675,10 @@ public class Spiel implements iBediener, Serializable {
 								&& this.brettArray.length - (coordY) < brettArray.length
 								&& this.brettArray.length - (coordY) > 1
 								&& brettArray[coordX][coordY].getFigur() != null
-								&& brettArray[coordX + a][coordY + b]
-										.getFigur() == null) {
-							if (brettArray[coordX][coordY].getFigur()
-									.getFarbe() == farbeGegner) {
+								&& brettArray[coordX + a][coordY + b].getFigur() == null) {
+							if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner) {
 
-								brettArray[testSpieler.getPosition().getPosX()][testSpieler.getPosition().getPosY()].getFigur() .setKannSpringen(true);
-
+								testSpieler.setKannSpringen(true);
 								this.spielerAktiv.setMussSpringen(true);
 								System.out.println("Sprungmoeglichkeit!");
 
