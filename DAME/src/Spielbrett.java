@@ -24,7 +24,7 @@ public class Spielbrett implements Serializable{
 	}
 		for (int i = 0; i < brett.length; i++) {
 			for (int j=0; j<brett[i].length; j++) {
-				this.brett[i][j].setAusgabeID(" []"); 
+				this.brett[i][j].setAusgabeID("[ ]"); 
 			}
 	}
 	}
@@ -50,6 +50,14 @@ public class Spielbrett implements Serializable{
 		this.KoordY=i;
 		
 	}
+	
+	/**
+	 * Wandelt x und y Koordinate in String um
+	 * @param x trivial
+	 * @param y trivial
+	 * @return s.o. :D
+	 */
+	
 	
 	public int getKoordX(){
 		return this.KoordX;

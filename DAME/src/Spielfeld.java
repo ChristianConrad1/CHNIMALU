@@ -18,15 +18,16 @@ public class Spielfeld implements Serializable{
 	 * @param String  ID
 	 *           
 	 */
-	
 	public Spielfeld(String ID){
 		setID(ID);
 		this.figur = null;
 		this.hatFigur = false;
 	}
+	
 	public void setPosX(int positionX){
 		this.positionX=positionX;
 	}
+	
 	public void setPosY(int positionY){
 		this.positionY=positionY;
 	}
@@ -47,9 +48,6 @@ public class Spielfeld implements Serializable{
 	 * @param String
 	 *            ID
 	 */
-
-
-	
 	public void setID(String ID){
 		if(ID==null){
 			throw new NullPointerException ("Keine g�ltige ID!");
@@ -63,6 +61,7 @@ public class Spielfeld implements Serializable{
 		}
 		this.ausgabeID=ID;
 	}
+	
 	/**
 	 * Gibt die ID des Spielfelds zur�ck
 	 * 
@@ -89,11 +88,12 @@ public class Spielfeld implements Serializable{
 		this.figur=figur;
 		this.hatFigur = true;
 		setAusgabeID(this.figur.getAnzeigeID());
-
 	}
+	
 	public Spielfigur getFigur(){
 		return this.figur;
 	}
+	
 	/**
 	 * Setzt die Spielfigur eines Spielfelds auf null
 	 * 
@@ -103,6 +103,7 @@ public class Spielfeld implements Serializable{
 		this.hatFigur = false;
 		setAusgabeID("[]");
 	}
+	
 	/**
 	 * Gibt zur�ck ob das Spielfeld eine Figur hat.
 	 * 

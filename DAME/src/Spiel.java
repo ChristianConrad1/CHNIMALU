@@ -25,8 +25,6 @@ public class Spiel implements iBediener, Serializable {
 		this.brettArray = brett.getNotation();
 		setAlleFiguren();
 		sc=new Scanner(System.in);
-		
-		
 	}
 
 	public void setAlleFiguren() {
