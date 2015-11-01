@@ -65,7 +65,5 @@ public class Spielbrett implements Serializable{
 	public int getKoordY(){
 		return this.KoordY;
 	}
-	public Spielfeld[][] getBrettArray() {
-		return brett;
-	}
+
 }

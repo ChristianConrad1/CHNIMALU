@@ -6,6 +6,7 @@ public class Spieler implements Serializable{
 	private KI ki;
 	private boolean istAktiv=false; 
 	private boolean mussSpringen=false;
+	
 
 	/**
 	 * KONSTRUKTOR
@@ -19,7 +20,14 @@ public class Spieler implements Serializable{
 	public Spieler(String name, FarbEnum c) {
 		this.setName(name);
 		this.setFarbe(c);
-		//ki = new KI(this); Wird wieder reinkommentiert sobald implementiert!
+	}												//bisher noch zwei Konstruktoren, da sonst in den Testklassen, die nicht auf
+													//die KI eingestellt sind umgeschrieben werden müssten.
+	public Spieler(String name, FarbEnum c, boolean istKI, Spielbrett brett) {
+		this.setName(name);
+		this.setFarbe(c);
+		if(istKI) {
+			ki = new KI_Dame(this, brett);
+		}
 	}
 	public void setMussSpringen(boolean springen){
 		this.mussSpringen=springen;
@@ -72,5 +80,11 @@ public class Spieler implements Serializable{
 	 */
 	public FarbEnum getFarbe() {
 		return this.farbe;
+	}
+	public boolean isKI(){
+		if(this.ki != null){
+			return true;
+		}
+		return false;
 	}
 }

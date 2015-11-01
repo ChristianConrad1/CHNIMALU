@@ -1,45 +1,37 @@
-import java.io.Serializable;
 
+public class KI_Dame extends KI {
+	private Spielfeld[][] brettArray;
+	private String[] rueckgabe = null; 
 
-public abstract class KI implements Serializable{
-	protected Spieler spieler;
-	//private Spielfeld[][] brettArray;
-	//private Spielbrett brett;
-	
-	public KI(Spieler s){
-		setSpieler(s);
+	public KI_Dame(Spieler s, Spielbrett brett) {
+		super(s);
+		if (brett != null) {
+			this.brettArray = brett.getNotation();
+		} else
+			throw new NullPointerException("übergebenes Spielbrett ist Null");
 	}
-	
-	public void setSpieler(Spieler s){
-		
-	if(s==null){
-		 throw new NullPointerException ("Spieler ist null!");
+
+	@Override
+	public String[] wasMacheIch() { // Muss koordinaten für die bewege Spielfigur
+								// zurückgeben... entweder direkt in
+								// Schachnotation (String Array) oder als zahlen
+								// bewegeSpielfigur(spieler.getKI().wasMacheIch()[0],
+								// spieler.getKI().wasMacheIch()[1]); <- so wird
+								// die methode gameloop aufgerufen, falls der
+								// spieler eine KI ist.
+			if(schlagen() != null)
+				return schlagen();
+			else
+				return ziehen();
 	}
-		this.spieler=s;
-	}
-	
-	public abstract String[] wasMacheIch();
-	
-	
-	
-	/* {
-		if(spieler.getMussSpringen() == true){
-			schlagen();
-		}
-		//kann ich ne Dame bekommen? Wenn ja, Dame machen
-		//sonst zuf�lligen Zug machen.
-		//3 Methoden (schlagen, dame, zuf�lliger Zug)
-	}*/
-	
-	//Ziel Koordinaten implementieren
-/*	public void schlagen() {
+
+	public String[] schlagen() { // muss Koordinaten von Spielfeld zurückgeben, damit
+								// wasMacheIch() diese weitergeben kann
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if (this.brettArray[i][j].getFigur().getKannSpringen() == true) {
 					int x = this.brettArray[i][j].getPosX();
 					int y = this.brettArray[i][j].getPosY();
-					String s = rewandler(x, y);
-
 					int links = this.brettArray[i][j].getPosX() - 1;
 					int rechts = this.brettArray[i][j].getPosX() + 1;
 					int oben = this.brettArray[i][j].getPosY() + 1;
@@ -47,6 +39,8 @@ public abstract class KI implements Serializable{
 
 					// ----------------------------ALLE 4 FAELLE DER
 					// DIAGONALEN UEBERPRUEFUNG-------------------------
+					
+					//ES FEHLT NOCH DIE ÜBERPRÜFUNG OB ES EINE DAME GIBT DIE SCHLAGEN KANN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 					int coordX = 0;
 					int coordY = 0;
@@ -110,8 +104,17 @@ public abstract class KI implements Serializable{
 
 								int x2 = coordX;
 								int y2 = coordY;
-								String s2 = rewandler(x2, y2);
-								bewegeSpielfigur(s, s2);
+								
+								rueckgabe = new String[2];
+								
+								rueckgabe[0] = rewandler(x, y);
+								rueckgabe[1] = rewandler(x2, y2);
+							
+								
+								
+								// String s2 = rewandler(x2, y2);
+								// bewegeSpielfigur(s, s2); //Denkfehler, KI hat
+								// keine Beziehung zu Spiell und zusätzlich ist s kein String sondern ein Spieler 
 							}
 
 						}
@@ -119,13 +122,24 @@ public abstract class KI implements Serializable{
 
 					}
 
-					
 				}
-
 			}
 		}
-	}
 	
+	
+	return rueckgabe;
+	}
+
+	public String[] ziehen() { // muss Koordinaten von Spielfeld zurückgeben, damit wasMacheIch()
+							// diese weitergeben kann
+
+	//Kann irgendeine Spielfigur dame werden?
+		//Wenn ja dann geb die Koordinaten für diesen Zug zurück
+	//Ansonsten
+		//Führe zufälligen Zug aus. evtl. auch führe zufälligen Zug mit Dame aus, falls es eine gibt?
+		
+	return null; //steht hier nur, weil diese Methode noch nicht implementiert ist und eclipse sonst meckert 	
+	}
 	
 	public String rewandler(int x, int y){
 		Integer a;
@@ -139,5 +153,6 @@ public abstract class KI implements Serializable{
 		
 		String s = c + d;
 		return s;		
-	}*/
+	}
+
 }

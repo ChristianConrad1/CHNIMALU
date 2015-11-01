@@ -17,7 +17,7 @@ public class Spiel implements iBediener, Serializable {
 	private boolean spielende = false;
 	private final int reihen = 4;
 	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
-	Scanner sc; 
+	private Scanner sc; 
 
 	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
 		this.brett = brett;
@@ -95,7 +95,7 @@ public class Spiel implements iBediener, Serializable {
 
 		spielerMussSpringen();
 
-		// Überprüfe ob unsere übergebenen Koordinaten in unserem Array-Feld
+		// ï¿½berprï¿½fe ob unsere ï¿½bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
 		if (a < 0 | a > this.brettArray.length - 1) {
 			throw new RuntimeException(
@@ -124,7 +124,7 @@ public class Spiel implements iBediener, Serializable {
 			farbeGegner = FarbEnum.schwarz;
 		}
 
-		// ------------------------------Wähle Spielfigur--------------------------
+		// ------------------------------Wï¿½hle Spielfigur--------------------------
 		try {
 			if (spielerAktiv.getAktiv() == true && spielerAktiv != null) {
 
@@ -143,7 +143,7 @@ public class Spiel implements iBediener, Serializable {
 
 		}
 
-		// ------------------------------------------------------ZIELFELD (Hier soll Stein als nächstes hin!)----------------------------------------------------------------------
+		// ------------------------------------------------------ZIELFELD (Hier soll Stein als nï¿½chstes hin!)----------------------------------------------------------------------
 
 		if (c < 0 | c > this.brettArray.length - 1) {
 			throw new RuntimeException(
@@ -221,20 +221,20 @@ public class Spiel implements iBediener, Serializable {
 							// EINE VON VIER
 							// RICHTUNGEN---------------------------------------
 
-							// Spezialfall: Gewählte Spielfigur hat Sprung,
-							// nutzt diesen aber nicht! Lösche sie!!
+							// Spezialfall: Gewï¿½hlte Spielfigur hat Sprung,
+							// nutzt diesen aber nicht! Lï¿½sche sie!!
 							if (aktiveSpielfigur.getKannSpringen() == true
 									&& spielerAktiv.getMussSpringen()
 									&& this.brettArray[c][d].getFigur() == null) {
 								this.brettArray[a][b].getFigur().getPosition()
 								.removeFigur();
 								System.out
-								.println("UPS! Sie haben einen Stein mit Schlagmöglichkeit gewählt, sind dieser jedoch nicht nachgegangen! Der Stein wurde zur Bestrafung vom Spielfeld entfernt!");
+								.println("UPS! Sie haben einen Stein mit Schlagmï¿½glichkeit gewï¿½hlt, sind dieser jedoch nicht nachgegangen! Der Stein wurde zur Bestrafung vom Spielfeld entfernt!");
 
 							}
 							// -------------------------------------------------------SPRINGEN----------------------------------------------------
 
-							// ---------------------------------AUFÜHRUNG DER SPRUNG CASES:------------------------------------
+							// ---------------------------------AUFï¿½HRUNG DER SPRUNG CASES:------------------------------------
 							if (c == koordX && d == koordY) {
 								while (aktiveSpielfigur.getKannSpringen() == true) {
 									if (this.brettArray[koordX][koordY].getHatFigur() == true&& this.brettArray[koordX][koordY].getFigur().getFarbe() == farbeGegner
@@ -667,7 +667,7 @@ public class Spiel implements iBediener, Serializable {
 						caseNumber++;
 						
 
-						if (testSpieler.getKannSpringen() == true) {//Erhöhe pro Stein der Schlagmöglichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungmög.
+						if (testSpieler.getKannSpringen() == true) {//Erhï¿½he pro Stein der Schlagmï¿½glichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungmï¿½g.
 							this.sprungKonflikt++;
 						}
 						}
