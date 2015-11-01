@@ -1,7 +1,8 @@
 
 public class KI_Dame extends KI {
 	private Spielfeld[][] brettArray;
-	private String[] rueckgabe = null; 
+
+
 
 	public KI_Dame(Spieler s, Spielbrett brett) {
 		super(s);
@@ -26,7 +27,9 @@ public class KI_Dame extends KI {
 	}
 
 	public String[] schlagen() { // muss Koordinaten von Spielfeld zurückgeben, damit
-								// wasMacheIch() diese weitergeben kann
+		// wasMacheIch() diese weitergeben kann
+
+		String[] rueckgabe = null; 					
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if (this.brettArray[i][j].getFigur().getKannSpringen() == true) {
@@ -39,8 +42,7 @@ public class KI_Dame extends KI {
 
 					// ----------------------------ALLE 4 FAELLE DER
 					// DIAGONALEN UEBERPRUEFUNG-------------------------
-					
-					//ES FEHLT NOCH DIE ÜBERPRÜFUNG OB ES EINE DAME GIBT DIE SCHLAGEN KANN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
 
 					int coordX = 0;
 					int coordY = 0;
