@@ -29,6 +29,9 @@ public class Spieler implements Serializable{
 			ki = new KI_Dame(this, brett);
 		}
 	}
+	public KI getKi() {
+		return ki;
+	}
 	public void setMussSpringen(boolean springen){
 		this.mussSpringen=springen;
 	}

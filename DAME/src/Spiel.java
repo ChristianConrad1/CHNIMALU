@@ -359,13 +359,13 @@ public class Spiel implements iBediener, Serializable {
 
 					}
 					
-					else if(spielerB.getMussSpringen()==false){
+					else if(spielerAktiv.getMussSpringen()==false){
 						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
 					}
 					
 				}
 					
-				else if(spielerB.getMussSpringen()==true){
+				else if(spielerAktiv.getMussSpringen()==true){
 					throw new RuntimeException("Waehlen sie bitte eine Figur die springen kann, bzw ein Feld das bespringbar ist!!");
 				
 				}
@@ -667,9 +667,10 @@ public class Spiel implements iBediener, Serializable {
 						caseNumber++;
 						
 
+						
+						}
 						if (testSpieler.getKannSpringen() == true) {//Erh�he pro Stein der Schlagm�glichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungm�g.
 							this.sprungKonflikt++;
-						}
 						}
 					}
 				}

@@ -32,8 +32,10 @@ public class KI_Dame extends KI {
 		// wasMacheIch() diese weitergeben kann
 
 		String[] rueckgabe = null;
+	
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
+				if(this.brettArray[i][j].getFigur()!=null){
 				if (this.brettArray[i][j].getFigur().getKannSpringen() == true) {
 					int x = this.brettArray[i][j].getPosX();
 					int y = this.brettArray[i][j].getPosY();
@@ -124,6 +126,7 @@ public class KI_Dame extends KI {
 
 					}
 
+				}
 				}
 			}
 		}
@@ -217,15 +220,17 @@ public class KI_Dame extends KI {
 									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
 											testSpieler.getPosition().getPosY());
 									rueckgabe[1] = rewandler(coordX, coordY);
+									return rueckgabe;
 					
 								} else if (FarbEnum.weiss == this.spieler.getFarbe()
 										&& caseNumber == 3 | caseNumber == 4) {
 									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
 											testSpieler.getPosition().getPosY());
 									rueckgabe[1] = rewandler(coordX, coordY);
+									return rueckgabe;
 									
 								}
-								return rueckgabe;
+								
 
 							}
 							caseNumber++;
@@ -245,10 +250,10 @@ public class KI_Dame extends KI {
 	}
 
 	public String rewandler(int x, int y) {
-		Integer a;
+		Character a;
 		Integer b;
 
-		a = x + 97;
+		a = (char) ((char)x + 97);
 		b = y + 1;
 
 		String c = a.toString();
