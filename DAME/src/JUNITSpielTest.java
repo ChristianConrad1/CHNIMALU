@@ -39,6 +39,8 @@ public class JUNITSpielTest {
 	
 	@Test
 	public void testFall(){
+		
+		
 	    System.out.println("Schlagen/Pusten (1)");
 	    System.out.println("Rückwärts Schlagen (2)");
 	    System.out.println("Ziehen (3)");

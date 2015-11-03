@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class KI_Dame extends KI {
+public class KI_Dame extends KI implements Serializable{
 	private Spielfeld[][] brettArray;
 
 	public KI_Dame(Spieler s, Spielbrett brett) {

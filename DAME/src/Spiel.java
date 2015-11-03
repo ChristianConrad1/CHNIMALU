@@ -17,7 +17,7 @@ public class Spiel implements iBediener, Serializable {
 	private boolean spielende = false;
 	private final int reihen = 4;
 	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
-	private Scanner sc; 
+	private transient Scanner sc; 
 
 	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
 		this.brett = brett;
