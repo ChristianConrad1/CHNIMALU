@@ -1,5 +1,7 @@
 import java.io.Serializable;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 public class KI_Dame extends KI implements Serializable{
 	private Spielfeld[][] brettArray;
 
@@ -136,16 +138,41 @@ public class KI_Dame extends KI implements Serializable{
 								// damit wasMacheIch()
 								// diese weitergeben kann
 		String[] rueckgabe = new String[2];
+		Spielfigur[] nurSpieler=new Spielfigur[24];
 		// Kann irgendeine Spielfigur dame werden?
 		// Wenn ja dann geb die Koordinaten für diesen Zug zurück
 		if (this.spieler.getAktiv() == true) {
-
+			int c=0; 
 			for (int i = 0; i < this.brettArray.length; i++) {
 				for (int j = 0; j < this.brettArray[i].length; j++) {
-					if (this.brettArray[i][j].getFigur() != null
-							&& this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()) {
+					if (this.brettArray[i][j].getFigur() != null&& this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()) {
+						
 						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
-
+						nurSpieler[c]=testSpieler;
+						c++;
+					}
+				}
+			}
+		}
+			int randomSpielfigur=0;
+			randomSpielfigur = 0 + (int)(Math.random()*23);
+		
+						while(this.spieler.getAktiv()==true){
+							
+						while(nurSpieler[randomSpielfigur]==null){
+							if(randomSpielfigur==23){
+								randomSpielfigur=0;
+							}
+							randomSpielfigur++;
+						}
+							
+							
+						Spielfigur testSpieler=nurSpieler[randomSpielfigur];
+						
+						
+						
+						//durchlaufe komplettes array
+				
 						int links = testSpieler.getPosition().getPosX() - 1;
 						int rechts = testSpieler.getPosition().getPosX() + 1;
 						int oben = testSpieler.getPosition().getPosY() + 1;
@@ -218,6 +245,7 @@ public class KI_Dame extends KI implements Serializable{
 									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
 											testSpieler.getPosition().getPosY());
 									rueckgabe[1] = rewandler(coordX, coordY);
+									
 									return rueckgabe;
 					
 								} else if (FarbEnum.weiss == this.spieler.getFarbe()
@@ -225,27 +253,30 @@ public class KI_Dame extends KI implements Serializable{
 									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
 											testSpieler.getPosition().getPosY());
 									rueckgabe[1] = rewandler(coordX, coordY);
+									
 									return rueckgabe;
 									
 								}
 								
 
 							}
+					
+							
 							caseNumber++;
 						}
-						// Ansonsten
-						// Führe zufälligen Zug aus. evtl. auch führe zufälligen
-						// Zug mit Dame aus, falls es eine gibt?
-
-						 // steht hier nur, weil diese Methode noch
-										// nicht implementiert ist und eclipse
-										// sonst meckert
-					}
-				}
-			}
-		}
+						if(randomSpielfigur==23){
+									randomSpielfigur=0;				
+									}
+						randomSpielfigur++;
+						
+						}
+						//Im Moment endlosschleife die nur abgebrochen wird wenn ziehen kann
+						
+					
 		return null;
-	}
+		}
+		
+	
 
 	public String rewandler(int x, int y) {
 		Character a;

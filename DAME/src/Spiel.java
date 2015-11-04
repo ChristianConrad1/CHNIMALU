@@ -260,7 +260,7 @@ public class Spiel implements iBediener, Serializable {
 										System.out.println(koordX1+" Zielfeld KoordX1");
 										System.out.println(koordY1+" Zielfeld KoordY1");
 
-										spielerMussSpringen();
+										//spielerMussSpringen();
 										
 										if (aktiveSpielfigur.getKannSpringen() == true) {
 											System.out.println("Der selbe Stein konnte weitere Steine ueberspringen!");
