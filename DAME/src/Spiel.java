@@ -110,7 +110,6 @@ public class Spiel implements iBediener, Serializable {
 		Spieler spielerGegner = null;
 		FarbEnum farbeAktiv = null;
 		FarbEnum farbeGegner = null;
-		System.out.println("Hallo");
 		if (spielerA.getAktiv() == true) {
 			spielerAktiv = spielerA;
 			spielerGegner = spielerB;
@@ -331,11 +330,12 @@ public class Spiel implements iBediener, Serializable {
 
 						if (spielerAktiv.getMussSpringen() == true) {
 							if (this.sprungKonflikt > 1) { //Im Moment haben wir 2 Steine die Springen koennen
-
+								
 								spielerAktiv.setAktiv(false);
 								spielerGegner.setAktiv(true);//Spielerwechsel fuer Eingabe, dann zueruck zum aktuellen Spieler!
-								System.out
-								.println("Sie hatten mehrere Steine mit Sprungmoeglichkeiten! Spieler B, Sie duerfen nun eines dieser Steinchen von Spieler A wï¿½hlen,so dass dieses vom Feld gelï¿½scht wird!");
+								
+								if(spielerGegner.isKI()==false){
+								System.out.println("Sie hatten mehrere Steine mit Sprungmoeglichkeiten! Spieler B, Sie duerfen nun eines dieser Steinchen von Spieler A waehlen,so dass dieses vom Feld geloescht wird!");
 
 								String eingabe = sc.nextLine();
 								brett.Umwandler(eingabe);
@@ -350,8 +350,23 @@ public class Spiel implements iBediener, Serializable {
 									throw new RuntimeException(
 											"Waehlen sie bitte nur eine der Steine die in beim vorhergehenden Zug eine Sprungmoeglichkeit hatten, die von ihrem Gegner nicht wahrgenommen wurde!");
 								}
-
-								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler!
+							}
+								System.out.println("Sprungkonflikt! Sie hatten mehrere Sprungmoeglichkeiten die Sie nicht genutzt haben! Ihr Gegner hat die Moeglichkeit genutzt und ihnen eines dieser Steinchen geloescht!");
+								if(spielerGegner.isKI()==true){
+									//Finde ein Steinchen das haette Springen duerfen:
+									for(int i=0; i<brettArray.length; i++){
+										for(int j=0; j<brettArray[i].length; j++){
+											if(this.brettArray[i][j].getFigur()!=null && this.brettArray[i][j].getFigur().getFarbe()==this.spielerAktiv.getFarbe() &&  this.brettArray[i][j].getFigur().getKannSpringen()==true){
+												this.brettArray[i][j].getFigur().getPosition().removeFigur();
+											}
+										}
+									}
+									
+								}
+								
+								
+								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler! Scheint zwar unnötig, weil danach Spielerwechsel kommt, ist es aber nicht, da 
+								//Spielerwechsel methode noch weitere ueberpruefungen macht ;)
 								spielerGegner.setAktiv(false);
 
 							} else {
@@ -680,11 +695,9 @@ public class Spiel implements iBediener, Serializable {
 								&& brettArray[coordX][coordY].getFigur() != null
 								) {
 							if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner && brettArray[(coordX+a)][(coordY+b)].getFigur() == null) {
-								System.out.println(spielerAktiv.getFarbe());
-								System.out.println("CoordXZIEL:"+(coordX+a)+" CoordYZIEL:"+(coordY+b));
 								testSpieler.setKannSpringen(true);
 								this.spielerAktiv.setMussSpringen(true);
-								System.out.println("Sprungmoeglichkeit!");
+							
 								
 								switch(caseNumber){ //Es kann entweder nur fuer case 1 oder 2 bzw  beide true sein fuer Schwarze Spieler, analog dazu 3 oder 4 fuer Weisse
 								case 1: 
@@ -724,6 +737,7 @@ public class Spiel implements iBediener, Serializable {
 			if (spielerAktiv.getMussSpringen() == false) {
 				System.out
 				.println("Alle ihre Figuren sind im moment spielbar!");
+				System.out.println("Spieler "+spielerAktiv.getName()+" Sie sind am Zug!");
 			}
 		}
 		}
