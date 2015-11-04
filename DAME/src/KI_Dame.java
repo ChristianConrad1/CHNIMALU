@@ -242,6 +242,7 @@ public class KI_Dame extends KI implements Serializable{
 								
 								if (FarbEnum.schwarz == this.spieler.getFarbe()
 										&& (caseNumber == 1 | caseNumber == 2)) {
+									
 									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
 											testSpieler.getPosition().getPosY());
 									rueckgabe[1] = rewandler(coordX, coordY);

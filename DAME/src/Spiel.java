@@ -250,22 +250,46 @@ public class Spiel implements iBediener, Serializable {
 
 										spielerAktiv.setMussSpringen(false);
 										aktiveSpielfigur.setKannSpringen(false);			
-										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg										
-										koordX = aktiveSpielfigur.getPosition().getPosX() +Dx;
-										koordY = aktiveSpielfigur.getPosition().getPosY() +Dy;
-										koordX1 = koordX+Dx;
-										koordY1 = koordY+Dy;
+										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, fuer erneutes Springen						
 										
-										
-										System.out.println(koordX1+" Zielfeld KoordX1");
-										System.out.println(koordY1+" Zielfeld KoordY1");
-
-										//spielerMussSpringen();
+									
+										spielerMussSpringen();
 										
 										if (aktiveSpielfigur.getKannSpringen() == true) {
 											System.out.println("Der selbe Stein konnte weitere Steine ueberspringen!");
 											
-										}
+											boolean[] sprungCases=aktiveSpielfigur.getSprungCases();
+											if(sprungCases[0]==true){ //spring als naechstes nach links oben
+												koordX = aktiveSpielfigur.getPosition().getPosX() -1;
+												koordY = aktiveSpielfigur.getPosition().getPosY() +1;
+												koordX1 = koordX-1;
+												koordY1 = koordY+1;
+											}
+											else if(sprungCases[1]==true){	//spring als naechstes nach rechts oben
+												koordX = aktiveSpielfigur.getPosition().getPosX() +1;
+												koordY = aktiveSpielfigur.getPosition().getPosY() +1;
+												koordX1 = koordX+1;
+												koordY1 = koordY+1;
+											}
+											else if(sprungCases[2]==true){	//spring als naechstes nach links unten
+												koordX = aktiveSpielfigur.getPosition().getPosX() -1;
+												koordY = aktiveSpielfigur.getPosition().getPosY() -1;
+												koordX1 = koordX-1;
+												koordY1 = koordY-1;
+											}
+											else if(sprungCases[3]==true){	//spring als naechstes nach rechts unten
+												koordX = aktiveSpielfigur.getPosition().getPosX() +1;
+												koordY = aktiveSpielfigur.getPosition().getPosY() -1;
+												koordX1 = koordX+1;
+												koordY1 = koordY-1;
+											}
+														}
+										
+										
+										
+										
+										
+										
 
 										System.out.println(aktiveSpielfigur.getKannSpringen());
 										System.out.println("Sprung vollendet.");
@@ -598,6 +622,7 @@ public class Spiel implements iBediener, Serializable {
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
+						boolean[] sprungCases=new boolean[4];
 						
 						while (caseNumber < 5) {
 							
@@ -660,6 +685,26 @@ public class Spiel implements iBediener, Serializable {
 								testSpieler.setKannSpringen(true);
 								this.spielerAktiv.setMussSpringen(true);
 								System.out.println("Sprungmoeglichkeit!");
+								
+								switch(caseNumber){ //Es kann entweder nur fuer case 1 oder 2 bzw  beide true sein fuer Schwarze Spieler, analog dazu 3 oder 4 fuer Weisse
+								case 1: 
+									sprungCases[0]=true;
+									testSpieler.setSprungCases(sprungCases);
+									break;
+								case 2: 
+									sprungCases[1]=true;
+									testSpieler.setSprungCases(sprungCases);
+									break;
+								case 3: 
+									sprungCases[2]=true;
+									testSpieler.setSprungCases(sprungCases);
+									break;
+								case 4: 
+									sprungCases[3]=true;
+									testSpieler.setSprungCases(sprungCases);
+									break;
+									
+								}
 
 							}
 							

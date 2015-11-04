@@ -6,6 +6,8 @@ public class Spielfigur implements Serializable{
 	private String anzeigeID;
 	private boolean dame = false;
 	private boolean kannSpringen=false;
+	private boolean[] sprungCases;
+	private boolean[] ziehCases;
 
 	/**
 	 * Konstruktor der Klasse Spielfigur. Setzt die Position und die Spielfigur
@@ -17,6 +19,10 @@ public class Spielfigur implements Serializable{
 	 *            position
 	 */
 	public Spielfigur(FarbEnum c, Spielfeld position) {
+		
+		setSprungCases(new boolean[4]);
+		setZiehCases(new boolean[4]);
+		
 		setFarbe(c);
 		setPosition(position);
 		if(c==FarbEnum.schwarz) {
@@ -100,6 +106,22 @@ public class Spielfigur implements Serializable{
 		
 		
 	
+	}
+
+	public boolean[] getSprungCases() {
+		return sprungCases;
+	}
+
+	public void setSprungCases(boolean[] sprungCases) {
+		this.sprungCases = sprungCases;
+	}
+
+	public boolean[] getZiehCases() {
+		return ziehCases;
+	}
+
+	public void setZiehCases(boolean[] ziehCases) {
+		this.ziehCases = ziehCases;
 	}
 
 }
