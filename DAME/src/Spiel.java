@@ -236,9 +236,9 @@ public class Spiel implements iBediener, Serializable {
 
 							// ---------------------------------AUF�HRUNG DER SPRUNG CASES:------------------------------------
 							if (c == koordX && d == koordY) {
-								while (aktiveSpielfigur.getKannSpringen() == true) {
+								while (aktiveSpielfigur.getKannSpringen() == true && this.spielerAktiv.getMussSpringen() == true&& this.brettArray[koordX1][koordY1].getHatFigur() == false) {
 									if (this.brettArray[koordX][koordY].getHatFigur() == true&& this.brettArray[koordX][koordY].getFigur().getFarbe() == farbeGegner
-													&& this.brettArray[koordX1][koordY1].getHatFigur() == false) {
+													) {
 										
 										
 										this.aktiveSpielfigur.getPosition().removeFigur();
@@ -249,33 +249,31 @@ public class Spiel implements iBediener, Serializable {
 										System.out.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
 
 										spielerAktiv.setMussSpringen(false);
-										aktiveSpielfigur.setKannSpringen(false);
-
-										spielerMussSpringen(); //ueberprueft nochmals alle Steine auf moegliche Spruenge
-										
-																			
-										//HIER MUSS NOCH EIN BUG GEFIXT WERDEN BEIM DOPPELT SPRINGEN! noch nicht ueberschrieben
-										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg
-										System.out.println(aktiveSpielfigur);
-										System.out.println(aktiveSpielfigur.getPosition().getPosX() +" "+ aktiveSpielfigur.getPosition().getPosY());
+										aktiveSpielfigur.setKannSpringen(false);			
+										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, damit im Falle erneuter Sprungmoeg										
 										koordX = aktiveSpielfigur.getPosition().getPosX() +Dx;
 										koordY = aktiveSpielfigur.getPosition().getPosY() +Dy;
 										koordX1 = koordX+Dx;
 										koordY1 = koordY+Dy;
 										
-										System.out.println(koordX);
-										System.out.println(koordY);
+										
+										System.out.println(koordX1+" Zielfeld KoordX1");
+										System.out.println(koordY1+" Zielfeld KoordY1");
 
+										spielerMussSpringen();
 										
 										if (aktiveSpielfigur.getKannSpringen() == true) {
-											System.out.println("Der selbe Stein konnte weitere Steine �berspringen!");
+											System.out.println("Der selbe Stein konnte weitere Steine ueberspringen!");
+											
 										}
 
 										System.out.println(aktiveSpielfigur.getKannSpringen());
-										System.out.println("Sprung vollendet nach Links-Oben");
+										System.out.println("Sprung vollendet.");
 
 									}
 								}
+								aktiveSpielfigur.setKannSpringen(false);
+								spielerAktiv.setMussSpringen(false);
 								aktiveSpielfigur = null;
 								spielerWechsel();
 							}
@@ -359,7 +357,8 @@ public class Spiel implements iBediener, Serializable {
 
 					}
 					
-					else if(spielerAktiv.getMussSpringen()==false){
+					else if(spielerAktiv.getMussSpringen()==false && c == koordX && d == koordY
+							&& this.brettArray[c][d].getHatFigur() == true){
 						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
 					}
 					
@@ -575,7 +574,7 @@ public class Spiel implements iBediener, Serializable {
 			}
 		}
 
-		// ----------------------------------KANN SPIELER A MIT EINER FIGUR
+		// ----------------------------------KANN SPIELER MIT EINER FIGUR
 		// SPRINGEN??--------------------------
 		if (spielerAktiv.getAktiv() == true) {
 
@@ -654,9 +653,10 @@ public class Spiel implements iBediener, Serializable {
 								&& this.brettArray.length - (coordY) < brettArray.length
 								&& this.brettArray.length - (coordY) > 1
 								&& brettArray[coordX][coordY].getFigur() != null
-								&& brettArray[coordX + a][coordY + b].getFigur() == null) {
-							if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner) {
-
+								) {
+							if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner && brettArray[(coordX+a)][(coordY+b)].getFigur() == null) {
+								System.out.println(spielerAktiv.getFarbe());
+								System.out.println("CoordXZIEL:"+(coordX+a)+" CoordYZIEL:"+(coordY+b));
 								testSpieler.setKannSpringen(true);
 								this.spielerAktiv.setMussSpringen(true);
 								System.out.println("Sprungmoeglichkeit!");

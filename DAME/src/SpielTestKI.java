@@ -12,7 +12,7 @@
 
 		public static void main (String Args[]){
 			brett=new Spielbrett();
-			spieler1=new Spieler("bernd",FarbEnum.schwarz);
+			spieler1=new Spieler("bernd",FarbEnum.schwarz, true, brett);
 			spieler2=new Spieler("berndy",FarbEnum.weiss, true, brett);
 			
 			

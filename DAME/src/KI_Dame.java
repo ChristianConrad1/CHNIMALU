@@ -116,10 +116,7 @@ public class KI_Dame extends KI implements Serializable{
 								rueckgabe[0] = rewandler(x, y);
 								rueckgabe[1] = rewandler(x2, y2);
 
-								// String s2 = rewandler(x2, y2);
-								// bewegeSpielfigur(s, s2); //Denkfehler, KI hat
-								// keine Beziehung zu Spiell und zusätzlich ist
-								// s kein String sondern ein Spieler
+								
 							}
 
 						}
