@@ -186,6 +186,7 @@ public class KI_Dame extends KI implements Serializable{
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
+						boolean[] ziehCases=new boolean[4];
 
 						while (caseNumber < 5) {
 
@@ -240,36 +241,93 @@ public class KI_Dame extends KI implements Serializable{
 									&& this.brettArray.length - (coordY) > 1
 									&& brettArray[coordX][coordY].getFigur() == null) {
 								
-								if (FarbEnum.schwarz == this.spieler.getFarbe()
-										&& (caseNumber == 1 | caseNumber == 2)) {
+								if (this.spieler.getFarbe()==FarbEnum.schwarz&& (caseNumber == 1)) {
 									
-									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
-											testSpieler.getPosition().getPosY());
-									rueckgabe[1] = rewandler(coordX, coordY);
+									ziehCases[0]=true;	//diese Spielfigur kann nach oben links ziehen
+									testSpieler.setZiehCases(ziehCases);
+								} 
+								if (this.spieler.getFarbe()==FarbEnum.schwarz&& (caseNumber == 2)) {
 									
-									return rueckgabe;
-					
-								} else if (FarbEnum.weiss == this.spieler.getFarbe()
-										&& caseNumber == 3 | caseNumber == 4) {
-									rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),
-											testSpieler.getPosition().getPosY());
-									rueckgabe[1] = rewandler(coordX, coordY);
+									ziehCases[1]=true;	//diese Spielfigur kann nach oben rechts ziehen
+									testSpieler.setZiehCases(ziehCases);
+								}	
+								if (this.spieler.getFarbe()==FarbEnum.weiss&& (caseNumber == 3)) {
 									
-									return rueckgabe;
+									ziehCases[2]=true;	//diese Spielfigur kann nach unten links ziehen
+									testSpieler.setZiehCases(ziehCases);
+								}	
+								if (this.spieler.getFarbe()==FarbEnum.weiss&& (caseNumber == 4)) {
 									
-								}
+									ziehCases[3]=true;	//diese Spielfigur kann nach unten rechts ziehen
+									testSpieler.setZiehCases(ziehCases);
+								}	
 								
-
 							}
 					
 							
 							caseNumber++;
 						}
-						if(randomSpielfigur==23){
+						if(randomSpielfigur==23){ //Grenzfall, falls immernoch kein Return eingetreten ist, dann fang von links wieder an durch das Array durchzusuchen!
 									randomSpielfigur=0;				
 									}
 						randomSpielfigur++;
 						
+						
+						if(ziehCases[0]==true && ziehCases[1]==true){
+							int randomSprungcase=1;
+							randomSprungcase = 1 + (int)(Math.random()*2);
+							if(randomSprungcase==1){	//Random fall 1: Zieh nach Links oben!
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()+1);
+								return rueckgabe;
+							}
+								
+							else{	//Random fall 2: Zieh nach Rechts oben!
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()+1);
+								return rueckgabe;
+							}
+							
+						}
+						else if(ziehCases[0]==true&&ziehCases[1]==false){ //Falls nur oben links moeglich, nehme diesen zug!
+							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()+1);
+							return rueckgabe;
+						}
+						else if(ziehCases[1]==true&&ziehCases[0]==false){ //Falls nur oben rechts moeglich, nehme diesen zug!
+							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()+1);
+							return rueckgabe;
+						}
+						
+						if(ziehCases[2]==true && ziehCases[3]==true){
+							int randomSprungcase=1;
+							randomSprungcase = 1 + (int)(Math.random()*2);
+							if(randomSprungcase==1){	//Random fall 1: Zieh nach Links unten!
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()-1);
+								return rueckgabe;
+							}
+								
+							else{	//Random fall 2: Zieh nach Rechts unten!
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()-1);
+								return rueckgabe;
+							}
+							
+						}
+						else if(ziehCases[2]==true&&ziehCases[3]==false){ //Falls nur unten links moeglich, nehme diesen zug!
+							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()-1);
+							return rueckgabe;
+						}
+						else if(ziehCases[3]==true&&ziehCases[2]==false){ //Falls nur unten rechts moeglich, nehme diesen zug!
+							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
+							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()-1);
+							return rueckgabe;
+						}
+						
+					
 						}
 						//Im Moment endlosschleife die nur abgebrochen wird wenn ziehen kann
 						
