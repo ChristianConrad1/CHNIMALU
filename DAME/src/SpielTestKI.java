@@ -20,7 +20,9 @@
 		    sc=new Scanner(System.in);	   
 		    b= s1;
 		    testAusgabe();
-		    testScanner();
+		    while(true){
+			    testScanner();
+		    }
 		}
 
 		
@@ -75,7 +77,7 @@
 		    b.bewegeSpielfigur(eingabe,ausgabe);
 		
 			testAusgabe();
-			testScanner();
+//			testScanner();
 
 			
 		}

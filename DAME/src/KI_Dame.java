@@ -145,10 +145,11 @@ public class KI_Dame extends KI implements Serializable{
 			int c=0; 
 			for (int i = 0; i < this.brettArray.length; i++) {
 				for (int j = 0; j < this.brettArray[i].length; j++) {
-					if (this.brettArray[i][j].getFigur() != null&& this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()) {
+					if (this.brettArray[i][j].getFigur() != null && this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()) {
 						
 						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
 						nurSpieler[c]=testSpieler;
+						
 						c++;
 					}
 				}
@@ -157,22 +158,26 @@ public class KI_Dame extends KI implements Serializable{
 			int randomSpielfigur=0;
 			randomSpielfigur = 0 + (int)(Math.random()*23);
 		
-						while(this.spieler.getAktiv()==true){
+						while(this.spieler.getAktiv()==true && nurSpieler!=null){
 							
-						while(nurSpieler[randomSpielfigur]==null){
-							if(randomSpielfigur==23){
+						while(nurSpieler[randomSpielfigur]==null && nurSpieler!=null){
+							if(randomSpielfigur<23)
+							randomSpielfigur++;
+							else{
 								randomSpielfigur=0;
 							}
-							randomSpielfigur++;
 						}
-							
-							
+						if(nurSpieler==null){
+							System.out.println("der Boi ist null");
+							return null;
+						}
+						
 						Spielfigur testSpieler=nurSpieler[randomSpielfigur];
 						
 						
 						
 						//durchlaufe komplettes array
-				
+					
 						int links = testSpieler.getPosition().getPosX() - 1;
 						int rechts = testSpieler.getPosition().getPosX() + 1;
 						int oben = testSpieler.getPosition().getPosY() + 1;
@@ -180,13 +185,14 @@ public class KI_Dame extends KI implements Serializable{
 
 						// ----------------------------ALLE 4 FAELLE DER
 						// DIAGONALEN UEBERPRUEFUNG-------------------------
-
+						
 						int coordX = 0;
 						int coordY = 0;
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
 						boolean[] ziehCases=new boolean[4];
+						testSpieler.setZiehCases(ziehCases);
 
 						while (caseNumber < 5) {
 
@@ -235,11 +241,11 @@ public class KI_Dame extends KI implements Serializable{
 
 							}
 
-							if (this.brettArray.length - (coordX) > 1
+							if (this.brettArray.length - (coordX) > 0 && this.brettArray.length - (coordY) > 0
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
-									&& this.brettArray.length - (coordY) > 1
-									&& brettArray[coordX][coordY].getFigur() == null) {
+									
+									&& brettArray[coordX][coordY].getHatFigur() == false) {
 								
 								if (this.spieler.getFarbe()==FarbEnum.schwarz&& (caseNumber == 1)) {
 									
@@ -267,12 +273,9 @@ public class KI_Dame extends KI implements Serializable{
 							
 							caseNumber++;
 						}
-						if(randomSpielfigur==23){ //Grenzfall, falls immernoch kein Return eingetreten ist, dann fang von links wieder an durch das Array durchzusuchen!
-									randomSpielfigur=0;				
-									}
-						randomSpielfigur++;
 						
 						
+												
 						if(ziehCases[0]==true && ziehCases[1]==true){
 							int randomSprungcase=1;
 							randomSprungcase = 1 + (int)(Math.random()*2);
@@ -315,6 +318,7 @@ public class KI_Dame extends KI implements Serializable{
 								return rueckgabe;
 							}
 							
+							
 						}
 						else if(ziehCases[2]==true&&ziehCases[3]==false){ //Falls nur unten links moeglich, nehme diesen zug!
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
@@ -327,16 +331,19 @@ public class KI_Dame extends KI implements Serializable{
 							return rueckgabe;
 						}
 						
-					
+						if(randomSpielfigur==23){ //Grenzfall, falls immernoch kein Return eingetreten ist, dann fang von links wieder an durch das Array durchzusuchen!
+							randomSpielfigur=0;				
+							}
+						else{
+				randomSpielfigur++;
+				System.out.println("Wir befinden uns in dieser Schleife. Erhoehe!");
+						}
 						}
 						//Im Moment endlosschleife die nur abgebrochen wird wenn ziehen kann
-						
-					
+					System.out.println("hier wird null zurueckgegeben");
 		return null;
 		}
 		
-	
-
 	public String rewandler(int x, int y) {
 		Character a;
 		Integer b;
