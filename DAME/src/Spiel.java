@@ -315,7 +315,7 @@ public class Spiel implements iBediener, Serializable {
 
 					if (c == koordX && d == koordY&& this.brettArray[c][d].getFigur() == null) {
 						System.out.println("AktiveSpielfigur im allgemeinen Ziehen: "+ aktiveSpielfigur);
-						if (aktiveSpielfigur.getKannSpringen() == false && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz && d>aktiveSpielfigur.getPosition().getPosY()) | (aktiveSpielfigur.getFarbe() == FarbEnum.weiss && d<aktiveSpielfigur.getPosition().getPosY())) {
+						if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == false && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz && d>aktiveSpielfigur.getPosition().getPosY()) | (aktiveSpielfigur.getFarbe() == FarbEnum.weiss && d<aktiveSpielfigur.getPosition().getPosY())) {
 
 							aktiveSpielfigur.getPosition().removeFigur();
 							aktiveSpielfigur.setPosition(this.brettArray[c][d]);
@@ -332,7 +332,7 @@ public class Spiel implements iBediener, Serializable {
 						
 						
 							
-							else if (aktiveSpielfigur.getKannSpringen() == true) {
+							else if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == true) {
 							aktiveSpielfigur.getPosition().removeFigur();
 						}
 							else{
