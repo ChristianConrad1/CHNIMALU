@@ -20,10 +20,15 @@
 		    sc=new Scanner(System.in);	   
 		    b= s1;
 		    testAusgabe();
-		    while(true){
+		    while(s1.getSpielende()==false){
+		    	
 			    testScanner();
-		    }
-		}
+			    s1.isSpielende();
+			    }
+		    System.out.println("Der Gewinner ist: " +s1.getWinner().getName());	
+		    	}
+		    
+		
 
 		
 		

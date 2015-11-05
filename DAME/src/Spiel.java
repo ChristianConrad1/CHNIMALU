@@ -336,7 +336,7 @@ public class Spiel implements iBediener, Serializable {
 							aktiveSpielfigur.getPosition().removeFigur();
 						}
 							else{
-								throw new RuntimeException("Ungültiges Zielfeld!");
+								throw new RuntimeException("Ungï¿½ltiges Zielfeld!");
 							}
 
 						if (spielerAktiv.getMussSpringen() == true) {
@@ -376,7 +376,7 @@ public class Spiel implements iBediener, Serializable {
 								}
 								
 								
-								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler! Scheint zwar unnötig, weil danach Spielerwechsel kommt, ist es aber nicht, da 
+								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler! Scheint zwar unnï¿½tig, weil danach Spielerwechsel kommt, ist es aber nicht, da 
 								//Spielerwechsel methode noch weitere ueberpruefungen macht ;)
 								spielerGegner.setAktiv(false);
 
@@ -428,8 +428,6 @@ public class Spiel implements iBediener, Serializable {
 		e.printStackTrace();
 			
 	}
-		
-		isSpielende();	//Prueft ob beide Spieler noch Spielfiguren haben
 	
 	}
 
@@ -781,6 +779,12 @@ public class Spiel implements iBediener, Serializable {
 
 	public Spielbrett getBrett() {
 		return brett;
+	}
+	public boolean getSpielende(){
+		return this.spielende;
+	}
+	public Spieler getWinner() {
+		return this.winner;
 	}
 
 	public void isSpielende() {
