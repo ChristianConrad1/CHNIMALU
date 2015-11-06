@@ -133,14 +133,14 @@ public class Spiel implements iBediener, Serializable {
 					this.aktiveSpielfigur.setPosition(brettArray[a][b]);
 				} else {
 					throw new RuntimeException(
-							"Keine schwarze Spielfigur ausgew�hlt!");
+							"Keine " + this.spielerAktiv.getFarbe() +"e Spielfigur ausgew�hlt!");
 				}
 			}
 
 		} catch (Exception e) {
 			System.err.println(e);
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+//			System.err.println(e.getMessage());
+//			e.printStackTrace();
 
 		}
 
@@ -321,7 +321,7 @@ public class Spiel implements iBediener, Serializable {
 							aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 							this.brettArray[c][d].setFigur(aktiveSpielfigur);
 							// Ist die Spielfigur jetzt eine Dame?-------------------
-							if ((aktiveSpielfigur.getPosition().getPosY() == 11 &&aktiveSpielfigur.getFarbe()==FarbEnum.schwarz) | (aktiveSpielfigur.getPosition().getPosY()==1 && aktiveSpielfigur.getFarbe() == FarbEnum.weiss)){
+							if ((aktiveSpielfigur.getPosition().getPosY() == 11 &&aktiveSpielfigur.getFarbe()==FarbEnum.schwarz) | (aktiveSpielfigur.getPosition().getPosY()==0 && aktiveSpielfigur.getFarbe() == FarbEnum.weiss)){
 								aktiveSpielfigur.setDame();
 								System.out.println("setDame aufgerufen");
 							}
@@ -335,9 +335,9 @@ public class Spiel implements iBediener, Serializable {
 							else if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == true) {
 							aktiveSpielfigur.getPosition().removeFigur();
 						}
-							else{
-								throw new RuntimeException("Ung�ltiges Zielfeld!");
-							}
+//							else{
+//								throw new RuntimeException("Ung�ltiges Zielfeld!");
+//							}
 
 						if (spielerAktiv.getMussSpringen() == true) {
 							if (this.sprungKonflikt > 1) { //Im Moment haben wir 2 Steine die Springen koennen
@@ -407,8 +407,9 @@ public class Spiel implements iBediener, Serializable {
 
 					}
 					
-					else if(spielerAktiv.getMussSpringen()==false && c == koordX && d == koordY
-							&& this.brettArray[c][d].getFigur() != null){
+					
+					else //if(spielerAktiv.getMussSpringen()==false && c == koordX && d == koordY
+						//	&& this.brettArray[c][d].getFigur() != null){
 						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
 					}
 					
@@ -419,7 +420,7 @@ public class Spiel implements iBediener, Serializable {
 				
 				}
 				
-			}
+		//	}
 			
 			
 	}catch (Exception e) {

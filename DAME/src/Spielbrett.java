@@ -38,6 +38,10 @@ public class Spielbrett implements Serializable{
 
 	
 	public void Umwandler(String s){
+		try{
+			if(s.charAt(0) < 97 | s.charAt(0) >109){
+				throw new RuntimeException("Falsche Eingabe");
+			}
 		int c = s.charAt(0);
 		c=c-97;
 		
@@ -45,10 +49,15 @@ public class Spielbrett implements Serializable{
 		Integer i = 0;
 		i = i.parseInt(s2);
 		i -= 1;
-		
+		if(i <0 | i>11){
+			throw new RuntimeException("Falsche Eingabe");
+		}
 		this.KoordX=c;
 		this.KoordY=i;
-		
+		}
+		catch(Exception e){
+			System.err.println(e);
+		}
 	}
 	
 	/**

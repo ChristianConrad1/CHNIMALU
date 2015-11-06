@@ -4,7 +4,6 @@ import org.omg.Messaging.SyncScopeHelper;
 
 public class KI_Dame extends KI implements Serializable{
 	private Spielfeld[][] brettArray;
-
 	public KI_Dame(Spieler s, Spielbrett brett) {
 		super(s);
 		if (brett != null) {
@@ -22,12 +21,15 @@ public class KI_Dame extends KI implements Serializable{
 		// spieler.getKI().wasMacheIch()[1]); <- so wird
 		// die methode gameloop aufgerufen, falls der
 		// spieler eine KI ist.
-		if (schlagen() != null)
-			return schlagen();
-		else if  (ziehen() != null)
-			return ziehen();
-		else
-			throw new RuntimeException("Alle Spielfiguren geblockt!");
+		if (schlagen() != null){
+			return schlagen();}
+		else if  (dameWerden() != null){
+			System.out.println("Ich bin intelligent!");
+			return dameWerden();}
+		else if  (ziehen() != null){
+			return ziehen();}		
+		else{
+			throw new RuntimeException("Alle Spielfiguren geblockt!");}
 	}
 
 	public String[] schlagen() { // muss Koordinaten von Spielfeld zurückgeben,
@@ -134,13 +136,59 @@ public class KI_Dame extends KI implements Serializable{
 		return rueckgabe;
 	}
 
+	public String[] dameWerden() {
+		String[] rueckgabe = null;
+		for (int i = 0; i < this.brettArray.length; i++) {
+			for (int j = 0; j < this.brettArray[i].length; j++) {
+				if (this.brettArray[i][j].getFigur() != null && this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()){
+						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
+						int links = this.brettArray[i][j].getPosX() - 1;
+						int rechts = this.brettArray[i][j].getPosX() + 1;
+						int oben = this.brettArray[i][j].getPosY() + 1;
+						int unten = this.brettArray[i][j].getPosY() - 1;
+						
+						if(links >=0 && oben == 11 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.schwarz &&
+							this.brettArray[links][oben].getHatFigur() == false){
+							rueckgabe = new String[2];
+
+							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
+							rueckgabe[1] = rewandler(links, oben);
+							return rueckgabe;
+						}
+						if(rechts <=brettArray.length  && oben == 11 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.schwarz &&
+								this.brettArray[rechts][oben].getHatFigur() == false){
+								rueckgabe = new String[2];
+
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(rechts, oben);
+								return rueckgabe;
+					}
+						if(rechts <=brettArray.length && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
+								this.brettArray[rechts][unten].getHatFigur() == false){
+								rueckgabe = new String[2];
+
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(rechts, unten);
+								return rueckgabe;
+					}
+						if(links >=0 && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
+								this.brettArray[links][unten].getHatFigur() == false){
+								rueckgabe = new String[2];
+
+								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
+								rueckgabe[1] = rewandler(links, unten);
+								return rueckgabe;
+					}
+				}
+			}
+		}
+		return rueckgabe;
+	}
 	public String[] ziehen() { // muss Koordinaten von Spielfeld zurückgeben,
 								// damit wasMacheIch()
 								// diese weitergeben kann
 		String[] rueckgabe = new String[2];
 		Spielfigur[] nurSpieler=new Spielfigur[24];
-		// Kann irgendeine Spielfigur dame werden?
-		// Wenn ja dann geb die Koordinaten für diesen Zug zurück
 		if (this.spieler.getAktiv() == true) {
 			int c=0; 
 			for (int i = 0; i < this.brettArray.length; i++) {
