@@ -1,8 +1,12 @@
+package SpeichernLaden;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import Basisklassen.Spiel;
+import Interfaces.iDatenzugriff;
 
 
 public class DatenzugriffSerialisiert implements iDatenzugriff{

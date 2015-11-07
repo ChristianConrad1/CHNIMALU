@@ -1,8 +1,12 @@
+package JUNIT;
 
 	import static org.junit.Assert.*;
 
 	import org.junit.Before;
 	import org.junit.Test;
+
+import Basisklassen.FarbEnum;
+import Basisklassen.Spieler;
 
 	public class JUNITSpielerTest {
 		

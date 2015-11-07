@@ -1,9 +1,12 @@
+package Basisklassen;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Scanner;
+
+import Interfaces.iBediener;
 
 public class Spiel implements iBediener, Serializable {
 	private PrintWriter pw;

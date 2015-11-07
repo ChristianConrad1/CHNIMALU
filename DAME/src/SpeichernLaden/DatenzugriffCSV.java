@@ -1,9 +1,20 @@
+package SpeichernLaden;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import Basisklassen.FarbEnum;
+import Basisklassen.KI;
+import Basisklassen.KI_Dame;
+import Basisklassen.Spiel;
+import Basisklassen.Spielbrett;
+import Basisklassen.Spieler;
+import Basisklassen.Spielfeld;
+import Basisklassen.Spielfigur;
+import Interfaces.iDatenzugriff;
 
 public class DatenzugriffCSV implements iDatenzugriff{
 

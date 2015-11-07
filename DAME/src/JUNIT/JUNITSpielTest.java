@@ -1,7 +1,16 @@
+package JUNIT;
 import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import Basisklassen.FarbEnum;
+import Basisklassen.Spiel;
+import Basisklassen.Spielbrett;
+import Basisklassen.Spieler;
+import Basisklassen.Spielfeld;
+import Basisklassen.Spielfigur;
+import Interfaces.iBediener;
 
 public class JUNITSpielTest {
 /*------------------------------

@@ -1,7 +1,12 @@
+package JUNIT;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import Basisklassen.FarbEnum;
+import Basisklassen.Spielfeld;
+import Basisklassen.Spielfigur;
 
 
 public class JUNITSpielfeldTest {

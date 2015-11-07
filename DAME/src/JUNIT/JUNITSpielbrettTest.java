@@ -1,7 +1,11 @@
+package JUNIT;
 
 
 import org.junit.Before;
 import org.junit.Test;
+
+import Basisklassen.Spielbrett;
+import Basisklassen.Spielfeld;
 
 
 public class JUNITSpielbrettTest {

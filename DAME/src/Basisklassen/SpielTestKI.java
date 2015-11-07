@@ -1,5 +1,8 @@
+package Basisklassen;
 
 	import java.util.Scanner;
+
+import Interfaces.iBediener;
 
 	public class SpielTestKI {
 		

@@ -1,4 +1,13 @@
+package SpeichernLaden;
 import java.util.Scanner;
+
+import Basisklassen.FarbEnum;
+import Basisklassen.Spiel;
+import Basisklassen.Spielbrett;
+import Basisklassen.Spieler;
+import Basisklassen.Spielfeld;
+import Interfaces.iBediener;
+import Interfaces.iDatenzugriff;
 
 public class SpielTestSpeichern {
 	
