@@ -22,6 +22,7 @@ public class Spielfeld implements Serializable{
 		setID(ID);
 		this.figur = null;
 		this.hatFigur = false;
+		
 	}
 	
 	public void setPosX(int positionX){
@@ -88,6 +89,9 @@ public class Spielfeld implements Serializable{
 		this.figur=figur;
 		this.hatFigur = true;
 		setAusgabeID(this.figur.getAnzeigeID());
+		
+		//this.Umwandler(this.getID());
+		
 	}
 	
 	public Spielfigur getFigur(){
@@ -101,7 +105,7 @@ public class Spielfeld implements Serializable{
 	public void removeFigur(){
 		this.figur=null;
 		this.hatFigur = false;
-		setAusgabeID("[]");
+		setAusgabeID("[ ]");
 	}
 	
 	/**
@@ -112,5 +116,26 @@ public class Spielfeld implements Serializable{
 	public boolean getHatFigur(){
 		return this.hatFigur;
 	}
-
+	public void setXY(String s){
+		try{
+			if(s.charAt(0) < 97 | s.charAt(0) >109){
+				throw new RuntimeException("Falsche Eingabe");
+			}
+		int c = s.charAt(0);
+		c=c-97;
+		
+		String s2=s.substring(1);
+		Integer i = 0;
+		i = Integer.parseInt(s2);
+		i -= 1;
+		if(i <0 | i>11){
+			throw new RuntimeException("Falsche Eingabe");
+		}
+		this.positionX=c;
+		this.positionY=i;
+		}
+		catch(Exception e){
+			System.err.println(e);
+		}
+	}
 }

@@ -26,11 +26,17 @@ public class Spieler implements Serializable{
 		this.setName(name);
 		this.setFarbe(c);
 		if(istKI) {
-			ki = new KI_Dame(this, brett);
+			this.setKi(new KI_Dame(this, brett));
 		}
 	}
 	public KI getKi() {
 		return ki;
+	}
+	
+	public void setKi(KI ki) {
+		if(ki != null){
+		this.ki = ki;
+		} else throw new NullPointerException("Übergebene KI ist null");
 	}
 	public void setMussSpringen(boolean springen){
 		this.mussSpringen=springen;
@@ -90,4 +96,7 @@ public class Spieler implements Serializable{
 		}
 		return false;
 	}
+
+
+	
 }

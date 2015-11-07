@@ -2,6 +2,7 @@ import java.io.Serializable;
 
 public class Spielbrett implements Serializable{
 	private Spielfeld[][] brett;
+
 	private int KoordX;
 	private int KoordY;
 /**
@@ -35,7 +36,12 @@ public class Spielbrett implements Serializable{
 	public Spielfeld[][] getNotation() {
 		return this.brett;
 	}
-
+	/**
+	 * Wandelt x und y Koordinate in String um
+	 * @param x trivial
+	 * @param y trivial
+	 * @return s.o. :D
+	 */
 	
 	public void Umwandler(String s){
 		try{
@@ -60,13 +66,10 @@ public class Spielbrett implements Serializable{
 		}
 	}
 	
-	/**
-	 * Wandelt x und y Koordinate in String um
-	 * @param x trivial
-	 * @param y trivial
-	 * @return s.o. :D
-	 */
-	
+
+	public void setBrett(Spielfeld[][] brett) {
+		this.brett = brett;
+	}
 	
 	public int getKoordX(){
 		return this.KoordX;

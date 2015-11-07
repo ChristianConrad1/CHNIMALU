@@ -8,17 +8,29 @@ public class SpielTestLaden {
 	static Spiel s1;
 	static iBediener b;
 	static Scanner sc;
+	static Scanner sf;
 	static iDatenzugriff d;
 	static DatenzugriffSerialisiert d1;
+	static DatenzugriffCSV d2;
 
 	public static void main (String Args[]){
 		
 
 		
 		
-	    sc=new Scanner(System.in);	   
-	    d1 = new DatenzugriffSerialisiert();
-	    d = d1;
+	    sf=new Scanner(System.in);	   
+	    System.out.println("Mit welchem Format soll gelesen werden? CSV (1) SER (2):");
+	    int abfrage = sf.nextInt();
+	    if(abfrage == 1){
+	    	d2 = new DatenzugriffCSV();
+	    	d = d2;
+	    }
+	    else if(abfrage == 2){
+	    	d1 = new DatenzugriffSerialisiert();
+	    	d = d1;
+	    }
+	    
+	    
 	    s1 = d.load();
 	    b = s1;
 	    brett = s1.getBrett();
@@ -62,7 +74,7 @@ public class SpielTestLaden {
 	
 	
 	public static void testScanner(){
-		
+		sc = new Scanner(System.in);
 		System.out.print("Gib das Feld an, von dem du das Steinchen bewegen möchtest: ");
 	    String eingabe = sc.nextLine();
 

@@ -10,7 +10,6 @@ public class DatenzugriffSerialisiert implements iDatenzugriff{
 	private ObjectInputStream ois;
 	private Spiel s;
 	public DatenzugriffSerialisiert(){
-		
 
 	}
 	public void setSpiel(Spiel s){

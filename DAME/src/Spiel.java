@@ -17,6 +17,7 @@ public class Spiel implements iBediener, Serializable {
 	private boolean spielende = false;
 	private final int reihen = 4;
 	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
+	private FarbEnum farbeAktiv = null;
 	private transient Scanner sc; 
 
 	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
@@ -126,7 +127,8 @@ public class Spiel implements iBediener, Serializable {
 		// ------------------------------W�hle Spielfigur--------------------------
 		try {
 			if (spielerAktiv.getAktiv() == true && spielerAktiv != null) {
-
+				System.out.println(brettArray[a][b].getFigur().getFarbe());
+				System.out.println(farbeAktiv);
 				if (brettArray[a][b].getFigur() != null
 						&& brettArray[a][b].getFigur().getFarbe() == farbeAktiv) {
 					this.aktiveSpielfigur = brettArray[a][b].getFigur();
@@ -600,7 +602,7 @@ public class Spiel implements iBediener, Serializable {
 		this.sprungKonflikt = 0;
 
 		Spieler spielerAktiv = null;
-		FarbEnum farbeAktiv = null;
+		
 		FarbEnum farbeGegner = null;
 
 		if (spielerA.getAktiv() == true) {
@@ -772,6 +774,33 @@ public class Spiel implements iBediener, Serializable {
 
 	public Spieler getSpielerB() {
 		return spielerB;
+	}
+	public void setSpielerA(Spieler spielerA) {
+		if(spielerA != null){
+		this.spielerA = spielerA;
+		} else throw new NullPointerException("SpielerA ist NULL!");
+	}
+
+	public void setSpielerB(Spieler spielerB) {
+		if(spielerB != null){
+		this.spielerB = spielerB;
+		} else throw new NullPointerException("SpielerB ist NULL!");
+	}
+
+	public void setSpielerAktiv(Spieler spielerAktiv) {
+		if(spielerAktiv != null){
+		this.spielerAktiv = spielerAktiv;
+		//this.farbeAktiv = spielerAktiv.getFarbe();
+		if(spielerAktiv.getFarbe() == FarbEnum.schwarz){
+			this.spielerA.setAktiv(true);
+			this.spielerB.setAktiv(false);
+		}
+		else if(spielerAktiv.getFarbe() == FarbEnum.weiss){
+			this.spielerB.setAktiv(true);
+			this.spielerA.setAktiv(false);
+		}
+		System.out.println("SpielerAktiv:"+ farbeAktiv);
+		} else throw new NullPointerException("SpielerAktiv ist NULL!");
 	}
 
 	public Spieler getSpielerAktiv() {

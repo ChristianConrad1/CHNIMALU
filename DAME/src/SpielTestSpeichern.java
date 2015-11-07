@@ -8,8 +8,10 @@ public class SpielTestSpeichern {
 	static Spiel s1;
 	static iBediener b;
 	static Scanner sc;
-	static iDatenzugriff d;
+	static iDatenzugriff da;
+	static iDatenzugriff db;
 	static DatenzugriffSerialisiert d1;
+	static DatenzugriffCSV d2;
 
 	public static void main (String Args[]){
 		
@@ -19,8 +21,10 @@ public class SpielTestSpeichern {
 		s1=new Spiel(spieler1, spieler2, brett);
 	    sc=new Scanner(System.in);	   
 	    d1 = new DatenzugriffSerialisiert();
+	    d2 = new DatenzugriffCSV();
 	    b = s1;
-	    d = d1;
+	    da = d1;
+	    db = d2;
 	    testAusgabe();
 	    testScanner();
 	    //testAusgabe(); //Wird nicht benötigt, da in testScanner() schon testAusgabe aufgerufen wird.
@@ -60,9 +64,14 @@ public class SpielTestSpeichern {
 		
 		System.out.print("Gib das Feld an, von dem du das Steinchen bewegen möchtest: ");
 	    String eingabe = sc.nextLine();
-	    if(eingabe.equals("save")){ //Wenn save eingegeben wird wird gespeichert und die Methode verlassen.
-	    	d.save(s1);
-	    	//s1.spielerWechsel();
+	    if(eingabe.equals("saveser")){ //Wenn save eingegeben wird wird gespeichert und die Methode verlassen.
+	    	da.save(s1);
+	    
+	    	return;
+	    }
+	    if(eingabe.equals("savecsv")){ //Wenn save eingegeben wird wird gespeichert und die Methode verlassen.
+	    	db.save(s1);
+	  
 	    	return;
 	    }
 	    System.out.print("Gib dein Zielfeld an: ");
