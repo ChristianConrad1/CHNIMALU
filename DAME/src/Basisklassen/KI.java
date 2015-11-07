@@ -7,6 +7,8 @@ public abstract class KI implements Serializable{
 	//private Spielfeld[][] brettArray;
 	//private Spielbrett brett;
 	
+	
+	
 	public KI(Spieler s){
 		setSpieler(s);
 	}
