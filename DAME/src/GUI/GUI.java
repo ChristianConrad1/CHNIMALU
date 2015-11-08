@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import Basisklassen.FarbEnum;
 import Basisklassen.Spiel;
@@ -114,8 +115,12 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JPanel southPanel = new JPanel();
 	JPanel centerPanel = new JPanel();
 	
+	JTextField eingabe = new JTextField("a4-b5");
+	
+	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
+	
 	JButton bWEST = new JButton("WEST");
-	JButton bEAST = new JButton("EAST");
+	JButton bSubmit = new JButton("Durchführen");
 	JButton bNORTH = new JButton("NORTH");
 	JButton bSOUTH = new JButton("SOUTH");
 	JButton bCENTER = new JButton("CENTER");
@@ -124,8 +129,10 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	westPanel.add(new JLabel("Hier kommt was hin"));
 	westPanel.setLayout(new GridLayout(5,1));	//Erzeuge testhaft ein neues Gridlayout, dass seine Komponenten in 1 Spalte und 5 Zeilen unterteilt
 	
-	eastPanel.add(bEAST);	//Fuege testweise einen Button in das jeweilige Panel
-	eastPanel.setLayout(new GridLayout(1,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
+	eastPanel.add(ueberschrift);
+	eastPanel.add(eingabe);	
+	eastPanel.add(bSubmit);
+	eastPanel.setLayout(new GridLayout(3,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
 	
 	northPanel.add(bNORTH);
 	northPanel.setLayout(new GridLayout(1,1));
