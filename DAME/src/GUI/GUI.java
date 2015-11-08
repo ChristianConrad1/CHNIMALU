@@ -35,7 +35,7 @@ public GUI(){
 	
 }
 
-public void addMenuBar(){
+public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefuegt
 	
 	menuBar = new JMenuBar();
 	menuGame = new JMenu("Game");
@@ -49,7 +49,7 @@ public void addMenuBar(){
 	
 }
 
-public void setupLayout(){	//Hier wird Border-Layout angepasst, Buttons hinzugefuegt etc
+public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern unserer GUI, Buttons, Bereiche etc. werden hierrüber definiert
 	
 	this.mainJpanel.setLayout(new BorderLayout()); //Unser Haupt-JPanel entspricht einem Border-Layout
 	
@@ -91,7 +91,7 @@ public void setupLayout(){	//Hier wird Border-Layout angepasst, Buttons hinzugef
 
 }
 
-public void actionPerformed(ActionEvent e){
+public void actionPerformed(ActionEvent e){ //Hier werden Action-Events abgefangen. Wobei ich diese gerne spaeter als externe Klasse haette
 	
 	if(e.getSource()==menuItemStart){
 		 JOptionPane.showMessageDialog(null, "Start new game!", "Start Game", JOptionPane.ERROR_MESSAGE);
