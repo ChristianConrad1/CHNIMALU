@@ -101,6 +101,10 @@ public class Menu extends JFrame implements ActionListener{
 		
 		
 	}
+	public void oeffneFileChooser(){
+		jfc = new JFileChooser("savegame");
+		jfc.showOpenDialog(null);
+	}
 	public void neuesSpielMenu(){
 		
 		//Neuen JFrame und JPanel für neues Menü erstellen
@@ -150,8 +154,7 @@ public class Menu extends JFrame implements ActionListener{
 			neuesSpielMenu();
 		}
 		if(e.getSource() == laden){
-			jfc = new JFileChooser("savegame");
-			jfc.showOpenDialog(null);
+			oeffneFileChooser();
 			geladenesSpielStarten();
 		}
 		if(e.getSource() == ende){

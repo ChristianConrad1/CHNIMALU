@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,6 +26,11 @@ public class GUI extends JFrame implements ActionListener{
 	private  JMenuBar menuBar;
 	private  JMenu menuGame;
 	private  JMenuItem menuItemStart;
+	private  JMenuItem menuItemSave;
+	private  JMenuItem menuItemLoad;
+	
+
+	
 	private Spielbrett spielBrett;
 	private Spieler spielerA;
 	private Spieler spielerB;
@@ -62,8 +68,9 @@ public GUI(Spiel s){
 public void initNeuesSpiel(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
 	spielBrett = new Spielbrett();
 	
-	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz); //Ki Übergabe fehlt noch
-	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss); //Ki Übergabe fehlt noch
+
+	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz, aIstKi, spielBrett); 
+	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
 	
 	spiel = new Spiel(spielerA, spielerB, spielBrett);
 	
@@ -76,14 +83,24 @@ public void initGeladenesSpiel(Spiel s){
 public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefuegt
 	
 	menuBar = new JMenuBar();
-	menuGame = new JMenu("Game");
-	menuItemStart = new JMenuItem("Start New Game");
+	menuGame = new JMenu("Menü");
+	menuItemStart = new JMenuItem("Neues Spiel starten");
+	menuItemSave = new JMenuItem("Spiel speichern");
+	menuItemLoad = new JMenuItem("Spiel laden");
 	
-	menuBar.add(menuGame);
+	
 	menuGame.add(menuItemStart);
-	this.setJMenuBar(menuBar);
+	menuGame.add(menuItemSave);
+	menuGame.add(menuItemLoad);
 	
 	menuItemStart.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemSave.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemLoad.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	
+	menuBar.add(menuGame);
+	this.setJMenuBar(menuBar);
+	
+	
 	
 }
 
@@ -135,7 +152,18 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 public void actionPerformed(ActionEvent e){ //Hier werden Action-Events abgefangen. Wobei ich diese gerne spaeter als externe Klasse haette
 	
 	if(e.getSource()==menuItemStart){
-		 JOptionPane.showMessageDialog(null, "Start new game!", "Start Game", JOptionPane.ERROR_MESSAGE);
+		Menu m = new Menu("Startmenü", 300, 400);
+		m.neuesSpielMenu();
+		this.dispose();
+	}
+	if(e.getSource()==menuItemLoad){
+		Menu m = new Menu("Startmenü", 300, 400);
+		this.dispose();
+		m.oeffneFileChooser();
+		m.geladenesSpielStarten();
+	}
+	if(e.getSource()==menuItemSave){
+		JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 }
