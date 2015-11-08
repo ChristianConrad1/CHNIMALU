@@ -47,9 +47,9 @@ public class DatenzugriffSerialisiert implements iDatenzugriff{
 	}
 
 	@Override
-	public Spiel load() {
+	public Spiel load(String pfad) {
 		try{
-			ois = new ObjectInputStream(new FileInputStream("savegame/save.ser"));
+			ois = new ObjectInputStream(new FileInputStream(pfad));
 		}
 		catch(Exception e){
 			e.printStackTrace();

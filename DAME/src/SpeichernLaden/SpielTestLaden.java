@@ -31,14 +31,16 @@ public class SpielTestLaden {
 	    if(abfrage == 1){
 	    	d2 = new DatenzugriffCSV();
 	    	d = d2;
+	    	s1 = d.load("savegame/save.csv");
 	    }
 	    else if(abfrage == 2){
 	    	d1 = new DatenzugriffSerialisiert();
 	    	d = d1;
+	    	s1 = d.load("savegame/save.ser");
 	    }
 	    
 	    
-	    s1 = d.load();
+	    
 	    b = s1;
 	    brett = s1.getBrett();
 	   

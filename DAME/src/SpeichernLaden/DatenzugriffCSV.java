@@ -67,9 +67,9 @@ public class DatenzugriffCSV implements iDatenzugriff{
 		
 	}
 	@Override
-	public Spiel load() {
+	public Spiel load(String pfad) {
 		try {
-			br = new BufferedReader(new FileReader("savegame/save.csv"));
+			br = new BufferedReader(new FileReader(pfad));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

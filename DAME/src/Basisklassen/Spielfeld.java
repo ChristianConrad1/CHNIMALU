@@ -1,7 +1,10 @@
 package Basisklassen;
+import java.awt.Color;
 import java.io.Serializable;
 
-public class Spielfeld implements Serializable{
+import javax.swing.JLabel;
+
+public class Spielfeld extends JLabel implements Serializable{
 	
 	private Spielfigur figur;
 	private String ID;
@@ -20,6 +23,8 @@ public class Spielfeld implements Serializable{
 	 *           
 	 */
 	public Spielfeld(String ID){
+		super(ID);
+		super.setOpaque(true);
 		setID(ID);
 		this.figur = null;
 		this.hatFigur = false;
@@ -91,7 +96,20 @@ public class Spielfeld implements Serializable{
 		this.hatFigur = true;
 		setAusgabeID(this.figur.getAnzeigeID());
 		
-		//this.Umwandler(this.getID());
+		//Beim setzen der Figur andere Farbe des Felds zuweisen
+		if(figur.getFarbe() == FarbEnum.schwarz){
+			this.setBackground(Color.YELLOW);
+			if(figur.isDame()){
+				this.setBackground(Color.CYAN);
+			}
+		}
+		else if(figur.getFarbe() == FarbEnum.weiss){
+			this.setBackground(Color.RED);
+			if(figur.isDame()){
+				this.setBackground(Color.PINK);
+			}
+		}
+		//-----------------------------------------------------
 		
 	}
 	
@@ -107,6 +125,9 @@ public class Spielfeld implements Serializable{
 		this.figur=null;
 		this.hatFigur = false;
 		setAusgabeID("[ ]");
+		//Beim entfernen einer Figur das Feld auf Standardfarbe setzen
+		this.setBackground(Color.BLACK);
+		//-----------------------------------------------------------
 	}
 	
 	/**

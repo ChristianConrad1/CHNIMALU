@@ -1,7 +1,11 @@
 package Basisklassen;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.io.Serializable;
 
-public class Spielbrett implements Serializable{
+import javax.swing.JPanel;
+
+public class Spielbrett extends JPanel implements Serializable{
 	private Spielfeld[][] brett;
 
 	private int KoordX;
@@ -10,6 +14,8 @@ public class Spielbrett implements Serializable{
  * Konstruktor erzeugt Spielbrett aus Spielfeldern
  */
 	public Spielbrett() {
+		boolean farbe = true;
+		super.setLayout(new GridLayout(12,12));
 		brett=new Spielfeld[12][12];
 		char n = 'a';
 		int m=12;
@@ -17,10 +23,18 @@ public class Spielbrett implements Serializable{
 		for (int i = 0; i < brett.length; i++) {
 			for (int j = 0; j < brett[i].length; j++) {
 				this.brett[i][j] = new Spielfeld(n+ ""+m);
+				
+				super.add(this.brett[i][j]);
+				if(farbe) this.brett[i][j].setBackground(Color.BLACK);
+				else this.brett[i][j].setBackground(Color.WHITE);
+				
 				brett[i][j].setPosX(i);
 				brett[i][j].setPosY(j);
+				
+				farbe = !farbe;
 				m--;
 			}
+			farbe = !farbe;
 			n++;
 			m=12;
 	}

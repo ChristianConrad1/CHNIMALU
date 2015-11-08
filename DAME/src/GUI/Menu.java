@@ -16,12 +16,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Interfaces.iDatenzugriff;
+import SpeichernLaden.DatenzugriffCSV;
+import SpeichernLaden.DatenzugriffSerialisiert;
+
 public class Menu extends JFrame implements ActionListener{
 	private JPanel mainPanel;
 	private JButton laden;
 	private JButton neues;
 	private JButton ende;
 	private JButton start;
+	
+	private JTextField nameA;
+	private JTextField nameB;
+	private JCheckBox aIstKi;
+	private JCheckBox bIstKi;
+	
+	private JFrame neuesSpiel;
+	
+	private JFileChooser jfc; 
+	
+	private iDatenzugriff d;
+	private DatenzugriffSerialisiert d1;
+	
+	
+	private GUI g;
 
 	public Menu(String titel, int breite, int hoehe) {
 		//-JFrame erstellen
@@ -67,10 +86,25 @@ public class Menu extends JFrame implements ActionListener{
 		
 		
 	}
-	public void neuesSpiel(){
+	public void neuesSpielStarten(){
+		g = new GUI(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
+		neuesSpiel.dispose();
+		
+		
+	}
+	public void geladenesSpielStarten(){
+		d1 = new DatenzugriffSerialisiert();
+		d = d1;
+		//System.out.println(jfc.getSelectedFile().getAbsolutePath());
+		g = new GUI(d.load(jfc.getSelectedFile().getPath()));
+		this.dispose();
+		
+		
+	}
+	public void neuesSpielMenu(){
 		
 		//Neuen JFrame und JPanel für neues Menü erstellen
-		JFrame neuesSpiel = new JFrame("Neues Spiel");
+		neuesSpiel = new JFrame("Neues Spiel");
 		neuesSpiel.setSize(super.getWidth(), super.getHeight());
 		neuesSpiel.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		neuesSpiel.setLocationRelativeTo(null);
@@ -80,20 +114,20 @@ public class Menu extends JFrame implements ActionListener{
 		//--------------------------------------------------
 		
 		//Textfelder, Checkboxen und Button erstellen und positonieren
-		JTextField nameA = new JTextField("Name SpielerA");
+		nameA = new JTextField("Name SpielerA");
 		nameA.setPreferredSize(new Dimension(180, 20));
 		c.insets = new Insets(0,0,30,0);
 		c.gridx = 1;
 		c.gridy = 0;
 		secPanel.add(nameA,c);
-		JCheckBox aIstKi = new JCheckBox("Ist KI?");
+		aIstKi = new JCheckBox("Ist KI?");
 		c.gridy = 1;
 		secPanel.add(aIstKi,c);
-		JTextField nameB = new JTextField("Name SpielerB");
+		nameB = new JTextField("Name SpielerB");
 		nameB.setPreferredSize(new Dimension(180, 20));
 		c.gridy = 2;
 		secPanel.add(nameB,c);
-		JCheckBox bIstKi = new JCheckBox("Ist KI?");
+		bIstKi = new JCheckBox("Ist KI?");
 		c.gridy = 3;
 		secPanel.add(bIstKi,c);
 		start = new JButton("Spiel starten");
@@ -107,25 +141,27 @@ public class Menu extends JFrame implements ActionListener{
 		neuesSpiel.setVisible(true);
 		this.dispose(); //schließt den alten JFrame (Startmenü)
 		//------------------------------------------------------
+		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == neues){
-			neuesSpiel();
+			neuesSpielMenu();
 		}
 		if(e.getSource() == laden){
-			JFileChooser jfc = new JFileChooser("savegame");
+			jfc = new JFileChooser("savegame");
 			jfc.showOpenDialog(null);
+			geladenesSpielStarten();
 		}
 		if(e.getSource() == ende){
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?", JOptionPane.YES_NO_OPTION);
 			if(yn == 0){
-			this.dispose(); //Zuerst alle referenzen etc. l�schen, dann soft close 
+			this.dispose(); //Zuerst alle referenzen etc. l�schen, dann soft close 
 			}else return;
 		}
 		if(e.getSource() == start){
-			JOptionPane.showMessageDialog( null, "Hier wuerde jetzt ein neues Spiel gestartet werden...." );
+			this.neuesSpielStarten();
 		}
 	}
 

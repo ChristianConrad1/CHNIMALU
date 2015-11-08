@@ -13,6 +13,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Basisklassen.FarbEnum;
+import Basisklassen.Spiel;
+import Basisklassen.Spielbrett;
+import Basisklassen.Spieler;
+
 public class GUI extends JFrame implements ActionListener{
 	
 	private  JPanel mainJpanel;
@@ -20,19 +25,52 @@ public class GUI extends JFrame implements ActionListener{
 	private  JMenuBar menuBar;
 	private  JMenu menuGame;
 	private  JMenuItem menuItemStart;
+	private Spielbrett spielBrett;
+	private Spieler spielerA;
+	private Spieler spielerB;
+	private Spiel spiel;
 
 	
-public GUI(){
+public GUI(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
 
+	initNeuesSpiel(nameSpielerA, aIstKi, nameSpielerB, bIstKi);
+	
 	this.setVisible(true);
 	this.setTitle("Dame V1.0");
 	this.setSize(700, 700);
-	this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
 	addMenuBar();	//Fuege MenuBar hinzu
 	setupLayout();	//Erstelle unser Layout
 	
+}
+public GUI(Spiel s){
+
+	initGeladenesSpiel(s);
+	
+	this.setVisible(true);
+	this.setTitle("Dame V1.0");
+	this.setSize(700, 700);
+	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	mainJpanel = new JPanel();
+	this.getContentPane().add(mainJpanel);
+	addMenuBar();	//Fuege MenuBar hinzu
+	setupLayout();	//Erstelle unser Layout
+	
+}
+public void initNeuesSpiel(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
+	spielBrett = new Spielbrett();
+	
+	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz); //Ki Übergabe fehlt noch
+	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss); //Ki Übergabe fehlt noch
+	
+	spiel = new Spiel(spielerA, spielerB, spielBrett);
+	
+}
+public void initGeladenesSpiel(Spiel s){
+	this.spiel = s;
+	this.spielBrett = this.spiel.getBrett();
 }
 
 public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefuegt
@@ -49,7 +87,7 @@ public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefu
 	
 }
 
-public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern unserer GUI, Buttons, Bereiche etc. werden hierr�ber definiert
+public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern unserer GUI, Buttons, Bereiche etc. werden hierr�ber definiert
 	
 	this.mainJpanel.setLayout(new BorderLayout()); //Unser Haupt-JPanel entspricht einem Border-Layout
 	
@@ -78,7 +116,9 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	southPanel.add(bSOUTH);
 	southPanel.setLayout(new GridLayout(1,1));
 	
-	centerPanel.add(bCENTER);
+	//centerPanel.add(bCENTER);
+	
+	centerPanel.add(spielBrett);
 	centerPanel.setLayout(new GridLayout(1,1));
 	
 	
@@ -90,6 +130,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 
 }
+
 
 public void actionPerformed(ActionEvent e){ //Hier werden Action-Events abgefangen. Wobei ich diese gerne spaeter als externe Klasse haette
 	
