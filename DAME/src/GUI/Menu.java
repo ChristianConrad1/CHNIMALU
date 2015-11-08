@@ -1,16 +1,20 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Menu extends JFrame implements ActionListener{
 	private JPanel mainPanel;
@@ -22,10 +26,10 @@ public class Menu extends JFrame implements ActionListener{
 	public Menu(String titel, int breite, int hoehe) {
 		//-JFrame erstellen
 		super(titel);
-		super.setSize(breite, hoehe);
-		super.setResizable(false);
-		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		super.setLocationRelativeTo(null);
+		this.setSize(breite, hoehe);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		//---------------------------------
 		
 		mainPanel = new JPanel();
@@ -52,14 +56,14 @@ public class Menu extends JFrame implements ActionListener{
 
 		ende = new JButton("Ende");
 		ende.setPreferredSize(new Dimension(180, 50));
-		c.gridy = 4;
+		c.gridy = 3;
 		ende.addActionListener(this);
 		mainPanel.add(ende, c);
 		
 	
 		
-		super.add(mainPanel, BorderLayout.CENTER);
-		super.setVisible(true);
+		this.add(mainPanel, BorderLayout.CENTER);
+		this.setVisible(true);
 		
 		
 	}
@@ -68,7 +72,7 @@ public class Menu extends JFrame implements ActionListener{
 		//Neuen JFrame und JPanel für neues Menü erstellen
 		JFrame neuesSpiel = new JFrame("Neues Spiel");
 		neuesSpiel.setSize(super.getWidth(), super.getHeight());
-		neuesSpiel.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		neuesSpiel.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		neuesSpiel.setLocationRelativeTo(null);
 		JPanel secPanel = new JPanel();
 		secPanel.setLayout(new GridBagLayout());
@@ -117,11 +121,11 @@ public class Menu extends JFrame implements ActionListener{
 		if(e.getSource() == ende){
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?", JOptionPane.YES_NO_OPTION);
 			if(yn == 0){
-			System.exit(0);
+			this.dispose(); //Zuerst alle referenzen etc. l�schen, dann soft close 
 			}else return;
 		}
 		if(e.getSource() == start){
-			JOptionPane.showMessageDialog( null, "Hier würde jetzt ein neues Spiel gestartet werden...." );
+			JOptionPane.showMessageDialog( null, "Hier wuerde jetzt ein neues Spiel gestartet werden...." );
 		}
 	}
 
