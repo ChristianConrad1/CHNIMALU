@@ -1,5 +1,8 @@
 package Basisklassen;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.Serializable;
 
@@ -93,11 +96,17 @@ public class Spielbrett extends JPanel implements Serializable{
 	}
 
 	public void initBrett() {
+		int counter = 0;
 		boolean farbe = false;
-		super.setLayout(new GridLayout(12, 12));
+		super.setLayout(new GridBagLayout());
+		super.setSize(new Dimension(1000,1000)); //Funktioniert leider nicht -.-
+		GridBagConstraints c = new GridBagConstraints();
 		for (int i = 11; i >= 0; i--) {
+			c.gridy = counter;
 			for (int n = 0; n < brett[i].length; n++) {
-				super.add(this.brett[n][i]);
+				c.gridx = n;
+				this.brett[n][i].setPreferredSize(new Dimension(64,64));
+				super.add(this.brett[n][i], c);
 				if (farbe){
 					this.brett[n][i].setIcon(new ImageIcon("Schwarz_FELD.png"));
 					this.brett[n][i].setBackground(Color.BLACK);
@@ -110,6 +119,7 @@ public class Spielbrett extends JPanel implements Serializable{
 				
 			}
 			farbe=!farbe;
+			counter++;
 		}
 
 	}

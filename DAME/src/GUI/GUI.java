@@ -144,7 +144,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	//centerPanel.add(bCENTER);
 	
 	centerPanel.add(spielBrett);
-	centerPanel.setLayout(new GridBagLayout());
+	centerPanel.setLayout(new GridLayout(1,1));
 	
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
