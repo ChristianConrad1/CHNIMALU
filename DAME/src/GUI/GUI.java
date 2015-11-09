@@ -160,12 +160,12 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 public void actionPerformed(ActionEvent e){ //Hier werden Action-Events abgefangen. Wobei ich diese gerne spaeter als externe Klasse haette
 	
 	if(e.getSource()==menuItemStart){
-		Menu m = new Menu("Startmenü", 300, 400);
+		Menu m = new Menu("Startmenü");
 		m.neuesSpielMenu();
 		this.dispose();
 	}
 	if(e.getSource()==menuItemLoad){
-		Menu m = new Menu("Startmenü", 300, 400);
+		Menu m = new Menu("Startmenü");
 		this.dispose();
 		m.oeffneFileChooser();
 		m.geladenesSpielStarten();

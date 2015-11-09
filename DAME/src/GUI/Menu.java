@@ -2,16 +2,25 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,7 +30,7 @@ import SpeichernLaden.DatenzugriffCSV;
 import SpeichernLaden.DatenzugriffSerialisiert;
 
 public class Menu extends JFrame implements ActionListener{
-	private JPanel mainPanel;
+	private JLabel mainLabel; //Hauptarbeitsflache ist nun ein Label, auf Grund des Backgroundicons
 	private JButton laden;
 	private JButton neues;
 	private JButton ende;
@@ -39,53 +48,68 @@ public class Menu extends JFrame implements ActionListener{
 	private iDatenzugriff d;
 	private DatenzugriffSerialisiert d1;
 	
+	private  BufferedImage image;
 	
 	private GUI g;
 
-	public Menu(String titel, int breite, int hoehe) {
+	public Menu(String titel) {
 		//-JFrame erstellen
 		super(titel);
-		this.setSize(breite, hoehe);
+		this.setSize(600,500);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		//---------------------------------
 		
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridBagLayout());
+		mainLabel = new JLabel();
+		mainLabel.setIcon(new ImageIcon ("TITLEBACKGROUND.png"));
+		mainLabel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
 		
-
+	
 	
 		
-		neues = new JButton("Neues Spiel");
+		neues = new JButton(new ImageIcon("neuesSpiel.png")); // NEUES SPIEL
 		neues.setPreferredSize(new Dimension(180, 50));
 		c.gridx = 1;
 		c.gridy = 0;
 		c.insets = new Insets(0,0,30,0);
 		neues.addActionListener(this);
-		mainPanel.add(neues, c);
+		mainLabel.add(neues, c);
 		
-		laden = new JButton("Spiel laden");
+		laden = new JButton(new ImageIcon("spielLaden.png")); //SPIEL LADEN
 		laden.setPreferredSize(new Dimension(180, 50));
 		c.gridy = 2;
 		laden.addActionListener(this);
-		mainPanel.add(laden, c);
+		mainLabel.add(laden, c);
 
-		ende = new JButton("Ende");
+		ende = new JButton(new ImageIcon("spielEnde.png")); // ENDE
 		ende.setPreferredSize(new Dimension(180, 50));
 		c.gridy = 3;
 		ende.addActionListener(this);
-		mainPanel.add(ende, c);
+		mainLabel.add(ende, c);
 		
 	
 		
-		this.add(mainPanel, BorderLayout.CENTER);
+		this.add(mainLabel, BorderLayout.CENTER);
 		this.setVisible(true);
 		
 		
 	}
+	
+	class ImagePanel extends JComponent {
+	    private Image image;
+	    public ImagePanel(Image image) {
+	        this.image = image;
+	    }
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        g.drawImage(image, 0, 0, this);
+	    }
+	}
+	
 	public void neuesSpielStarten(){
 		g = new GUI(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
 		neuesSpiel.dispose();
@@ -112,8 +136,12 @@ public class Menu extends JFrame implements ActionListener{
 		neuesSpiel.setSize(super.getWidth(), super.getHeight());
 		neuesSpiel.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		neuesSpiel.setLocationRelativeTo(null);
-		JPanel secPanel = new JPanel();
-		secPanel.setLayout(new GridBagLayout());
+		
+		JLabel secLabel = new JLabel(); // ist nun JLabel wegen hintergrundicon
+		secLabel.setIcon(new ImageIcon("TITLEBACKGROUND.png"));
+		secLabel.setLayout(new GridBagLayout());
+		
+		
 		GridBagConstraints c = new GridBagConstraints();
 		//--------------------------------------------------
 		
@@ -123,25 +151,25 @@ public class Menu extends JFrame implements ActionListener{
 		c.insets = new Insets(0,0,30,0);
 		c.gridx = 1;
 		c.gridy = 0;
-		secPanel.add(nameA,c);
+		secLabel.add(nameA,c);
 		aIstKi = new JCheckBox("Ist KI?");
 		c.gridy = 1;
-		secPanel.add(aIstKi,c);
+		secLabel.add(aIstKi,c);
 		nameB = new JTextField("Name SpielerB");
 		nameB.setPreferredSize(new Dimension(180, 20));
 		c.gridy = 2;
-		secPanel.add(nameB,c);
+		secLabel.add(nameB,c);
 		bIstKi = new JCheckBox("Ist KI?");
 		c.gridy = 3;
-		secPanel.add(bIstKi,c);
-		start = new JButton("Spiel starten");
+		secLabel.add(bIstKi,c);
+		start = new JButton("Starte Spiel");
 		c.gridy = 4;
 		start.addActionListener(this);
-		secPanel.add(start,c);
+		secLabel.add(start,c);
 		//-------------------------------------------------
 		
 		//JPanel auf neuen JFrame hinzufügen und Sichtbar machen
-		neuesSpiel.add(secPanel, BorderLayout.CENTER);
+		neuesSpiel.add(secLabel, BorderLayout.CENTER);
 		neuesSpiel.setVisible(true);
 		this.dispose(); //schließt den alten JFrame (Startmenü)
 		//------------------------------------------------------
@@ -167,5 +195,5 @@ public class Menu extends JFrame implements ActionListener{
 			this.neuesSpielStarten();
 		}
 	}
-
+	
 }
