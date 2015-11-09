@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Spielbrett extends JPanel implements Serializable{
@@ -97,11 +98,16 @@ public class Spielbrett extends JPanel implements Serializable{
 		for (int i = 11; i >= 0; i--) {
 			for (int n = 0; n < brett[i].length; n++) {
 				super.add(this.brett[n][i]);
-				if (farbe)
+				if (farbe){
+					this.brett[n][i].setIcon(new ImageIcon("Schwarz_FELD.png"));
 					this.brett[n][i].setBackground(Color.BLACK);
-				else
+				}
+					else{
+					this.brett[n][i].setIcon(new ImageIcon("weiss_FELD.png"));
 					this.brett[n][i].setBackground(Color.WHITE);
+					}
 				farbe=!farbe;
+				
 			}
 			farbe=!farbe;
 		}

@@ -2,6 +2,7 @@ package Basisklassen;
 import java.awt.Color;
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Spielfeld extends JLabel implements Serializable{
@@ -27,8 +28,7 @@ public class Spielfeld extends JLabel implements Serializable{
 		super.setOpaque(true);
 		setID(ID);
 		this.figur = null;
-		this.hatFigur = false;
-		
+		this.hatFigur = false;		
 	}
 	
 	public void setPosX(int positionX){
@@ -98,12 +98,14 @@ public class Spielfeld extends JLabel implements Serializable{
 		
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
+			this.setIcon(new ImageIcon("testBLACKStone.png"));
 			this.setBackground(Color.YELLOW);
 			if(figur.isDame()){
 				this.setBackground(Color.CYAN);
 			}
 		}
 		else if(figur.getFarbe() == FarbEnum.weiss){
+			this.setIcon(new ImageIcon("testWhiteStone.png"));
 			this.setBackground(Color.RED);
 			if(figur.isDame()){
 				this.setBackground(Color.PINK);
@@ -126,6 +128,7 @@ public class Spielfeld extends JLabel implements Serializable{
 		this.hatFigur = false;
 		setAusgabeID("[ ]");
 		//Beim entfernen einer Figur das Feld auf Standardfarbe setzen
+		this.setIcon(new ImageIcon("testBLACKStone.png"));
 		this.setBackground(Color.BLACK);
 		//-----------------------------------------------------------
 	}

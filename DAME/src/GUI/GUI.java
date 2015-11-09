@@ -1,5 +1,6 @@
 package GUI;
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -143,7 +144,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	//centerPanel.add(bCENTER);
 	
 	centerPanel.add(spielBrett);
-	centerPanel.setLayout(new GridLayout(1,1));
+	centerPanel.setLayout(new GridBagLayout());
 	
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
