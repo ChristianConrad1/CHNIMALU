@@ -98,14 +98,14 @@ public class Spielfeld extends JLabel implements Serializable{
 		
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
-			this.setIcon(new ImageIcon("testBLACKStone.png"));
+			this.setIcon(new ImageIcon("BLACKStone.png"));
 			this.setBackground(Color.YELLOW);
 			if(figur.isDame()){
 				this.setBackground(Color.CYAN);
 			}
 		}
 		else if(figur.getFarbe() == FarbEnum.weiss){
-			this.setIcon(new ImageIcon("testWhiteStone.png"));
+			this.setIcon(new ImageIcon("WHITEStone.png"));
 			this.setBackground(Color.RED);
 			if(figur.isDame()){
 				this.setBackground(Color.PINK);
