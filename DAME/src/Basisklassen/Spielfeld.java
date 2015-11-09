@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class Spielfeld extends JLabel implements Serializable{
+public class Spielfeld  extends JLabel implements Serializable{
 	
 	private Spielfigur figur;
 	private String ID;
@@ -98,14 +98,14 @@ public class Spielfeld extends JLabel implements Serializable{
 		
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
-			this.setIcon(new ImageIcon("BLACKStone.png"));
+			this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
 			this.setBackground(Color.YELLOW);
 			if(figur.isDame()){
 				this.setBackground(Color.CYAN);
 			}
 		}
 		else if(figur.getFarbe() == FarbEnum.weiss){
-			this.setIcon(new ImageIcon("WHITEStone.png"));
+			this.setIcon(new ImageIcon("res/img/WHITEStone.png"));
 			this.setBackground(Color.RED);
 			if(figur.isDame()){
 				this.setBackground(Color.PINK);
@@ -128,7 +128,7 @@ public class Spielfeld extends JLabel implements Serializable{
 		this.hatFigur = false;
 		setAusgabeID("[ ]");
 		//Beim entfernen einer Figur das Feld auf Standardfarbe setzen
-		this.setIcon(new ImageIcon("testBLACKStone.png"));
+		this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
 		this.setBackground(Color.BLACK);
 		//-----------------------------------------------------------
 	}

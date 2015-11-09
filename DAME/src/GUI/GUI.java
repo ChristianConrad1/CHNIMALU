@@ -1,5 +1,6 @@
 package GUI;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,7 +22,7 @@ import Basisklassen.Spiel;
 import Basisklassen.Spielbrett;
 import Basisklassen.Spieler;
 
-public class GUI extends JFrame implements ActionListener{
+public class GUI extends JFrame{
 	
 	private  JPanel mainJpanel;
 	private  GUI g;
@@ -32,40 +33,37 @@ public class GUI extends JFrame implements ActionListener{
 	private  JMenuItem menuItemLoad;
 	
 
-	
 	private Spielbrett spielBrett;
 	private Spieler spielerA;
 	private Spieler spielerB;
 	private Spiel spiel;
+	
+
+	private EventHandler eh;
 
 	
 public GUI(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
 
 	initNeuesSpiel(nameSpielerA, aIstKi, nameSpielerB, bIstKi);
-	
-	this.setVisible(true);
-	this.setTitle("Dame V1.0");
-	this.setSize(700, 700);
-	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	mainJpanel = new JPanel();
-	this.getContentPane().add(mainJpanel);
-	addMenuBar();	//Fuege MenuBar hinzu
-	setupLayout();	//Erstelle unser Layout
-	
+	guiStartup();
 }
 public GUI(Spiel s){
-
 	initGeladenesSpiel(s);
-	
-	this.setVisible(true);
+	guiStartup();
+}
+public void guiStartup(){
 	this.setTitle("Dame V1.0");
-	this.setSize(700, 700);
+	this.setSize(1150, 900); //Größe des JFrames
+	this.setMinimumSize(new Dimension(1150, 900)); //Minimalgröße des JFrames
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
+	eh = new EventHandler(this);
 	addMenuBar();	//Fuege MenuBar hinzu
 	setupLayout();	//Erstelle unser Layout
+	this.setVisible(true);
 	
+
 }
 public void initNeuesSpiel(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
 	spielBrett = new Spielbrett();
@@ -95,9 +93,9 @@ public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefu
 	menuGame.add(menuItemSave);
 	menuGame.add(menuItemLoad);
 	
-	menuItemStart.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
-	menuItemSave.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
-	menuItemLoad.addActionListener(this);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemStart.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemSave.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemLoad.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
 	
 	menuBar.add(menuGame);
 	this.setJMenuBar(menuBar);
@@ -141,10 +139,9 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	southPanel.add(bSOUTH);
 	southPanel.setLayout(new GridLayout(1,1));
 	
-	//centerPanel.add(bCENTER);
-	
+	centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
 	centerPanel.add(spielBrett);
-	centerPanel.setLayout(new GridLayout(1,1));
+	
 	
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
@@ -157,23 +154,15 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 }
 
 
-public void actionPerformed(ActionEvent e){ //Hier werden Action-Events abgefangen. Wobei ich diese gerne spaeter als externe Klasse haette
-	
-	if(e.getSource()==menuItemStart){
-		Menu m = new Menu("Startmenü");
-		m.neuesSpielMenu();
-		this.dispose();
-	}
-	if(e.getSource()==menuItemLoad){
-		Menu m = new Menu("Startmenü");
-		this.dispose();
-		m.oeffneFileChooser();
-		m.geladenesSpielStarten();
-	}
-	if(e.getSource()==menuItemSave){
-		JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
+public JMenuItem getMenuItemStart() {
+	return menuItemStart;
 }
+public JMenuItem getMenuItemSave() {
+	return menuItemSave;
+}
+public JMenuItem getMenuItemLoad() {
+	return menuItemLoad;
+}
+
 	
 }

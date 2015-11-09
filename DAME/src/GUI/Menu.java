@@ -29,7 +29,7 @@ import Interfaces.iDatenzugriff;
 import SpeichernLaden.DatenzugriffCSV;
 import SpeichernLaden.DatenzugriffSerialisiert;
 
-public class Menu extends JFrame implements ActionListener{
+public class Menu extends JFrame{
 	private JLabel mainLabel; //Hauptarbeitsflache ist nun ein Label, auf Grund des Backgroundicons
 	private JButton laden;
 	private JButton neues;
@@ -51,6 +51,8 @@ public class Menu extends JFrame implements ActionListener{
 	private  BufferedImage image;
 	
 	private GUI g;
+	
+	private EventHandler eh;
 
 	public Menu(String titel) {
 		//-JFrame erstellen
@@ -62,32 +64,32 @@ public class Menu extends JFrame implements ActionListener{
 		//---------------------------------
 		
 		mainLabel = new JLabel();
-		mainLabel.setIcon(new ImageIcon ("TITLEBACKGROUND.png"));
+		mainLabel.setIcon(new ImageIcon ("res/img/TITLEBACKGROUND.png"));
 		mainLabel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
 		
-	
+		eh = new EventHandler(this);
 	
 		
-		neues = new JButton(new ImageIcon("neuesSpiel.png")); // NEUES SPIEL
+		neues = new JButton(new ImageIcon("res/img/neuesSpiel.png")); // NEUES SPIEL
 		neues.setPreferredSize(new Dimension(180, 50));
 		c.gridx = 1;
 		c.gridy = 0;
 		c.insets = new Insets(0,0,30,0);
-		neues.addActionListener(this);
+		neues.addActionListener(eh);
 		mainLabel.add(neues, c);
 		
-		laden = new JButton(new ImageIcon("spielLaden.png")); //SPIEL LADEN
+		laden = new JButton(new ImageIcon("res/img/spielLaden.png")); //SPIEL LADEN
 		laden.setPreferredSize(new Dimension(180, 50));
 		c.gridy = 2;
-		laden.addActionListener(this);
+		laden.addActionListener(eh);
 		mainLabel.add(laden, c);
 
-		ende = new JButton(new ImageIcon("spielEnde.png")); // ENDE
+		ende = new JButton(new ImageIcon("res/img/spielEnde.png")); // ENDE
 		ende.setPreferredSize(new Dimension(180, 50));
 		c.gridy = 3;
-		ende.addActionListener(this);
+		ende.addActionListener(eh);
 		mainLabel.add(ende, c);
 		
 	
@@ -140,7 +142,7 @@ public class Menu extends JFrame implements ActionListener{
 		neuesSpiel.setResizable(false);
 		
 		JLabel secLabel = new JLabel(); // ist nun JLabel wegen hintergrundicon
-		secLabel.setIcon(new ImageIcon("TITLEBACKGROUND.png"));
+		secLabel.setIcon(new ImageIcon("res/img/TITLEBACKGROUND.png"));
 		secLabel.setLayout(new GridBagLayout());
 		
 		
@@ -166,7 +168,7 @@ public class Menu extends JFrame implements ActionListener{
 		secLabel.add(bIstKi,c);
 		start = new JButton("Starte Spiel");
 		c.gridy = 4;
-		start.addActionListener(this);
+		start.addActionListener(eh);
 		secLabel.add(start,c);
 		//-------------------------------------------------
 		
@@ -177,25 +179,17 @@ public class Menu extends JFrame implements ActionListener{
 		//------------------------------------------------------
 		
 	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource() == neues){
-			neuesSpielMenu();
-		}
-		if(e.getSource() == laden){
-			oeffneFileChooser();
-			geladenesSpielStarten();
-		}
-		if(e.getSource() == ende){
-			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?", JOptionPane.YES_NO_OPTION);
-			if(yn == 0){
-			this.dispose(); //Zuerst alle referenzen etc. l�schen, dann soft close 
-			}else return;
-		}
-		if(e.getSource() == start){
-			this.neuesSpielStarten();
-		}
-	}
 	
+	public JButton getLaden() {
+		return laden;
+	}
+	public JButton getNeues() {
+		return neues;
+	}
+	public JButton getEnde() {
+		return ende;
+	}
+	public JButton getStart() {
+		return start;
+	}	
 }

@@ -99,7 +99,7 @@ public class Spielbrett extends JPanel implements Serializable{
 		int counter = 0;
 		boolean farbe = false;
 		super.setLayout(new GridBagLayout());
-		super.setSize(new Dimension(1000,1000)); //Funktioniert leider nicht -.-
+		super.setSize(new Dimension(768,768)); //Größe des von JPanel erbenden Spielbretts
 		GridBagConstraints c = new GridBagConstraints();
 		for (int i = 11; i >= 0; i--) {
 			c.gridy = counter;
@@ -108,12 +108,12 @@ public class Spielbrett extends JPanel implements Serializable{
 				this.brett[n][i].setPreferredSize(new Dimension(64,64));
 				super.add(this.brett[n][i], c);
 				if (farbe){
-					this.brett[n][i].setIcon(new ImageIcon("Schwarz_FELD.png"));
+					this.brett[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
 					this.brett[n][i].setBackground(Color.BLACK);
 				}
 					else{
-					this.brett[n][i].setIcon(new ImageIcon("weiss_FELD.png"));
-					this.brett[n][i].setBackground(Color.WHITE);
+						this.brett[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
+						this.brett[n][i].setBackground(Color.WHITE);
 					}
 				farbe=!farbe;
 				
