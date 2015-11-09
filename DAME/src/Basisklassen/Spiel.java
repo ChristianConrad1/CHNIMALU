@@ -32,9 +32,20 @@ public class Spiel implements iBediener, Serializable {
 	}
 
 	public void setAlleFiguren() {
+		boolean neuesSpiel = true;
 		if (brett == null) {
 			throw new NullPointerException("Spielbrett ist null!");
 		}
+		
+		for(int i = 0; i < brettArray.length; i++){ //Komplettes Array durchlaufen und schauen, ob schon spielfiguren stehen, falls ja ist es kein neues spiel
+			for(int n = 0; n < brettArray[i].length; n++){
+				if(brettArray[i][n].getHatFigur()){
+					neuesSpiel = false;
+					return;
+				}
+			}
+		}
+		if(neuesSpiel){ //Soll nicht gemacht werden
 		// schwarze Steine ([x])
 		int f = 0;
 		for (int n = 0; n < this.reihen; n++) {
@@ -59,6 +70,7 @@ public class Spiel implements iBediener, Serializable {
 				x = 0;
 		}
 		// -----------------------------------------------------------------------------------
+		}
 
 	}
 
@@ -168,7 +180,7 @@ public class Spiel implements iBediener, Serializable {
 						 bewegeDame(c, d);
 					}
 					
-					if(this.aktiveSpielfigur!=null){ //ist diese Immernoch != null? (nach bewege Dame z.B. nötig)
+					if(this.aktiveSpielfigur!=null){ //ist diese Immernoch != null? (nach bewege Dame z.B. nï¿½tig)
 			
 					
 					int links = aktiveSpielfigur.getPosition().getPosX() - 1;

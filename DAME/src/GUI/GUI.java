@@ -32,6 +32,9 @@ public class GUI extends JFrame{
 	private  JMenuItem menuItemSave;
 	private  JMenuItem menuItemLoad;
 	
+	private JTextField eingabe;
+	private JButton bSubmit;
+	
 
 	private Spielbrett spielBrett;
 	private Spieler spielerA;
@@ -114,12 +117,13 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JPanel southPanel = new JPanel();
 	JPanel centerPanel = new JPanel();
 	
-	JTextField eingabe = new JTextField("a4-b5");
+	eingabe = new JTextField("a4-b5");
 	
 	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
 	
 	JButton bWEST = new JButton("WEST");
-	JButton bSubmit = new JButton("Durchführen");
+	bSubmit = new JButton("Durchführen");
+	bSubmit.addActionListener(eh);
 	JButton bNORTH = new JButton("NORTH");
 	JButton bSOUTH = new JButton("SOUTH");
 	JButton bCENTER = new JButton("CENTER");
@@ -154,6 +158,15 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 }
 
 
+public Spiel getSpiel() {
+	return spiel;
+}
+public JTextField getEingabe() {
+	return eingabe;
+}
+public JButton getbSubmit() {
+	return bSubmit;
+}
 public JMenuItem getMenuItemStart() {
 	return menuItemStart;
 }

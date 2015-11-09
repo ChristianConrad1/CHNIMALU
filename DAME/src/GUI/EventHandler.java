@@ -33,6 +33,9 @@ public EventHandler(Menu m){
 				JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
+			if(e.getSource() == g.getbSubmit()){
+				//HIER MUSS WAS REIN
+			}
 		}
 		if (e.getSource() == m.getNeues()) {
 			m.neuesSpielMenu();

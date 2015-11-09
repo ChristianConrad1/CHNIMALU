@@ -18,7 +18,7 @@ public class Spielbrett extends JPanel implements Serializable{
  * Konstruktor erzeugt Spielbrett aus Spielfeldern
  */
 	public Spielbrett() {
-
+	
 		brett=new Spielfeld[12][12];
 		char n = 'a';
 		int m=1;
@@ -44,7 +44,7 @@ public class Spielbrett extends JPanel implements Serializable{
 				this.brett[i][j].setAusgabeID("[ ]"); 
 			}
 	}
-		this.initBrett();
+		//this.initBrett();
 	}
 /**
  * gibt Array aus Spielfeldern mit Schachnotation-ID zurück
