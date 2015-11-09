@@ -137,6 +137,8 @@ public class Menu extends JFrame implements ActionListener{
 		neuesSpiel.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		neuesSpiel.setLocationRelativeTo(null);
 		
+		neuesSpiel.setResizable(false);
+		
 		JLabel secLabel = new JLabel(); // ist nun JLabel wegen hintergrundicon
 		secLabel.setIcon(new ImageIcon("TITLEBACKGROUND.png"));
 		secLabel.setLayout(new GridBagLayout());
