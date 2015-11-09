@@ -14,35 +14,33 @@ public class Spielbrett extends JPanel implements Serializable{
  * Konstruktor erzeugt Spielbrett aus Spielfeldern
  */
 	public Spielbrett() {
-		boolean farbe = true;
-		super.setLayout(new GridLayout(12,12));
+
 		brett=new Spielfeld[12][12];
 		char n = 'a';
-		int m=12;
+		int m=1;
 		int p=11;
 		for (int i = 0; i < brett.length; i++) {
 			for (int j = 0; j < brett[i].length; j++) {
 				this.brett[i][j] = new Spielfeld(n+ ""+m);
 				
-				super.add(this.brett[i][j]);
-				if(farbe) this.brett[i][j].setBackground(Color.BLACK);
-				else this.brett[i][j].setBackground(Color.WHITE);
+
 				
 				brett[i][j].setPosX(i);
 				brett[i][j].setPosY(j);
 				
-				farbe = !farbe;
-				m--;
+				
+				m++;
 			}
-			farbe = !farbe;
+		
 			n++;
-			m=12;
+			m=1;
 	}
 		for (int i = 0; i < brett.length; i++) {
 			for (int j=0; j<brett[i].length; j++) {
 				this.brett[i][j].setAusgabeID("[ ]"); 
 			}
 	}
+		this.initBrett();
 	}
 /**
  * gibt Array aus Spielfeldern mit Schachnotation-ID zurück
@@ -91,6 +89,23 @@ public class Spielbrett extends JPanel implements Serializable{
 	}
 	public int getKoordY(){
 		return this.KoordY;
+	}
+
+	public void initBrett() {
+		boolean farbe = false;
+		super.setLayout(new GridLayout(12, 12));
+		for (int i = 11; i >= 0; i--) {
+			for (int n = 0; n < brett[i].length; n++) {
+				super.add(this.brett[n][i]);
+				if (farbe)
+					this.brett[n][i].setBackground(Color.BLACK);
+				else
+					this.brett[n][i].setBackground(Color.WHITE);
+				farbe=!farbe;
+			}
+			farbe=!farbe;
+		}
+
 	}
 
 }
