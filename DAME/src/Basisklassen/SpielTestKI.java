@@ -15,7 +15,7 @@ import Interfaces.iBediener;
 
 		public static void main (String Args[]){
 			brett=new Spielbrett();
-			spieler1=new Spieler("bernd",FarbEnum.schwarz);
+			spieler1=new Spieler("bernd",FarbEnum.schwarz,true, brett);
 			spieler2=new Spieler("berndy",FarbEnum.weiss, true, brett);
 			
 			
@@ -69,8 +69,8 @@ import Interfaces.iBediener;
 			if(s1.getSpielerAktiv().isKI() == true){
 		    	eingabe = s1.getSpielerAktiv().getKi().wasMacheIch()[0];
 		    	ausgabe = s1.getSpielerAktiv().getKi().wasMacheIch()[1];
-		    	System.out.println("Startfeld: " + eingabe);
-		    	System.out.println("Zielfeld: " + ausgabe);
+		    	System.out.println("Startfeld KI: " + eingabe);
+		    	System.out.println("Zielfeld KI: " + ausgabe);
 		    }
 			else{
 			System.out.print("Gib das Feld an, von dem du das Steinchen bewegen möchtest: ");

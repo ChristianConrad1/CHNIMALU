@@ -130,8 +130,6 @@ public class Spiel implements iBediener, Serializable {
 		// ------------------------------Wï¿½hle Spielfigur--------------------------
 		try {
 			if (spielerAktiv.getAktiv() == true && spielerAktiv != null) {
-				System.out.println(brettArray[a][b].getFigur().getFarbe());
-				System.out.println(farbeAktiv);
 				if (brettArray[a][b].getFigur() != null
 						&& brettArray[a][b].getFigur().getFarbe() == farbeAktiv) {
 					this.aktiveSpielfigur = brettArray[a][b].getFigur();
@@ -167,14 +165,12 @@ public class Spiel implements iBediener, Serializable {
 
 				if (spielerAktiv.getAktiv() == true) {
 					if (this.aktiveSpielfigur.isDame() == true) {
-						bewegeDame(c, d);
+						 bewegeDame(c, d);
 					}
-
-//					aktiveSpielfigur = this.brettArray[a][b].getFigur();
-					System.out.println("aktive Spielfigur: " +aktiveSpielfigur);
 					
-				
-					//System.out.println(aktiveSpielfigur.getPosition().getPosX()+ "/" + aktiveSpielfigur.getPosition().getPosY());
+					if(this.aktiveSpielfigur!=null){ //ist diese Immernoch != null? (nach bewege Dame z.B. nötig)
+			
+					
 					int links = aktiveSpielfigur.getPosition().getPosX() - 1;
 					int rechts = aktiveSpielfigur.getPosition().getPosX() + 1;
 					int oben = aktiveSpielfigur.getPosition().getPosY() + 1;
@@ -300,7 +296,7 @@ public class Spiel implements iBediener, Serializable {
 										
 										
 
-										System.out.println(aktiveSpielfigur.getKannSpringen());
+										
 										System.out.println("Sprung vollendet.");
 
 									}
@@ -319,7 +315,6 @@ public class Spiel implements iBediener, Serializable {
 					// --------------------------------------ALLGEMEINESZIEHEN----------------------------
 
 					if (c == koordX && d == koordY&& this.brettArray[c][d].getFigur() == null) {
-						System.out.println("AktiveSpielfigur im allgemeinen Ziehen: "+ aktiveSpielfigur);
 						if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == false && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz && d>aktiveSpielfigur.getPosition().getPosY()) | (aktiveSpielfigur.getFarbe() == FarbEnum.weiss && d<aktiveSpielfigur.getPosition().getPosY())) {
 
 							aktiveSpielfigur.getPosition().removeFigur();
@@ -328,7 +323,7 @@ public class Spiel implements iBediener, Serializable {
 							// Ist die Spielfigur jetzt eine Dame?-------------------
 							if ((aktiveSpielfigur.getPosition().getPosY() == 11 &&aktiveSpielfigur.getFarbe()==FarbEnum.schwarz) | (aktiveSpielfigur.getPosition().getPosY()==0 && aktiveSpielfigur.getFarbe() == FarbEnum.weiss)){
 								aktiveSpielfigur.setDame();
-								System.out.println("setDame aufgerufen");
+								System.out.println("Eine Figur ist zur Dame geworden!");
 							}
 
 							System.out.println("Zug vollendet!");
@@ -413,9 +408,14 @@ public class Spiel implements iBediener, Serializable {
 					}
 					
 					
-					else //if(spielerAktiv.getMussSpringen()==false && c == koordX && d == koordY
-						//	&& this.brettArray[c][d].getFigur() != null){
+					else 
+					{
+						if(this.spielerAktiv.isKI()==false){
 						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
+					}
+					}
+				
+					}
 					}
 					
 				}
@@ -430,8 +430,8 @@ public class Spiel implements iBediener, Serializable {
 			
 	}catch (Exception e) {
 		System.err.println(e);
-		System.err.println(e.getMessage());
-		e.printStackTrace();
+		//System.err.println(e.getMessage());
+		//e.printStackTrace();
 			
 	}
 	

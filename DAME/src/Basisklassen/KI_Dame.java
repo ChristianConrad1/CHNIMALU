@@ -1,5 +1,7 @@
 package Basisklassen;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.omg.Messaging.SyncScopeHelper;
 
@@ -101,6 +103,8 @@ public class KI_Dame extends KI implements Serializable{
 
 							coordX += a;
 							coordY += b;
+	
+							
 
 						}
 
@@ -164,7 +168,7 @@ public class KI_Dame extends KI implements Serializable{
 								rueckgabe[1] = rewandler(rechts, oben);
 								return rueckgabe;
 					}
-						if(rechts <=brettArray.length && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
+						if(rechts <=brettArray.length-1 && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
 								this.brettArray[rechts][unten].getHatFigur() == false){
 								rueckgabe = new String[2];
 
@@ -189,7 +193,8 @@ public class KI_Dame extends KI implements Serializable{
 								// damit wasMacheIch()
 								// diese weitergeben kann
 		String[] rueckgabe = new String[2];
-		Spielfigur[] nurSpieler=new Spielfigur[24];
+		ArrayList<Spielfigur> nurSpieler=new ArrayList<>();
+	//	Spielfigur[] nurSpieler=new Spielfigur[24];
 		if (this.spieler.getAktiv() == true) {
 			int c=0; 
 			for (int i = 0; i < this.brettArray.length; i++) {
@@ -197,33 +202,23 @@ public class KI_Dame extends KI implements Serializable{
 					if (this.brettArray[i][j].getFigur() != null && this.brettArray[i][j].getFigur().getFarbe() == this.spieler.getFarbe()) {
 						
 						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
-						nurSpieler[c]=testSpieler;
-						
+						nurSpieler.add(testSpieler);
 						c++;
 					}
 				}
 			}
 		}
-			int randomSpielfigur=0;
-			randomSpielfigur = 0 + (int)(Math.random()*23);
+
 		
 						while(this.spieler.getAktiv()==true && nurSpieler!=null){
 							
-						while(nurSpieler[randomSpielfigur]==null && nurSpieler!=null){
-							if(randomSpielfigur<23)
-							randomSpielfigur++;
-							else{
-								randomSpielfigur=0;
-							}
-						}
-						if(nurSpieler==null){
-							System.out.println("der Boi ist null");
+						Collections.shuffle(nurSpieler);
+						Spielfigur testSpieler=nurSpieler.get(0);	
+						
+						if(nurSpieler.isEmpty()==true){
 							return null;
 						}
-						
-						Spielfigur testSpieler=nurSpieler[randomSpielfigur];
-						
-						
+			
 						
 						//durchlaufe komplettes array
 					
@@ -283,10 +278,13 @@ public class KI_Dame extends KI implements Serializable{
 								if(this.brettArray.length - (coordX)==0 | this.brettArray.length - (coordY)==0 | this.brettArray.length - (coordX) == this.brettArray.length | this.brettArray.length - (coordY) == this.brettArray.length ){
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(coordX, coordY);
+								
+								nurSpieler.remove(0);
 								return rueckgabe;
 								}	
 								coordX += a;
 								coordY += b;
+								
 
 							}
 
@@ -331,12 +329,15 @@ public class KI_Dame extends KI implements Serializable{
 							if(randomSprungcase==1){	//Random fall 1: Zieh nach Links oben!
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()+1);
+								nurSpieler.remove(0);
 								return rueckgabe;
+								
 							}
 								
 							else{	//Random fall 2: Zieh nach Rechts oben!
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()+1);
+								nurSpieler.remove(0);
 								return rueckgabe;
 							}
 							
@@ -344,11 +345,13 @@ public class KI_Dame extends KI implements Serializable{
 						else if(ziehCases[0]==true&&ziehCases[1]==false){ //Falls nur oben links moeglich, nehme diesen zug!
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()+1);
+							nurSpieler.remove(0);
 							return rueckgabe;
 						}
 						else if(ziehCases[1]==true&&ziehCases[0]==false){ //Falls nur oben rechts moeglich, nehme diesen zug!
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()+1);
+							nurSpieler.remove(0);
 							return rueckgabe;
 						}
 						
@@ -358,12 +361,14 @@ public class KI_Dame extends KI implements Serializable{
 							if(randomSprungcase==1){	//Random fall 1: Zieh nach Links unten!
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()-1);
+								nurSpieler.remove(0);
 								return rueckgabe;
 							}
 								
 							else{	//Random fall 2: Zieh nach Rechts unten!
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()-1);
+								nurSpieler.remove(0);
 								return rueckgabe;
 							}
 							
@@ -372,24 +377,18 @@ public class KI_Dame extends KI implements Serializable{
 						else if(ziehCases[2]==true&&ziehCases[3]==false){ //Falls nur unten links moeglich, nehme diesen zug!
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()-1,testSpieler.getPosition().getPosY()-1);
+							nurSpieler.remove(0);
 							return rueckgabe;
 						}
 						else if(ziehCases[3]==true&&ziehCases[2]==false){ //Falls nur unten rechts moeglich, nehme diesen zug!
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(),testSpieler.getPosition().getPosY());
 							rueckgabe[1] = rewandler(testSpieler.getPosition().getPosX()+1,testSpieler.getPosition().getPosY()-1);
+							nurSpieler.remove(0);
 							return rueckgabe;
 						}
 						
-						if(randomSpielfigur==23){ //Grenzfall, falls immernoch kein Return eingetreten ist, dann fang von links wieder an durch das Array durchzusuchen!
-							randomSpielfigur=0;				
-							}
-						else{
-				randomSpielfigur++;
-				System.out.println("Wir befinden uns in dieser Schleife. Erhoehe!");
-						}
 						}
 						//Im Moment endlosschleife die nur abgebrochen wird wenn ziehen kann
-					System.out.println("hier wird null zurueckgegeben");
 		return null;
 		}
 		
