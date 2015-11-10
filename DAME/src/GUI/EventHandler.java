@@ -5,14 +5,23 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import Basisklassen.Spielfeld;
+
 public class EventHandler implements ActionListener{
 	private GUI g;
 	private Menu m;
+	private Spielfeld f;
+	private static boolean buttonClick; //Wenn ein button geklickt wurde, dann true, da Methode auf zweiten Button warten muss
+	private static String eingabeButton;
+	
 public EventHandler(GUI g){
 		this.g = g;
 }
 public EventHandler(Menu m){
 	this.m = m;
+}
+public EventHandler(Spielfeld f){
+	this.f = f;
 }
 
 	@Override
@@ -45,19 +54,36 @@ public EventHandler(Menu m){
 				System.out.println(eingabe +" ausgabe:"+ ausgabe);
 				
 				g.bewegeSpielfigur(eingabe, ausgabe);
-				
-		
-				
 			}
 		}
-		if (m!=null && e.getSource() == m.getNeues()) {
+		
+		if(f!=null){
+			if(e.getSource() == f){
+				if(buttonClick==false){
+				System.out.println("Waehle Zielfeld!"); //Wird an Textbox oder so ausgegeben!
+				eingabeButton=f.getID();
+				buttonClick=true;
+				}
+				if(buttonClick==true){
+					String ausgabeButton=f.getID();
+
+					g.bewegeSpielfigur(eingabeButton, ausgabeButton);
+					ausgabeButton=" ";
+					buttonClick=false;
+				}
+			}
+		}
+		
+		
+		if(m!=null){
+		if (e.getSource() == m.getNeues()) {
 			m.neuesSpielMenu();
 		}
-		if (m!=null && e.getSource() == m.getLaden()) {
+		if (e.getSource() == m.getLaden()) {
 			m.oeffneFileChooser();
 			m.geladenesSpielStarten();
 		}
-		if (m!=null && e.getSource() == m.getEnde()) {
+		if (e.getSource() == m.getEnde()) {
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?",
 					JOptionPane.YES_NO_OPTION);
 			if (yn == 0) {
@@ -66,10 +92,11 @@ public EventHandler(Menu m){
 			} else
 				return;
 		}
-		if (m!=null && e.getSource() == m.getStart()) {
+		if (e.getSource() == m.getStart()) {
 			m.neuesSpielStarten();
 		}
 
 	}
-
+		
+	}
 }

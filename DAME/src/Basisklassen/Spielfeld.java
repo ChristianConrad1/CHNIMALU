@@ -3,9 +3,11 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 
-public class Spielfeld  extends JLabel implements Serializable{
+import GUI.EventHandler;
+
+public class Spielfeld  extends JButton implements Serializable{
 	
 	private Spielfigur figur;
 	private String ID;
@@ -13,6 +15,8 @@ public class Spielfeld  extends JLabel implements Serializable{
 	private boolean hatFigur;
 	private int positionX;
 	private int positionY;
+	
+	private EventHandler eh;
 
 	
 	
@@ -28,7 +32,10 @@ public class Spielfeld  extends JLabel implements Serializable{
 		super.setOpaque(true);
 		setID(ID);
 		this.figur = null;
-		this.hatFigur = false;		
+		this.hatFigur = false;	
+		eh=new EventHandler(this);
+		this.addActionListener(eh);
+		
 	}
 	
 	public void setPosX(int positionX){
