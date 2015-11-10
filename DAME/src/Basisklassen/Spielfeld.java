@@ -28,7 +28,7 @@ public class Spielfeld  extends JButton implements Serializable{
 	 *           
 	 */
 	public Spielfeld(String ID){
-		super(ID);
+		//super(ID);
 		super.setOpaque(true);
 		setID(ID);
 		this.figur = null;
@@ -106,6 +106,7 @@ public class Spielfeld  extends JButton implements Serializable{
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
 			this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
+			
 			this.setBackground(Color.YELLOW);
 			if(figur.isDame()){
 				this.setBackground(Color.CYAN);

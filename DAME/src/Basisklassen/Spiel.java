@@ -302,23 +302,13 @@ public class Spiel implements iBediener, Serializable {
 											}
 														}
 										
-										
-										
-										
-										
-										
-
-										
 										System.out.println("Sprung vollendet.");
-
 									}
 								}
-								aktiveSpielfigur.setKannSpringen(false);
-								spielerAktiv.setMussSpringen(false);
-								aktiveSpielfigur = null;
-								spielerWechsel();
+							
+								
 							}
-
+							
 						}
 					}
 
@@ -763,8 +753,6 @@ public class Spiel implements iBediener, Serializable {
 				}
 			
 			if (spielerAktiv.getMussSpringen() == false) {
-				System.out
-				.println("Kein Sprung moeglich!");
 				System.out.println("Spieler "+spielerAktiv.getName()+" Sie sind am Zug!");
 				
 			}
