@@ -1,19 +1,14 @@
 package GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -21,6 +16,7 @@ import Basisklassen.FarbEnum;
 import Basisklassen.Spiel;
 import Basisklassen.Spielbrett;
 import Basisklassen.Spieler;
+import Interfaces.iBediener;
 
 public class GUI extends JFrame{
 	
@@ -40,6 +36,8 @@ public class GUI extends JFrame{
 	private Spieler spielerA;
 	private Spieler spielerB;
 	private Spiel spiel;
+	
+	private static iBediener bediener;
 	
 
 	private EventHandler eh;
@@ -76,6 +74,7 @@ public void initNeuesSpiel(String nameSpielerA, boolean aIstKi, String nameSpiel
 	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
 	
 	spiel = new Spiel(spielerA, spielerB, spielBrett);
+	bediener=spiel;
 	
 }
 public void initGeladenesSpiel(Spiel s){
@@ -176,6 +175,9 @@ public JMenuItem getMenuItemSave() {
 public JMenuItem getMenuItemLoad() {
 	return menuItemLoad;
 }
-
+public static void bewegeSpielfigur(String eingabe, String ausgabe) {
+	String s1=eingabe; String s2=ausgabe;
+	bediener.bewegeSpielfigur(s1, s2);
+}
 	
 }

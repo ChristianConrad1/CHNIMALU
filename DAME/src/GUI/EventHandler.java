@@ -35,16 +35,29 @@ public EventHandler(Menu m){
 			}
 			if(e.getSource() == g.getbSubmit()){
 				//HIER MUSS WAS REIN
+				String s=g.getEingabe().getText();	//Unser String mit Strich Notation z.B. a4-b5
+				System.out.println(s);
+				int split=s.indexOf('-');
+				
+				String eingabe = s.substring(0,split);
+				String ausgabe = s.substring(split+1);
+				
+				System.out.println(eingabe +" ausgabe:"+ ausgabe);
+				
+				g.bewegeSpielfigur(eingabe, ausgabe);
+				
+		
+				
 			}
 		}
-		if (e.getSource() == m.getNeues()) {
+		if (m!=null && e.getSource() == m.getNeues()) {
 			m.neuesSpielMenu();
 		}
-		if (e.getSource() == m.getLaden()) {
+		if (m!=null && e.getSource() == m.getLaden()) {
 			m.oeffneFileChooser();
 			m.geladenesSpielStarten();
 		}
-		if (e.getSource() == m.getEnde()) {
+		if (m!=null && e.getSource() == m.getEnde()) {
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?",
 					JOptionPane.YES_NO_OPTION);
 			if (yn == 0) {
@@ -53,7 +66,7 @@ public EventHandler(Menu m){
 			} else
 				return;
 		}
-		if (e.getSource() == m.getStart()) {
+		if (m!=null && e.getSource() == m.getStart()) {
 			m.neuesSpielStarten();
 		}
 

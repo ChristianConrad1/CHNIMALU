@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
@@ -44,7 +43,7 @@ public class Spielbrett extends JPanel implements Serializable{
 				this.brett[i][j].setAusgabeID("[ ]"); 
 			}
 	}
-		//this.initBrett();
+		this.initBrett();
 	}
 /**
  * gibt Array aus Spielfeldern mit Schachnotation-ID zurück

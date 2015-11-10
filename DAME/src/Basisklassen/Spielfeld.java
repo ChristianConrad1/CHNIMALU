@@ -94,18 +94,18 @@ public class Spielfeld  extends JLabel implements Serializable{
 		}
 		this.figur=figur;
 		this.hatFigur = true;
-		setAusgabeID(this.figur.getAnzeigeID());
+		setAusgabeID(this.figur.getAnzeigeID()); 
 		
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
-			//this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
+			this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
 			this.setBackground(Color.YELLOW);
 			if(figur.isDame()){
 				this.setBackground(Color.CYAN);
 			}
 		}
 		else if(figur.getFarbe() == FarbEnum.weiss){
-			//this.setIcon(new ImageIcon("res/img/WHITEStone.png"));
+			this.setIcon(new ImageIcon("res/img/WHITEStone.png"));
 			this.setBackground(Color.RED);
 			if(figur.isDame()){
 				this.setBackground(Color.PINK);
@@ -128,7 +128,7 @@ public class Spielfeld  extends JLabel implements Serializable{
 		this.hatFigur = false;
 		setAusgabeID("[ ]");
 		//Beim entfernen einer Figur das Feld auf Standardfarbe setzen
-		//this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
+		this.setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
 		this.setBackground(Color.BLACK);
 		//-----------------------------------------------------------
 	}
