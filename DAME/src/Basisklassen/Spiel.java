@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Scanner;
 
+import GUI.Sounds;
 import Interfaces.iBediener;
 
 public class Spiel implements iBediener, Serializable {
@@ -22,6 +23,8 @@ public class Spiel implements iBediener, Serializable {
 	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
 	private FarbEnum farbeAktiv = null;
 	private transient Scanner sc; 
+	
+	private transient Sounds sound;
 
 	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
 		this.brett = brett;
@@ -29,6 +32,7 @@ public class Spiel implements iBediener, Serializable {
 		this.brettArray = brett.getNotation();
 		setAlleFiguren();
 		sc=new Scanner(System.in);
+		sound = new Sounds();
 	}
 
 	public void setAlleFiguren() {
@@ -303,6 +307,7 @@ public class Spiel implements iBediener, Serializable {
 														}
 										
 										System.out.println("Sprung vollendet.");
+										sound.schlagSound();
 									}
 								}
 							
@@ -329,6 +334,7 @@ public class Spiel implements iBediener, Serializable {
 							}
 
 							System.out.println("Zug vollendet!");
+							sound.ziehSound();
 
 						}
 						
