@@ -37,7 +37,7 @@ public class GUI extends JFrame{
 	private Spieler spielerB;
 	private Spiel spiel;
 	
-	private  iBediener ibediener;
+	private  iBediener ibediener; 
 	
 
 	private EventHandler eh;
@@ -54,7 +54,7 @@ public GUI(Spiel s){
 }
 public void guiStartup(){
 	this.setTitle("Dame V1.0");
-	this.setSize(1150, 900); //Größe des JFrames
+	this.setSize(1150, 900); //Groe�e des JFrames
 	this.setMinimumSize(new Dimension(1150, 900)); //Minimalgröße des JFrames
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
