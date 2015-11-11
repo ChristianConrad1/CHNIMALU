@@ -37,7 +37,7 @@ public class GUI extends JFrame{
 	private Spieler spielerB;
 	private Spiel spiel;
 	
-	private  iBediener ibediener; 
+	private static iBediener ibediener; 
 	
 
 	private EventHandler eh;
@@ -175,7 +175,7 @@ public JMenuItem getMenuItemSave() {
 public JMenuItem getMenuItemLoad() {
 	return menuItemLoad;
 }
-public void bewegeSpielfigur(String eingabe, String ausgabe) {
+public static void bewegeSpielfigur(String eingabe, String ausgabe) {
 	String s1=eingabe; String s2=ausgabe;
 	ibediener.bewegeSpielfigur(s1, s2);
 }
