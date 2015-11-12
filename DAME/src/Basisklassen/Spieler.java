@@ -21,13 +21,13 @@ public class Spieler implements Serializable{
 	public Spieler(String name, FarbEnum c) {
 		this.setName(name);
 		this.setFarbe(c);
-	}												//bisher noch zwei Konstruktoren, da sonst in den Testklassen, die nicht auf
+}												//bisher noch zwei Konstruktoren, da sonst in den Testklassen, die nicht auf
 													//die KI eingestellt sind umgeschrieben werden müssten.
-	public Spieler(String name, FarbEnum c, boolean istKI, Spielbrett brett) {
+	public Spieler(String name, FarbEnum c, boolean istKI) {
 		this.setName(name);
 		this.setFarbe(c);
 		if(istKI) {
-			this.setKi(new KI_Dame(this, brett));
+			this.setKi(new KI_Dame(this));
 		}
 	}
 	public KI getKi() {

@@ -1,4 +1,5 @@
 package Basisklassen;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,31 +8,37 @@ import java.io.Serializable;
 import java.util.Scanner;
 
 import GUI.Sounds;
-import Interfaces.iBediener;
+import Interfaces.*;
+import SpeichernLaden.DatenzugriffCSV;
+import SpeichernLaden.DatenzugriffSerialisiert;
 
 public class Spiel implements iBediener, Serializable {
-	private PrintWriter pw;
+	private iMessage msg;
+
 	private Spieler winner;
 	private Spieler spielerA;
 	private Spieler spielerB;
-	private Spieler spielerAktiv; //der spieler der gerade am zug ist, nicht zu verwechseln mit der aktiven Spielfigur
+	private Spieler spielerAktiv; // der spieler der gerade am zug ist, nicht zu
+									// verwechseln mit der aktiven Spielfigur
 	private Spielbrett brett;
 	private Spielfigur aktiveSpielfigur = null; // Setze immer null nach Zug
 	private Spielfeld[][] brettArray;
 	private boolean spielende = false;
 	private final int reihen = 4;
-	private int sprungKonflikt=0; //Falls 2 Steinchen in Schlagmoeglichkeit kommen entsteht ein Konflikt! (zaehlt hoch, Konflikt ab 2!)
+	private int sprungKonflikt = 0; // Falls 2 Steinchen in Schlagmoeglichkeit
+									// kommen entsteht ein Konflikt! (zaehlt
+									// hoch, Konflikt ab 2!)
 	private FarbEnum farbeAktiv = null;
-	private transient Scanner sc; 
-	
+	private transient Scanner sc;
+
 	private transient Sounds sound;
 
-	public Spiel(Spieler spieler1, Spieler spieler2, Spielbrett brett) {
+	public Spiel(Spielbrett brett) {
 		this.brett = brett;
-		setSpieler(spieler1, spieler2);
+
 		this.brettArray = brett.getNotation();
 		setAlleFiguren();
-		sc=new Scanner(System.in);
+		sc = new Scanner(System.in);
 		sound = new Sounds();
 	}
 
@@ -40,59 +47,51 @@ public class Spiel implements iBediener, Serializable {
 		if (brett == null) {
 			throw new NullPointerException("Spielbrett ist null!");
 		}
-		
-		for(int i = 0; i < brettArray.length; i++){ //Komplettes Array durchlaufen und schauen, ob schon spielfiguren stehen, falls ja ist es kein neues spiel
-			for(int n = 0; n < brettArray[i].length; n++){
-				if(brettArray[i][n].getHatFigur()){
+
+		for (int i = 0; i < brettArray.length; i++) { // Komplettes Array
+														// durchlaufen und
+														// schauen, ob schon
+														// spielfiguren stehen,
+														// falls ja ist es kein
+														// neues spiel
+			for (int n = 0; n < brettArray[i].length; n++) {
+				if (brettArray[i][n].getHatFigur()) {
 					neuesSpiel = false;
 					return;
 				}
 			}
 		}
-		if(neuesSpiel){ //Soll nicht gemacht werden
-		// schwarze Steine ([x])
-		int f = 0;
-		for (int n = 0; n < this.reihen; n++) {
-			for (; f < brettArray.length; f += 2) {
-				brettArray[f][n].setFigur(new Spielfigur(FarbEnum.schwarz, brettArray[f][n]));
+		if (neuesSpiel) { // Soll nicht gemacht werden
+			// schwarze Steine ([x])
+			int f = 0;
+			for (int n = 0; n < this.reihen; n++) {
+				for (; f < brettArray.length; f += 2) {
+					brettArray[f][n].setFigur(new Spielfigur(FarbEnum.schwarz, brettArray[f][n]));
+				}
+				if (f % 2 == 0)
+					f = 1;
+				else
+					f = 0;
 			}
-			if (f % 2 == 0)
-				f = 1;
-			else
-				f = 0;
-		}
-		// weisse Steine ([o])
-		int x = 1;
-		for (int n = brettArray.length - 1; n > (brettArray.length - 1) - this.reihen; n--) { // (n-3) da rueckwaerts gezaehlt wird
-																						
-			for (; x < brettArray.length; x += 2) {
-				brettArray[x][n].setFigur(new Spielfigur(FarbEnum.weiss, brettArray[x][n]));
+			// weisse Steine ([o])
+			int x = 1;
+			for (int n = brettArray.length - 1; n > (brettArray.length - 1) - this.reihen; n--) { // (n-3)
+																									// da
+																									// rueckwaerts
+																									// gezaehlt
+																									// wird
+
+				for (; x < brettArray.length; x += 2) {
+					brettArray[x][n].setFigur(new Spielfigur(FarbEnum.weiss, brettArray[x][n]));
+				}
+				if (x % 2 == 0)
+					x = 1;
+				else
+					x = 0;
 			}
-			if (x % 2 == 0)
-				x = 1;
-			else
-				x = 0;
-		}
-		// -----------------------------------------------------------------------------------
+			// -----------------------------------------------------------------------------------
 		}
 
-	}
-
-	/**
-	 * lege Spieler fest!
-	 * 
-	 * @param spieler1
-	 * @param spieler2
-	 */
-	public void setSpieler(Spieler spieler1, Spieler spieler2) {
-		if (spieler1 != null && spieler2 != null) {
-			this.spielerA = spieler1;
-			this.spielerAktiv = spielerA;
-			this.spielerA.setAktiv(true);
-			this.spielerB = spieler2;
-		} else {
-			throw new NullPointerException("Einer oder mehrere Spieler sind null!");
-		}
 	}
 
 	/**
@@ -103,8 +102,9 @@ public class Spiel implements iBediener, Serializable {
 	 * @param String2
 	 *            eingabe Zielfeld
 	 */
-	
-	//**************************************BEWEGE SPIELFIGUR METHODE********************************************
+
+	// **************************************BEWEGE SPIELFIGUR
+	// METHODE********************************************
 	public void bewegeSpielfigur(String s1, String s2) {
 		brett.Umwandler(s1);
 		int a = brett.getKoordX();
@@ -118,12 +118,10 @@ public class Spiel implements iBediener, Serializable {
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
 		if (a < 0 | a > this.brettArray.length - 1) {
-			throw new RuntimeException(
-					"Ihre X Koordinate ist nicht in unserem Spielfeld!");
+			throw new RuntimeException("Ihre X Koordinate ist nicht in unserem Spielfeld!");
 		}
 		if (b < 0 | b > this.brettArray.length - 1) {
-			throw new RuntimeException(
-					"Ihre Y Koordinate ist nicht in unserem Spielfeld!");
+			throw new RuntimeException("Ihre Y Koordinate ist nicht in unserem Spielfeld!");
 		}
 
 		Spieler spielerAktiv = null;
@@ -143,312 +141,386 @@ public class Spiel implements iBediener, Serializable {
 			farbeGegner = FarbEnum.schwarz;
 		}
 
-		// ------------------------------W�hle Spielfigur--------------------------
+		// ------------------------------W�hle
+		// Spielfigur--------------------------
 		try {
 			if (spielerAktiv.getAktiv() == true && spielerAktiv != null) {
-				if (brettArray[a][b].getFigur() != null
-						&& brettArray[a][b].getFigur().getFarbe() == farbeAktiv) {
+				if (brettArray[a][b].getFigur() != null && brettArray[a][b].getFigur().getFarbe() == farbeAktiv) {
 					this.aktiveSpielfigur = brettArray[a][b].getFigur();
 					this.aktiveSpielfigur.setPosition(brettArray[a][b]);
 				} else {
-					throw new RuntimeException(
-							"Keine " + this.spielerAktiv.getFarbe() +"e Spielfigur ausgew�hlt!");
+					throw new RuntimeException("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
 				}
 			}
 
 		} catch (Exception e) {
 			System.err.println(e);
-//			System.err.println(e.getMessage());
-//			e.printStackTrace();
+			// System.err.println(e.getMessage());
+			// e.printStackTrace();
 
 		}
 
-		// ------------------------------------------------------ZIELFELD (Hier soll Stein als n�chstes hin!)----------------------------------------------------------------------
-		
-		
+		// ------------------------------------------------------ZIELFELD (Hier
+		// soll Stein als n�chstes
+		// hin!)----------------------------------------------------------------------
+
 		if (c < 0 | c > this.brettArray.length - 1) {
-			throw new RuntimeException(
-					"Ihre X Koordinate ist nicht in unserem Spielfeld!");
+			throw new RuntimeException("Ihre X Koordinate ist nicht in unserem Spielfeld!");
 		}
 
 		if (d < 0 | d > this.brettArray.length - 1) {
-			throw new RuntimeException(
-					"Ihre Y Koordinate ist nicht in unserem Spielfeld!");
+			throw new RuntimeException("Ihre Y Koordinate ist nicht in unserem Spielfeld!");
 		}
 		try {
-			
+
 			if (this.aktiveSpielfigur != null) {
 
 				if (spielerAktiv.getAktiv() == true) {
 					if (this.aktiveSpielfigur.isDame() == true) {
-						 bewegeDame(c, d);
+						bewegeDame(c, d);
 					}
-					
-					if(this.aktiveSpielfigur!=null){ //ist diese Immernoch != null? (nach bewege Dame z.B. n�tig)
-			
-					
-					int links = aktiveSpielfigur.getPosition().getPosX() - 1;
-					int rechts = aktiveSpielfigur.getPosition().getPosX() + 1;
-					int oben = aktiveSpielfigur.getPosition().getPosY() + 1;
-					int unten = aktiveSpielfigur.getPosition().getPosY() - 1;
 
-					int koordX = 0;
-					int koordY = 0;
-					int koordX1 = 0;
-					int koordY1 = 0;
-					int Dx = 0; //Variable fuer X Verschiebung
-					int Dy = 0; //Variable fuer Y Verschiebung
+					if (this.aktiveSpielfigur != null) { // ist diese Immernoch
+															// != null? (nach
+															// bewege Dame z.B.
+															// n�tig)
 
-					// CASE: LINKS OBEN:
-					if (c == links && d == oben) {
-						koordX = links;
-						koordY = oben;
-						koordX1 = links - 1;
-						koordY1 = oben + 1;
-						Dx= -1; //Fuer die Verschiebung in oder entgegen X Richtung 
-						Dy= 1;	//Fuer die Verschiebung in oder entgegen Y Richtung
-					}
-					// CASE: RECHTS OBEN:
-					if (c == rechts && d == oben) {
-						koordX = rechts;
-						koordY = oben;
-						koordX1 = rechts + 1;
-						koordY1 = oben + 1;
-						Dx= 1; //Fuer die Verschiebung in oder entgegen X Richtung 
-						Dy= 1;	//Fuer die Verschiebung in oder entgegen Y Richtung
-					}
-					// CASE: LINKS UNTEN:
-					if (c == links && d == unten) {
-						koordX = links;
-						koordY = unten;
-						koordX1 = links - 1;
-						koordY1 = unten - 1;
-						Dx= -1; //Fuer die Verschiebung in oder entgegen X Richtung 
-						Dy= -1;	//Fuer die Verschiebung in oder entgegen Y Richtung
-					}
-					// CASE: RECHTS UTNEN:
-					if (c == rechts && d == unten) {
-						koordX = rechts;
-						koordY = unten;
-						koordX1 = rechts + 1;
-						koordY1 = unten - 1;
-						Dx= +1; //Fuer die Verschiebung in oder entgegen X Richtung 
-						Dy= -1;	//Fuer die Verschiebung in oder entgegen Y Richtung
-					}
-			
-					if (spielerAktiv.getMussSpringen() == true) {
-						
-						if (aktiveSpielfigur.getKannSpringen() == true) {
-							// ----------------------------------SPRINGEN IN
-							// EINE VON VIER
-							// RICHTUNGEN---------------------------------------
+						int links = aktiveSpielfigur.getPosition().getPosX() - 1;
+						int rechts = aktiveSpielfigur.getPosition().getPosX() + 1;
+						int oben = aktiveSpielfigur.getPosition().getPosY() + 1;
+						int unten = aktiveSpielfigur.getPosition().getPosY() - 1;
 
-							// Spezialfall: Gew�hlte Spielfigur hat Sprung,
-							// nutzt diesen aber nicht! L�sche sie!!
-							if (aktiveSpielfigur.getKannSpringen() == true
-									&& spielerAktiv.getMussSpringen()
-									&& this.brettArray[c][d].getFigur() == null) {
-								this.brettArray[a][b].removeFigur();
-								System.out
-								.println("UPS! Sie haben einen Stein mit Schlagm�glichkeit gew�hlt, sind dieser jedoch nicht nachgegangen! Der Stein wurde zur Bestrafung vom Spielfeld entfernt!");
+						int koordX = 0;
+						int koordY = 0;
+						int koordX1 = 0;
+						int koordY1 = 0;
+						int Dx = 0; // Variable fuer X Verschiebung
+						int Dy = 0; // Variable fuer Y Verschiebung
 
-							}
-							// -------------------------------------------------------SPRINGEN----------------------------------------------------
-
-							// ---------------------------------AUF�HRUNG DER SPRUNG CASES:------------------------------------
-							if (c == koordX && d == koordY) {
-								while (aktiveSpielfigur.getKannSpringen() == true && this.spielerAktiv.getMussSpringen() == true&& this.brettArray[koordX1][koordY1].getFigur() == null) {
-									if (this.brettArray[koordX][koordY].getFigur() != null&& this.brettArray[koordX][koordY].getFigur().getFarbe() == farbeGegner
-													) {
-										
-										
-										this.aktiveSpielfigur.getPosition().removeFigur();
-										this.brettArray[koordX][koordY].removeFigur();
-										this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
-										aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
-										
-										System.out.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
-
-										spielerAktiv.setMussSpringen(false);
-										aktiveSpielfigur.setKannSpringen(false);			
-										aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); //Weise neue Steinposition zu, fuer erneutes Springen						
-										
-									
-										spielerMussSpringen();
-										
-										if (aktiveSpielfigur.getKannSpringen() == true) {
-											System.out.println("Der selbe Stein konnte weitere Steine ueberspringen!");
-											
-											boolean[] sprungCases=aktiveSpielfigur.getSprungCases();
-											if(sprungCases[0]==true){ //spring als naechstes nach links oben
-												koordX = aktiveSpielfigur.getPosition().getPosX() -1;
-												koordY = aktiveSpielfigur.getPosition().getPosY() +1;
-												koordX1 = koordX-1;
-												koordY1 = koordY+1;
-											}
-											else if(sprungCases[1]==true){	//spring als naechstes nach rechts oben
-												koordX = aktiveSpielfigur.getPosition().getPosX() +1;
-												koordY = aktiveSpielfigur.getPosition().getPosY() +1;
-												koordX1 = koordX+1;
-												koordY1 = koordY+1;
-											}
-											else if(sprungCases[2]==true){	//spring als naechstes nach links unten
-												koordX = aktiveSpielfigur.getPosition().getPosX() -1;
-												koordY = aktiveSpielfigur.getPosition().getPosY() -1;
-												koordX1 = koordX-1;
-												koordY1 = koordY-1;
-											}
-											else if(sprungCases[3]==true){	//spring als naechstes nach rechts unten
-												koordX = aktiveSpielfigur.getPosition().getPosX() +1;
-												koordY = aktiveSpielfigur.getPosition().getPosY() -1;
-												koordX1 = koordX+1;
-												koordY1 = koordY-1;
-											}
-														}
-										
-										System.out.println("Sprung vollendet.");
-										sound.schlagSound();
-									}
-								}
-							
-								
-							}
-							
+						// CASE: LINKS OBEN:
+						if (c == links && d == oben) {
+							koordX = links;
+							koordY = oben;
+							koordX1 = links - 1;
+							koordY1 = oben + 1;
+							Dx = -1; // Fuer die Verschiebung in oder entgegen X
+										// Richtung
+							Dy = 1; // Fuer die Verschiebung in oder entgegen Y
+									// Richtung
 						}
-					}
-
-					// *******************************************NORMALES ZIEHEN!****************************************
-
-					// --------------------------------------ALLGEMEINESZIEHEN----------------------------
-
-					if (c == koordX && d == koordY&& this.brettArray[c][d].getFigur() == null) {
-						if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == false && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz && d>aktiveSpielfigur.getPosition().getPosY()) | (aktiveSpielfigur.getFarbe() == FarbEnum.weiss && d<aktiveSpielfigur.getPosition().getPosY())) {
-
-							aktiveSpielfigur.getPosition().removeFigur();
-							aktiveSpielfigur.setPosition(this.brettArray[c][d]);
-							this.brettArray[c][d].setFigur(aktiveSpielfigur);
-							// Ist die Spielfigur jetzt eine Dame?-------------------
-							if ((aktiveSpielfigur.getPosition().getPosY() == 11 &&aktiveSpielfigur.getFarbe()==FarbEnum.schwarz) | (aktiveSpielfigur.getPosition().getPosY()==0 && aktiveSpielfigur.getFarbe() == FarbEnum.weiss)){
-								aktiveSpielfigur.setDame();
-								System.out.println("Eine Figur ist zur Dame geworden!");
-							}
-
-							System.out.println("Zug vollendet!");
-							sound.ziehSound();
-
+						// CASE: RECHTS OBEN:
+						if (c == rechts && d == oben) {
+							koordX = rechts;
+							koordY = oben;
+							koordX1 = rechts + 1;
+							koordY1 = oben + 1;
+							Dx = 1; // Fuer die Verschiebung in oder entgegen X
+									// Richtung
+							Dy = 1; // Fuer die Verschiebung in oder entgegen Y
+									// Richtung
 						}
-						
-						
-							
-							else if (aktiveSpielfigur!=null && aktiveSpielfigur.getKannSpringen() == true) {
-							aktiveSpielfigur.getPosition().removeFigur();
+						// CASE: LINKS UNTEN:
+						if (c == links && d == unten) {
+							koordX = links;
+							koordY = unten;
+							koordX1 = links - 1;
+							koordY1 = unten - 1;
+							Dx = -1; // Fuer die Verschiebung in oder entgegen X
+										// Richtung
+							Dy = -1; // Fuer die Verschiebung in oder entgegen Y
+										// Richtung
 						}
-//							else{
-//								throw new RuntimeException("Ung�ltiges Zielfeld!");
-//							}
+						// CASE: RECHTS UTNEN:
+						if (c == rechts && d == unten) {
+							koordX = rechts;
+							koordY = unten;
+							koordX1 = rechts + 1;
+							koordY1 = unten - 1;
+							Dx = +1; // Fuer die Verschiebung in oder entgegen X
+										// Richtung
+							Dy = -1; // Fuer die Verschiebung in oder entgegen Y
+										// Richtung
+						}
 
 						if (spielerAktiv.getMussSpringen() == true) {
-							if (this.sprungKonflikt > 1) { //Im Moment haben wir 2 Steine die Springen koennen
-								
-								spielerAktiv.setAktiv(false);
-								spielerGegner.setAktiv(true);//Spielerwechsel fuer Eingabe, dann zueruck zum aktuellen Spieler!
-								
-								if(spielerGegner.isKI()==false){
-								System.out.println("Sie hatten mehrere Steine mit Sprungmoeglichkeiten! Spieler B, Sie duerfen nun eines dieser Steinchen von Spieler A waehlen,so dass dieses vom Feld geloescht wird!");
 
-								String eingabe = sc.nextLine();
-								brett.Umwandler(eingabe);
-								int x = brett.getKoordX();
-								int y = brett.getKoordY();
-								if (this.brettArray[x][y].getFigur() != null) {
-									if (this.brettArray[x][y].getFigur().getFarbe() == farbeAktiv&& this.brettArray[x][y].getFigur().getKannSpringen()) {
-										this.brettArray[x][y].removeFigur();
+							if (aktiveSpielfigur.getKannSpringen() == true) {
+								// ----------------------------------SPRINGEN IN
+								// EINE VON VIER
+								// RICHTUNGEN---------------------------------------
 
-									}
-								} else {
-									throw new RuntimeException(
-											"Waehlen sie bitte nur eine der Steine die in beim vorhergehenden Zug eine Sprungmoeglichkeit hatten, die von ihrem Gegner nicht wahrgenommen wurde!");
+								// Spezialfall: Gew�hlte Spielfigur hat Sprung,
+								// nutzt diesen aber nicht! L�sche sie!!
+								if (aktiveSpielfigur.getKannSpringen() == true && spielerAktiv.getMussSpringen()
+										&& this.brettArray[c][d].getFigur() == null) {
+									this.brettArray[a][b].removeFigur();
+									System.out.println(
+											"UPS! Sie haben einen Stein mit Schlagm�glichkeit gew�hlt, sind dieser jedoch nicht nachgegangen! Der Stein wurde zur Bestrafung vom Spielfeld entfernt!");
+
 								}
-							}
-								System.out.println("Sprungkonflikt! Sie hatten mehrere Sprungmoeglichkeiten die Sie nicht genutzt haben! Ihr Gegner hat die Moeglichkeit genutzt und ihnen eines dieser Steinchen geloescht!");
-								if(spielerGegner.isKI()==true){
-									//Finde ein Steinchen das haette Springen duerfen:
-									for(int i=0; i<brettArray.length; i++){
-										for(int j=0; j<brettArray[i].length; j++){
-											if(this.brettArray[i][j].getFigur()!=null && this.brettArray[i][j].getFigur().getFarbe()==this.spielerAktiv.getFarbe() &&  this.brettArray[i][j].getFigur().getKannSpringen()==true){
-												this.brettArray[i][j].getFigur().getPosition().removeFigur();
+								// -------------------------------------------------------SPRINGEN----------------------------------------------------
+
+								// ---------------------------------AUF�HRUNG
+								// DER SPRUNG
+								// CASES:------------------------------------
+								if (c == koordX && d == koordY) {
+									while (aktiveSpielfigur.getKannSpringen() == true
+											&& this.spielerAktiv.getMussSpringen() == true
+											&& this.brettArray[koordX1][koordY1].getFigur() == null) {
+										if (this.brettArray[koordX][koordY].getFigur() != null
+												&& this.brettArray[koordX][koordY].getFigur()
+														.getFarbe() == farbeGegner) {
+
+											this.aktiveSpielfigur.getPosition().removeFigur();
+											this.brettArray[koordX][koordY].removeFigur();
+											this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
+											aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
+
+											System.out.println(
+													"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
+
+											spielerAktiv.setMussSpringen(false);
+											aktiveSpielfigur.setKannSpringen(false);
+											aktiveSpielfigur = brettArray[koordX1][koordY1].getFigur(); // Weise
+																										// neue
+																										// Steinposition
+																										// zu,
+																										// fuer
+																										// erneutes
+																										// Springen
+
+											spielerMussSpringen();
+
+											if (aktiveSpielfigur.getKannSpringen() == true) {
+												System.out.println(
+														"Der selbe Stein konnte weitere Steine ueberspringen!");
+
+												boolean[] sprungCases = aktiveSpielfigur.getSprungCases();
+												if (sprungCases[0] == true) { // spring
+																				// als
+																				// naechstes
+																				// nach
+																				// links
+																				// oben
+													koordX = aktiveSpielfigur.getPosition().getPosX() - 1;
+													koordY = aktiveSpielfigur.getPosition().getPosY() + 1;
+													koordX1 = koordX - 1;
+													koordY1 = koordY + 1;
+												} else if (sprungCases[1] == true) { // spring
+																						// als
+																						// naechstes
+																						// nach
+																						// rechts
+																						// oben
+													koordX = aktiveSpielfigur.getPosition().getPosX() + 1;
+													koordY = aktiveSpielfigur.getPosition().getPosY() + 1;
+													koordX1 = koordX + 1;
+													koordY1 = koordY + 1;
+												} else if (sprungCases[2] == true) { // spring
+																						// als
+																						// naechstes
+																						// nach
+																						// links
+																						// unten
+													koordX = aktiveSpielfigur.getPosition().getPosX() - 1;
+													koordY = aktiveSpielfigur.getPosition().getPosY() - 1;
+													koordX1 = koordX - 1;
+													koordY1 = koordY - 1;
+												} else if (sprungCases[3] == true) { // spring
+																						// als
+																						// naechstes
+																						// nach
+																						// rechts
+																						// unten
+													koordX = aktiveSpielfigur.getPosition().getPosX() + 1;
+													koordY = aktiveSpielfigur.getPosition().getPosY() - 1;
+													koordX1 = koordX + 1;
+													koordY1 = koordY - 1;
+												}
 											}
+
+											System.out.println("Sprung vollendet.");
+											sound.schlagSound();
 										}
 									}
-									
+
 								}
-								
-								
-								spielerAktiv.setAktiv(true); //Eingabe Beendet, zueruck zum aktuellen Spieler! Scheint zwar unn�tig, weil danach Spielerwechsel kommt, ist es aber nicht, da 
-								//Spielerwechsel methode noch weitere ueberpruefungen macht ;)
-								spielerGegner.setAktiv(false);
 
-							} else {
-								// Gibt es nur eine Spielfigur die springen kann, suchen wir diese einfach in unserem Array
-								for (int i = 0; i < this.brettArray.length; i++) {
-									for (int j = 0; j < this.brettArray[i].length; j++) {
-										if (this.brettArray[i][j].getFigur() != null
-												&& this.brettArray[i][j].getFigur().getFarbe() == farbeAktiv
-														&& this.brettArray[i][j].getFigur().getKannSpringen()) {
-
-											Spielfigur testSpieler = this.brettArray[i][j].getFigur();
-
-											testSpieler.getPosition().removeFigur();
-
-											testSpieler = null;
-											System.out.println("Jetzt wird bestraft!! Sie hatten eine Sprungmoeglichkeit! Diese wurde nicht wahrgenommen, der Stein wurde entfernt!"); // danach
-											
-										}
-									}
-								}
 							}
 						}
 
-						aktiveSpielfigur = null;
-						spielerAktiv.setMussSpringen(false);
-						spielerWechsel();
+						// *******************************************NORMALES
+						// ZIEHEN!****************************************
+
+						// --------------------------------------ALLGEMEINESZIEHEN----------------------------
+
+						if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
+							if (aktiveSpielfigur != null && aktiveSpielfigur.getKannSpringen() == false
+									&& (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
+											&& d > aktiveSpielfigur.getPosition().getPosY())
+											| (aktiveSpielfigur.getFarbe() == FarbEnum.weiss
+													&& d < aktiveSpielfigur.getPosition().getPosY())) {
+
+								aktiveSpielfigur.getPosition().removeFigur();
+								aktiveSpielfigur.setPosition(this.brettArray[c][d]);
+								this.brettArray[c][d].setFigur(aktiveSpielfigur);
+								// Ist die Spielfigur jetzt eine
+								// Dame?-------------------
+								if ((aktiveSpielfigur.getPosition().getPosY() == 11
+										&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
+										| (aktiveSpielfigur.getPosition().getPosY() == 0
+												&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
+									aktiveSpielfigur.setDame();
+									System.out.println("Eine Figur ist zur Dame geworden!");
+								}
+
+								System.out.println("Zug vollendet!");
+								sound.ziehSound();
+
+							}
+
+							else if (aktiveSpielfigur != null && aktiveSpielfigur.getKannSpringen() == true) {
+								aktiveSpielfigur.getPosition().removeFigur();
+							}
+							// else{
+							// throw new RuntimeException("Ung�ltiges
+							// Zielfeld!");
+							// }
+
+							if (spielerAktiv.getMussSpringen() == true) {
+								if (this.sprungKonflikt > 1) { // Im Moment
+																// haben wir 2
+																// Steine die
+																// Springen
+																// koennen
+
+									spielerAktiv.setAktiv(false);
+									spielerGegner.setAktiv(true);// Spielerwechsel
+																	// fuer
+																	// Eingabe,
+																	// dann
+																	// zueruck
+																	// zum
+																	// aktuellen
+																	// Spieler!
+
+									if (spielerGegner.isKI() == false) {
+										System.out.println(
+												"Sie hatten mehrere Steine mit Sprungmoeglichkeiten! Spieler B, Sie duerfen nun eines dieser Steinchen von Spieler A waehlen,so dass dieses vom Feld geloescht wird!");
+
+										String eingabe = sc.nextLine();
+										brett.Umwandler(eingabe);
+										int x = brett.getKoordX();
+										int y = brett.getKoordY();
+										if (this.brettArray[x][y].getFigur() != null) {
+											if (this.brettArray[x][y].getFigur().getFarbe() == farbeAktiv
+													&& this.brettArray[x][y].getFigur().getKannSpringen()) {
+												this.brettArray[x][y].removeFigur();
+
+											}
+										} else {
+											throw new RuntimeException(
+													"Waehlen sie bitte nur eine der Steine die in beim vorhergehenden Zug eine Sprungmoeglichkeit hatten, die von ihrem Gegner nicht wahrgenommen wurde!");
+										}
+									}
+									System.out.println(
+											"Sprungkonflikt! Sie hatten mehrere Sprungmoeglichkeiten die Sie nicht genutzt haben! Ihr Gegner hat die Moeglichkeit genutzt und ihnen eines dieser Steinchen geloescht!");
+									if (spielerGegner.isKI() == true) {
+										// Finde ein Steinchen das haette
+										// Springen duerfen:
+										for (int i = 0; i < brettArray.length; i++) {
+											for (int j = 0; j < brettArray[i].length; j++) {
+												if (this.brettArray[i][j].getFigur() != null
+														&& this.brettArray[i][j].getFigur()
+																.getFarbe() == this.spielerAktiv.getFarbe()
+														&& this.brettArray[i][j].getFigur().getKannSpringen() == true) {
+													this.brettArray[i][j].getFigur().getPosition().removeFigur();
+												}
+											}
+										}
+
+									}
+
+									spielerAktiv.setAktiv(true); // Eingabe
+																	// Beendet,
+																	// zueruck
+																	// zum
+																	// aktuellen
+																	// Spieler!
+																	// Scheint
+																	// zwar
+																	// unn�tig,
+																	// weil
+																	// danach
+																	// Spielerwechsel
+																	// kommt,
+																	// ist es
+																	// aber
+																	// nicht, da
+									// Spielerwechsel methode noch weitere
+									// ueberpruefungen macht ;)
+									spielerGegner.setAktiv(false);
+
+								} else {
+									// Gibt es nur eine Spielfigur die springen
+									// kann, suchen wir diese einfach in unserem
+									// Array
+									for (int i = 0; i < this.brettArray.length; i++) {
+										for (int j = 0; j < this.brettArray[i].length; j++) {
+											if (this.brettArray[i][j].getFigur() != null
+													&& this.brettArray[i][j].getFigur().getFarbe() == farbeAktiv
+													&& this.brettArray[i][j].getFigur().getKannSpringen()) {
+
+												Spielfigur testSpieler = this.brettArray[i][j].getFigur();
+
+												testSpieler.getPosition().removeFigur();
+
+												testSpieler = null;
+												System.out.println(
+														"Jetzt wird bestraft!! Sie hatten eine Sprungmoeglichkeit! Diese wurde nicht wahrgenommen, der Stein wurde entfernt!"); // danach
+
+											}
+										}
+									}
+								}
+							}
+
+							aktiveSpielfigur = null;
+							spielerAktiv.setMussSpringen(false);
+							spielerWechsel();
+
+						}
+
+						else {
+							if (this.spielerAktiv.isKI() == false) {
+								throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
+							}
+						}
 
 					}
-					
-					
-					else 
-					{
-						if(this.spielerAktiv.isKI()==false){
-						throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
-					}
-					}
-				
-					}
-					}
-					
 				}
-					
-				else if(spielerAktiv.getMussSpringen()==true){
-					throw new RuntimeException("Waehlen sie bitte eine Figur die springen kann, bzw ein Feld das bespringbar ist!!");
-				
-				}
-				
-		//	}
-			
-			
-	}catch (Exception e) {
-		System.err.println(e);
-		//System.err.println(e.getMessage());
-		//e.printStackTrace();
-			
-	}
-	
+
+			}
+
+			else if (spielerAktiv.getMussSpringen() == true) {
+				throw new RuntimeException(
+						"Waehlen sie bitte eine Figur die springen kann, bzw ein Feld das bespringbar ist!!");
+
+			}
+
+			// }
+
+		} catch (Exception e) {
+			System.err.println(e);
+			// System.err.println(e.getMessage());
+			// e.printStackTrace();
+
+		}
+
 	}
 
-
-		
-	
-//++++++++++++++++++++++++++++++++ BEWEGE DAME ++++++++++++++++++++++++++++++
+	// ++++++++++++++++++++++++++++++++ BEWEGE DAME
+	// ++++++++++++++++++++++++++++++
 	private void bewegeDame(int c, int d) {
 		int richtung = d - aktiveSpielfigur.getPosition().getPosY();
 		int abstandx = Math.abs(c - aktiveSpielfigur.getPosition().getPosX());
@@ -463,7 +535,6 @@ public class Spiel implements iBediener, Serializable {
 				aktiveSpielfigur = null;
 				System.out.println("Zug vollendet");
 				spielerWechsel();
-		
 
 			}
 
@@ -488,7 +559,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur = null;
 						System.out.println("Zug vollendet");
 						spielerWechsel();
-					
+
 					}
 
 					else {
@@ -498,12 +569,12 @@ public class Spiel implements iBediener, Serializable {
 							System.out.println("sprung nach rechts!");
 							aktiveSpielfigur.getPosition().removeFigur();
 							this.brettArray[c + 1][d + 1].setFigur(aktiveSpielfigur);
-							aktiveSpielfigur.setPosition(this.brettArray[c+1][d+1]);
+							aktiveSpielfigur.setPosition(this.brettArray[c + 1][d + 1]);
 							this.brettArray[c][d].removeFigur();
 							aktiveSpielfigur = null;
 							System.out.println("Zug vollendet");
 							spielerWechsel();
-						
+
 						}
 					}
 				}
@@ -521,8 +592,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur = null;
 						System.out.println("Zug vollendet");
 						spielerWechsel();
-					
-						
+
 					}
 
 					else if (this.brettArray[c + 1][d - 1].getFigur() != null) {
@@ -536,8 +606,6 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur = null;
 						System.out.println("Zug vollendet");
 						spielerWechsel();
-					
-					
 
 					}
 
@@ -547,30 +615,33 @@ public class Spiel implements iBediener, Serializable {
 			throw new RuntimeException("Nicht diagonal");
 		}
 
-		//Pruefen ob beide Spieler noch Spielfiguren haben---------------
+		// Pruefen ob beide Spieler noch Spielfiguren haben---------------
 		isSpielende();
-		//-------------------------------------------------------
+		// -------------------------------------------------------
 	}
 
-	//###############################		SPIELER WECHSEL  	#########################################
-	
-	public void spielerWechsel() {
-		
+	// ############################### SPIELER WECHSEL
+	// #########################################
 
-	
-		
+	public void spielerWechsel() {
+
 		if (spielerA.getAktiv() == true) {
 			spielerA.setAktiv(false);
 			spielerB.setAktiv(true);
 			spielerAktiv = spielerB;
-			spielerMussSpringen();
-	
+
 		} else {
 			spielerA.setAktiv(true);
 			spielerB.setAktiv(false);
 			spielerAktiv = spielerA;
-			spielerMussSpringen();
-			
+
+		}
+		spielerMussSpringen();
+		if (spielerAktiv.isKI()) {
+			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
+			// WaitMessage
+			bewegeSpielfigur(zug[0], zug[1]);
+
 		}
 	}
 
@@ -579,30 +650,35 @@ public class Spiel implements iBediener, Serializable {
 	 * Speicherort: savegame/savegame.csv
 	 */
 	@Override
-	public void belegungCSV() {
+	public String belegungCSV() {
 
-		try {
-			pw = new PrintWriter(new FileWriter("savegame/belegung.csv"));
-		} catch (FileNotFoundException e) {
-			System.err.println("DATEI ZUM SPEICHERN NICHT GEFUNDEN!");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * try { pw = new PrintWriter(new FileWriter("savegame/belegung.csv"));
+		 * } catch (FileNotFoundException e) { System.err.println(
+		 * "DATEI ZUM SPEICHERN NICHT GEFUNDEN!"); } catch (IOException e) {
+		 * e.printStackTrace(); }
+		 */
+		String blg = "";
 
 		Spielfeld[][] belegung = brett.getNotation();
 		for (int i = this.brettArray.length - 1; i >= 0; i--) {
 			for (int n = 0; n < belegung[i].length; n++) {
-				pw.print(belegung[n][i].getAusgabeID() + "\t");
+				blg += belegung[i][i].getAusgabeID();
+				// pw.print(belegung[n][i].getAusgabeID() + "\t");
 			}
-			pw.println();
+			blg += "\n";
+			// pw.println();
 		}
-		
-		pw.close();
+
+		// pw.close();
+		return blg;
 	}
-	
-	
-	//#############################################################		SPIELER MUSS SPRINGEN ()  	#######################################################################
-	//#########################		BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN - NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
+
+	// ############################################################# SPIELER
+	// MUSS SPRINGEN ()
+	// #######################################################################
+	// ######################### BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN -
+	// NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
 
 	private void spielerMussSpringen() {
 
@@ -613,7 +689,7 @@ public class Spiel implements iBediener, Serializable {
 		this.sprungKonflikt = 0;
 
 		Spieler spielerAktiv = null;
-		
+
 		FarbEnum farbeGegner = null;
 
 		if (spielerA.getAktiv() == true) {
@@ -632,7 +708,14 @@ public class Spiel implements iBediener, Serializable {
 				if (this.brettArray[i][j].getFigur() != null) {
 					spielerA.setMussSpringen(false);
 					spielerB.setMussSpringen(false);
-					this.brettArray[i][j].getFigur().setKannSpringen(false); // Kennt nun keine Figur mehr die springen kann
+					this.brettArray[i][j].getFigur().setKannSpringen(false); // Kennt
+																				// nun
+																				// keine
+																				// Figur
+																				// mehr
+																				// die
+																				// springen
+																				// kann
 
 				}
 			}
@@ -661,121 +744,133 @@ public class Spiel implements iBediener, Serializable {
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
-						boolean[] sprungCases=new boolean[4];
-						
+						boolean[] sprungCases = new boolean[4];
+
 						while (caseNumber < 5) {
-							
-						switch (caseNumber) {
-						case 1: // OBEN LINKS
-							coordX = links;
-							coordY = oben;
-							a = -1;
-							b = 1;
-							break;
 
-						case 2: // OBEN RECHTS
-							coordX = rechts;
-							coordY = oben;
-							a = 1;
-							b = 1;
-							
-							break;
+							switch (caseNumber) {
+							case 1: // OBEN LINKS
+								coordX = links;
+								coordY = oben;
+								a = -1;
+								b = 1;
+								break;
 
-						case 3: // UNTEN LINKS
-							coordX = links;
-							coordY = unten;
-							a = -1;
-							b = -1;
-							break;
+							case 2: // OBEN RECHTS
+								coordX = rechts;
+								coordY = oben;
+								a = 1;
+								b = 1;
 
-						case 4: // UNTEN RECHTS
-							coordX = rechts;
-							coordY = unten;
-							a = 1;
-							b = -1;
-							break;
-						}
+								break;
 
-						
+							case 3: // UNTEN LINKS
+								coordX = links;
+								coordY = unten;
+								a = -1;
+								b = -1;
+								break;
+
+							case 4: // UNTEN RECHTS
+								coordX = rechts;
+								coordY = unten;
+								a = 1;
+								b = -1;
+								break;
+							}
 
 							while (this.brettArray.length - (coordX) > 1
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
-									&& this.brettArray.length - (coordY) > 1
-									&& testSpieler.isDame() == true
+									&& this.brettArray.length - (coordY) > 1 && testSpieler.isDame() == true
 									&& brettArray[coordX][coordY].getFigur() == null) {
 
-								    coordX+=a;
-									coordY+=b;
-														
-								}
-								
-							
-						
-						if (this.brettArray.length - (coordX) > 1
-								&& this.brettArray.length - (coordX) < this.brettArray.length
-								&& this.brettArray.length - (coordY) < brettArray.length
-								&& this.brettArray.length - (coordY) > 1
-								&& brettArray[coordX][coordY].getFigur() != null
-								) {
-							if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner && brettArray[(coordX+a)][(coordY+b)].getFigur() == null) {
-								testSpieler.setKannSpringen(true);
-								this.spielerAktiv.setMussSpringen(true);
-							
-								
-								switch(caseNumber){ //Es kann entweder nur fuer case 1 oder 2 bzw  beide true sein fuer Schwarze Spieler, analog dazu 3 oder 4 fuer Weisse
-								case 1: 
-									sprungCases[0]=true;
-									testSpieler.setSprungCases(sprungCases);
-									break;
-								case 2: 
-									sprungCases[1]=true;
-									testSpieler.setSprungCases(sprungCases);
-									break;
-								case 3: 
-									sprungCases[2]=true;
-									testSpieler.setSprungCases(sprungCases);
-									break;
-								case 4: 
-									sprungCases[3]=true;
-									testSpieler.setSprungCases(sprungCases);
-									break;
-									
+								coordX += a;
+								coordY += b;
+
+							}
+
+							if (this.brettArray.length - (coordX) > 1
+									&& this.brettArray.length - (coordX) < this.brettArray.length
+									&& this.brettArray.length - (coordY) < brettArray.length
+									&& this.brettArray.length - (coordY) > 1
+									&& brettArray[coordX][coordY].getFigur() != null) {
+								if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner
+										&& brettArray[(coordX + a)][(coordY + b)].getFigur() == null) {
+									testSpieler.setKannSpringen(true);
+									this.spielerAktiv.setMussSpringen(true);
+
+									switch (caseNumber) { // Es kann entweder
+															// nur fuer case 1
+															// oder 2 bzw beide
+															// true sein fuer
+															// Schwarze Spieler,
+															// analog dazu 3
+															// oder 4 fuer
+															// Weisse
+									case 1:
+										sprungCases[0] = true;
+										testSpieler.setSprungCases(sprungCases);
+										break;
+									case 2:
+										sprungCases[1] = true;
+										testSpieler.setSprungCases(sprungCases);
+										break;
+									case 3:
+										sprungCases[2] = true;
+										testSpieler.setSprungCases(sprungCases);
+										break;
+									case 4:
+										sprungCases[3] = true;
+										testSpieler.setSprungCases(sprungCases);
+										break;
+
+									}
+
 								}
 
 							}
-							
-						}
-						caseNumber++;
-						
+							caseNumber++;
 
-						
 						}
-						if (testSpieler.getKannSpringen() == true) {//Erh�he pro Stein der Schlagm�glichkeit 'Sprungkonflikt' -> mehrere Male bedeutet somit mehrere Steine mit Sprungm�g.
+						if (testSpieler.getKannSpringen() == true) {// Erh�he
+																	// pro Stein
+																	// der
+																	// Schlagm�glichkeit
+																	// 'Sprungkonflikt'
+																	// ->
+																	// mehrere
+																	// Male
+																	// bedeutet
+																	// somit
+																	// mehrere
+																	// Steine
+																	// mit
+																	// Sprungm�g.
 							this.sprungKonflikt++;
 						}
 					}
 				}
-				}
-			
+			}
+
 			if (spielerAktiv.getMussSpringen() == false) {
-				System.out.println("Spieler "+spielerAktiv.getName()+" Sie sind am Zug!");
-				
+				System.out.println("Spieler " + spielerAktiv.getName() + " Sie sind am Zug!");
+
 			}
 		}
-		}
-	
+	}
 
 	// #############################################################################
 	// ENDE SPIELER MUSS SPRINGEN
 	// ##################################################
-	
-	//############################################################################# ENDE SPIELER MUSS SPRINGEN ##################################################
-	
+
+	// #############################################################################
+	// ENDE SPIELER MUSS SPRINGEN
+	// ##################################################
+
 	public void setBrettArray(Spielfeld[][] brettArray) {
 		this.brettArray = brettArray;
 	}
-
 
 	public Spieler getSpielerA() {
 		return spielerA;
@@ -784,32 +879,35 @@ public class Spiel implements iBediener, Serializable {
 	public Spieler getSpielerB() {
 		return spielerB;
 	}
+
 	public void setSpielerA(Spieler spielerA) {
-		if(spielerA != null){
-		this.spielerA = spielerA;
-		} else throw new NullPointerException("SpielerA ist NULL!");
+		if (spielerA != null) {
+			this.spielerA = spielerA;
+		} else
+			throw new NullPointerException("SpielerA ist NULL!");
 	}
 
 	public void setSpielerB(Spieler spielerB) {
-		if(spielerB != null){
-		this.spielerB = spielerB;
-		} else throw new NullPointerException("SpielerB ist NULL!");
+		if (spielerB != null) {
+			this.spielerB = spielerB;
+		} else
+			throw new NullPointerException("SpielerB ist NULL!");
 	}
 
 	public void setSpielerAktiv(Spieler spielerAktiv) {
-		if(spielerAktiv != null){
-		this.spielerAktiv = spielerAktiv;
-		//this.farbeAktiv = spielerAktiv.getFarbe();
-		if(spielerAktiv.getFarbe() == FarbEnum.schwarz){
-			this.spielerA.setAktiv(true);
-			this.spielerB.setAktiv(false);
-		}
-		else if(spielerAktiv.getFarbe() == FarbEnum.weiss){
-			this.spielerB.setAktiv(true);
-			this.spielerA.setAktiv(false);
-		}
-		System.out.println("SpielerAktiv:"+ farbeAktiv);
-		} else throw new NullPointerException("SpielerAktiv ist NULL!");
+		if (spielerAktiv != null) {
+			this.spielerAktiv = spielerAktiv;
+			// this.farbeAktiv = spielerAktiv.getFarbe();
+			if (spielerAktiv.getFarbe() == FarbEnum.schwarz) {
+				this.spielerA.setAktiv(true);
+				this.spielerB.setAktiv(false);
+			} else if (spielerAktiv.getFarbe() == FarbEnum.weiss) {
+				this.spielerB.setAktiv(true);
+				this.spielerA.setAktiv(false);
+			}
+			System.out.println("SpielerAktiv:" + farbeAktiv);
+		} else
+			throw new NullPointerException("SpielerAktiv ist NULL!");
 	}
 
 	public Spieler getSpielerAktiv() {
@@ -819,9 +917,11 @@ public class Spiel implements iBediener, Serializable {
 	public Spielbrett getBrett() {
 		return brett;
 	}
-	public boolean getSpielende(){
+
+	public boolean getSpielende() {
 		return this.spielende;
 	}
+
 	public Spieler getWinner() {
 		return this.winner;
 	}
@@ -849,4 +949,249 @@ public class Spiel implements iBediener, Serializable {
 		}
 
 	}
+
+	@Override
+	public void pusten(String feld) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void spielerHzfg(String name, boolean ki) {
+		if (spielerA == null) {
+			spielerA = new Spieler(name, FarbEnum.schwarz, ki);
+			this.spielerAktiv = spielerA;
+			this.spielerA.setAktiv(true);
+		} else if (spielerB == null) {
+			spielerB = new Spieler(name, FarbEnum.weiss, ki);
+		} else
+			throw new RuntimeException("Schon zwei Spieler vorhanden");
+		if (spielerA != null && spielerB != null) {
+			this.spielerWechsel();
+		}
+
+	}
+
+	@Override
+	public void speichern(String pfad) {
+		// TODO Auto-generated method stub
+		iDatenzugriff idz;
+		String[] args = pfad.split(".");
+		String typ = args[args.length - 1].toLowerCase();
+
+		switch (typ) {
+		case "ser":
+			idz = new DatenzugriffSerialisiert();
+			idz.save(this);
+			break;
+		case "csv":
+			idz = new DatenzugriffCSV();
+			idz.save(this.toCSV());
+			break;
+		case "pdf":
+			break;
+		default:
+			throw new RuntimeException("Filetype not supported");
+		}
+
+	}
+
+	@Override
+	public void laden(String pfad) {
+
+		iDatenzugriff idz;
+		String[] args = pfad.split(".");
+		String typ = args[args.length - 1].toLowerCase();
+
+		switch (typ) {
+		case "ser":
+			idz = new DatenzugriffSerialisiert();
+			Spiel x = (Spiel) idz.load(pfad);
+			this.aktiveSpielfigur = x.aktiveSpielfigur;
+			this.brett = x.brett;
+			this.brettArray = x.brettArray;
+			this.farbeAktiv = x.farbeAktiv;
+			this.spielerA = x.spielerA;
+			this.spielerAktiv = x.spielerAktiv;
+			this.spielerB = x.spielerB;
+			break;
+		case "csv":
+			idz = new DatenzugriffCSV();
+			String s = (String) idz.load(pfad);
+			this.fromCSV(s);
+			break;
+		default:
+			throw new RuntimeException("Filetype not supported");
+		}
+
+	}
+
+	@Override
+	public void neuesSpiel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mail() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void init(Object view) {
+		//Wenn can not cast Exception, dann instanceof GUI, später auch Web
+		if(view instanceof iMessage){
+			msg = (iMessage) view;
+		}else throw new RuntimeException("Couldn't add view");
+
+	}
+
+	private String toCSV() {
+
+		String s = "";
+		// -Spielfeld speichern-----------------------------------
+		Spielfeld[][] belegung = brett.getNotation();
+		for (int i = belegung.length - 1; i >= 0; i--) {
+			for (int n = 0; n < belegung[i].length; n++) {
+				s += (belegung[n][i].getAusgabeID() + ";");
+			}
+			s += "\n";
+		}
+		// --------------------------------------------------------
+		// -Spieler A speichern------------------------------------
+		s += (this.getSpielerA().getFarbe() + "\n");
+		s += (this.getSpielerA().getName() + "\n");
+		s += (this.getSpielerA().getMussSpringen() + "\n");
+		s += (this.getSpielerA().isKI() + "\n");
+
+		// --------------------------------------------------------
+		// -Spieler B speichern------------------------------------
+		s += (this.getSpielerB().getFarbe() + "\n");
+		s += (this.getSpielerB().getName() + "\n");
+		s += (this.getSpielerB().getMussSpringen() + "\n");
+		s += (this.getSpielerB().isKI() + "\n");
+		s += (this.getSpielerB().getAktiv() + "\n"); // wird nur von spielerB
+														// gespeichert, falls
+														// spielerB aktiv ist,
+														// ist spielerA nicht
+														// aktiv und andersrum
+		// --------------------------------------------------------
+
+		return s;
+	}
+
+	private void fromCSV(String s) {
+		String[] irgendwas = s.split("\n");
+		char c;
+		String id = null;
+		String line = null;
+		String[] field = null;
+		Spielfeld[][] belegung = new Spielfeld[12][12]; // Wenn auch die
+														// Spielfeldgröße
+														// gespeichert werden
+														// kann, dann muss hier
+														// angepasst werden.
+
+		for (int x = 0; x < irgendwas.length; x++) {
+			if (x == 0) {
+				line = irgendwas[0];
+
+				for (int i = belegung.length - 1; i >= 0; i--) {
+					c = 97;
+					field = line.split(";");
+					
+
+					for (int n = 0; n < belegung[i].length; n++) {
+
+						belegung[n][i] = new Spielfeld((char) (c + n) + "" + (i + 1));
+						belegung[n][i].setXY(belegung[n][i].getID());
+						belegung[n][i].setAusgabeID(field[n]);
+						if (belegung[n][i].getAusgabeID().equals("[X]")) {
+							belegung[n][i].setFigur(new Spielfigur(FarbEnum.schwarz, belegung[n][i]));
+						} else if (belegung[n][i].getAusgabeID().equals("[O]")) {
+							belegung[n][i].setFigur(new Spielfigur(FarbEnum.weiss, belegung[n][i]));
+						} else if (belegung[n][i].getAusgabeID().equals("[*X*]")) {
+							belegung[n][i].setFigur(new Spielfigur(FarbEnum.schwarz, belegung[n][i]));
+							belegung[n][i].getFigur().setDame();
+						} else if (belegung[n][i].getAusgabeID().equals("[*O*]")) {
+							belegung[n][i].setFigur(new Spielfigur(FarbEnum.weiss, belegung[n][i]));
+							belegung[n][i].getFigur().setDame();
+						}
+
+					}
+					
+				}
+				this.brett = new Spielbrett();
+				this.brett.setBrett(belegung);
+
+			}
+			else{
+				// -SpielerA einlesen und im Spiel Objekt setzen-------------------
+				spielerA = new Spieler("spielerA", null);
+
+				this.spielerA.setFarbe(this.toFarbEnum(irgendwas[++x]));
+				this.spielerA.setName(irgendwas[++x]);
+				this.spielerA.setMussSpringen(toBoolean(irgendwas[++x]));
+				if (toBoolean(irgendwas[++x]) == true) {
+					KI ki = new KI_Dame(spielerA);
+					this.spielerA.setKi(ki);
+				}
+
+				// ----------------------------------------------------------------
+
+				// -SpielerB einlesen und im Spiel Objekt setzen-------------------
+				spielerB = new Spieler("spielerB", null);
+
+				this.spielerB.setFarbe(this.toFarbEnum(irgendwas[++x]));
+				this.spielerB.setName(irgendwas[++x]);
+				this.spielerA.setMussSpringen(toBoolean(irgendwas[++x]));
+				if (toBoolean(irgendwas[++x]) == true) {
+					KI ki = new KI_Dame(spielerB);
+					this.spielerB.setKi(ki);
+				}
+
+				// ----------------------------------------------------------------
+				// -SpielerB.getAktiv() einlesen und spielerAktiv setzen-----------
+
+				if (irgendwas[++x].equals("true")) {
+					this.spielerAktiv = this.spielerB;
+				} else
+					this.spielerAktiv = this.spielerA;
+
+				// ----------------------------------------------------------------
+
+				this.spielerHzfg(spielerA.getName(), spielerA.isKI());
+				this.spielerHzfg(spielerB.getName(), spielerB.isKI());
+				
+
+				
+			}
+		}
+
+		// ----------------------------------------------------------------
+
+		
+
+	
+	}
+
+	private FarbEnum toFarbEnum(String farbe) {
+		if (farbe.equals("schwarz")) {
+			return FarbEnum.schwarz;
+		} else if (farbe.equals("weiss")) {
+			return FarbEnum.weiss;
+		} else
+			throw new RuntimeException("Geladene Farbe gehört nicht zum Farbenum");
+	}
+
+	private boolean toBoolean(String bool) {
+		if (bool.equals("true"))
+			return true;
+		else if (bool.equals("false"))
+			return false;
+		else
+			throw new RuntimeException("Gelesener Wert ist kein boolean!");
+	}
+
 }

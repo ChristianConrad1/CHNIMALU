@@ -21,6 +21,6 @@ public abstract class KI implements Serializable{
 		this.spieler=s;
 	}
 	
-	public abstract String[] wasMacheIch();
+	public abstract String[] wasMacheIch(Spielbrett brett);
 	
 }

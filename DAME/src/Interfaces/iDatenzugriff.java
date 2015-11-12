@@ -2,6 +2,6 @@ package Interfaces;
 import Basisklassen.Spiel;
 
 public interface iDatenzugriff {
-	public void save(Spiel s);
-	public Spiel load(String pfad);
+	public void save(Object o);
+	public Object load(String pfad);
 }

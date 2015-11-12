@@ -17,8 +17,9 @@ import Basisklassen.Spiel;
 import Basisklassen.Spielbrett;
 import Basisklassen.Spieler;
 import Interfaces.iBediener;
+import Interfaces.iMessage;
 
-public class GUI extends JFrame{
+public class GUI extends JFrame implements iMessage{
 	
 	private  JPanel mainJpanel;
 	private  GUI g;
@@ -37,24 +38,22 @@ public class GUI extends JFrame{
 	private Spieler spielerB;
 	private Spiel spiel;
 	
-	private static iBediener ibediener; 
+	private  iBediener ibediener; 
 	
 
 	private EventHandler eh;
 
 	
-public GUI(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
+public GUI(){
+	this.spielBrett = new Spielbrett();
+	ibediener = new Spiel(this.spielBrett);
+	ibediener.init(this);
+	guiStartup();
+}
 
-	initNeuesSpiel(nameSpielerA, aIstKi, nameSpielerB, bIstKi);
-	guiStartup();
-}
-public GUI(Spiel s){
-	initGeladenesSpiel(s);
-	guiStartup();
-}
 public void guiStartup(){
 	this.setTitle("Dame V1.0");
-	this.setSize(1150, 900); //Groe�e des JFrames
+	this.setSize(1150, 900); //Groe�e des JFrames
 	this.setMinimumSize(new Dimension(1150, 900)); //Minimalgröße des JFrames
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
@@ -175,9 +174,25 @@ public JMenuItem getMenuItemSave() {
 public JMenuItem getMenuItemLoad() {
 	return menuItemLoad;
 }
-public static void bewegeSpielfigur(String eingabe, String ausgabe) {
+public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 	String s1=eingabe; String s2=ausgabe;
 	ibediener.bewegeSpielfigur(s1, s2);
+	
+}
+@Override
+public void printError(String msg) {
+	// TODO Auto-generated method stub
+	
+}
+@Override
+public void printOk(String msg) {
+	// TODO Auto-generated method stub
+	
+}
+@Override
+public void printOkWindow(String msg) {
+	// TODO Auto-generated method stub
+	
 }
 	
 }

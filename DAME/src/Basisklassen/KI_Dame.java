@@ -7,16 +7,12 @@ import org.omg.Messaging.SyncScopeHelper;
 
 public class KI_Dame extends KI implements Serializable{
 	private Spielfeld[][] brettArray;
-	public KI_Dame(Spieler s, Spielbrett brett) {
+	public KI_Dame(Spieler s) {
 		super(s);
-		if (brett != null) {
-			this.brettArray = brett.getNotation();
-		} else
-			throw new NullPointerException("übergebenes Spielbrett ist Null");
 	}
 
 	@Override
-	public String[] wasMacheIch() { // Muss koordinaten für die bewege
+	public String[] wasMacheIch(Spielbrett brett) { // Muss koordinaten für die bewege
 									// Spielfigur
 		// zurückgeben... entweder direkt in
 		// Schachnotation (String Array) oder als zahlen
@@ -24,6 +20,9 @@ public class KI_Dame extends KI implements Serializable{
 		// spieler.getKI().wasMacheIch()[1]); <- so wird
 		// die methode gameloop aufgerufen, falls der
 		// spieler eine KI ist.
+		if(brett != null){
+			brettArray = brett.getNotation();
+		}
 		if (schlagen() != null){
 			return schlagen();}
 		else if  (dameWerden() != null){
@@ -33,6 +32,7 @@ public class KI_Dame extends KI implements Serializable{
 			return ziehen();}		
 		else{
 			throw new RuntimeException("Alle Spielfiguren geblockt!");}
+		
 	}
 
 	public String[] schlagen() { // muss Koordinaten von Spielfeld zurückgeben,
