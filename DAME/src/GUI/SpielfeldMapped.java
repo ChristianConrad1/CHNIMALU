@@ -7,9 +7,11 @@ public class SpielfeldMapped extends JButton{
 	private String ID;
 	
 	String feldID;
-
+	
+	
 	
 	public SpielfeldMapped(String ID){
+		
 		
 	this.setID(ID);
 	

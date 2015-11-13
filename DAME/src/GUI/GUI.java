@@ -1,6 +1,5 @@
 package GUI;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -67,7 +66,6 @@ public void guiStartup(){
 	this.setMinimumSize(new Dimension(1150, 900)); //Minimalgröße des JFrames
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
-	mainJpanel.setBackground(Color.black);
 	this.getContentPane().add(mainJpanel);
 	eh = new EventHandler(this);
 	addMenuBar();	//Fuege MenuBar hinzu
@@ -229,9 +227,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	//centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
 	
-	//centerPanel.setIcon(new ImageIcon("res/img/TEST/Background_FIELDS.png"));
 	centerPanel.add(brettMapped);
-	centerPanel.setBackground(Color.black);
 
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
