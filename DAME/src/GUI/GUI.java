@@ -139,10 +139,12 @@ public void drawBrett(){
 			if(field[count].equals("[O]")){
 				System.out.println("Hallo");
 			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/whiteStone.png"));
+			brettArray[k][n].setRolloverIcon(new ImageIcon("res/img/TEST/blackStone.png"));
 			}
 			if(field[count].equals("[X]")){
 				System.out.println("Hallo");
 			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/blackStone.png"));
+			brettArray[k][n].setRolloverIcon(new ImageIcon("res/img/TEST/whiteStone.png"));
 			}
 			if(field[count].equals("[ ]")){
 				System.out.println("Hallo");

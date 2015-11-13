@@ -17,7 +17,7 @@ public class SpielfeldMapped extends JButton{
 	
 	this.setOpaque(false);
 	this.setContentAreaFilled(false);
-	//this.setBorderPainted(false);
+	this.setBorderPainted(false); //Falls rahmen angezeigt werden sollen, hier anschalten!
 		
 	}
 
