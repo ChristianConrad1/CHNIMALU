@@ -113,7 +113,8 @@ public class Menu extends JFrame{
 	}
 	
 	public void neuesSpielStarten(){
-		g = new GUI(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
+		//g = new GUI(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
+		g=new GUI();
 		neuesSpiel.dispose();
 		
 		
@@ -121,8 +122,7 @@ public class Menu extends JFrame{
 	public void geladenesSpielStarten(){
 		d1 = new DatenzugriffSerialisiert();
 		d = d1;
-		//System.out.println(jfc.getSelectedFile().getAbsolutePath());
-		g = new GUI(d.load(jfc.getSelectedFile().getPath()));
+		//g = new GUI(d.load(jfc.getSelectedFile().getPath()));
 		this.dispose();
 		
 		

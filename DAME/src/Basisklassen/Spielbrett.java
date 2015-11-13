@@ -17,7 +17,7 @@ public class Spielbrett extends JPanel implements Serializable{
  * Konstruktor erzeugt Spielbrett aus Spielfeldern
  */
 	public Spielbrett() {
-	
+	//Hier wird ID gesetzt und Standartausgabe fürs Feld
 		brett=new Spielfeld[12][12];
 		char n = 'a';
 		int m=1;
@@ -94,7 +94,7 @@ public class Spielbrett extends JPanel implements Serializable{
 		return this.KoordY;
 	}
 
-	public void initBrett() {
+	public void initBrett() { //Hier wird Brett zum GridBagLayout und setzt Standarticons
 		int counter = 0;
 		boolean farbe = false;
 		super.setLayout(new GridBagLayout());

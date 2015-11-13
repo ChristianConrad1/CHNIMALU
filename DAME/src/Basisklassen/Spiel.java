@@ -33,8 +33,8 @@ public class Spiel implements iBediener, Serializable {
 
 	private transient Sounds sound;
 
-	public Spiel(Spielbrett brett) {
-		this.brett = brett;
+	public Spiel() {
+		this.brett=new Spielbrett();
 
 		this.brettArray = brett.getNotation();
 		setAlleFiguren();

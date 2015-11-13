@@ -1,8 +1,12 @@
 package GUI;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,11 +36,10 @@ public class GUI extends JFrame implements iMessage{
 	private JTextField eingabe;
 	private JButton bSubmit;
 	
-
-	private Spielbrett spielBrett;
 	private Spieler spielerA;
 	private Spieler spielerB;
 	private Spiel spiel;
+	private SpielbrettMapped brettMapped; 
 	
 	private  iBediener ibediener; 
 	
@@ -45,8 +48,9 @@ public class GUI extends JFrame implements iMessage{
 
 	
 public GUI(){
-	this.spielBrett = new Spielbrett();
-	ibediener = new Spiel(this.spielBrett);
+	
+//Spielbrett Erstellung braucht eine Methode
+	initNeuesSpiel();
 	ibediener.init(this);
 	guiStartup();
 }
@@ -65,20 +69,59 @@ public void guiStartup(){
 	
 
 }
-public void initNeuesSpiel(String nameSpielerA, boolean aIstKi, String nameSpielerB, boolean bIstKi){
-	spielBrett = new Spielbrett();
+public void initNeuesSpiel(){
+	initBrett(); //dies ist das GEMAPPTE spielbrett
 	
-
-	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz, aIstKi, spielBrett); 
-	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
+//	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz, aIstKi, spielBrett); 
+//	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
 	
-	spiel = new Spiel(spielerA, spielerB, spielBrett);
+	
+	spiel = new Spiel();
 	ibediener=spiel;
 	
 }
+
+public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
+
+	brettMapped = new SpielbrettMapped();
+	SpielfeldMapped[][] brettArray = brettMapped.getNotation();
+
+	//Hier wird Brett zum GridBagLayout und setzt Standarticons
+	
+		int counter = 0;
+		boolean farbe = false;
+		brettMapped.setLayout(new GridBagLayout()); //Layout vom Spielbrett
+		
+		brettMapped.setSize(new Dimension(768,768)); //Size vom Spielbrett
+		GridBagConstraints c = new GridBagConstraints();
+		for (int i = 11; i >= 0; i--) {
+			c.gridy = counter;
+			for (int n = 0; n < brettArray[i].length; n++) {
+				c.gridx = n;
+				brettArray[n][i].setPreferredSize(new Dimension(64,64));
+				brettMapped.add(brettArray[n][i], c); //Spielbrett.add
+				if (farbe){
+					brettArray[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
+					brettArray[n][i].setBackground(Color.BLACK);
+				}
+					else{
+					brettArray[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
+					brettArray[n][i].setBackground(Color.WHITE);
+					}
+				farbe=!farbe;
+				
+			}
+			farbe=!farbe;
+			counter++;
+		}
+
+	}
+
+
+
 public void initGeladenesSpiel(Spiel s){
 	this.spiel = s;
-	this.spielBrett = this.spiel.getBrett();
+//	this.spielBrett = this.spiel.getBrett();
 }
 
 public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefuegt
@@ -142,7 +185,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	southPanel.setLayout(new GridLayout(1,1));
 	
 	centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
-	centerPanel.add(spielBrett);
+	centerPanel.add(brettMapped);
 	
 	
 	
