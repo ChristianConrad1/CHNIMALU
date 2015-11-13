@@ -14,14 +14,15 @@ import Interfaces.iBediener;
 		static Scanner sc;
 
 		public static void main (String Args[]){
-			brett=new Spielbrett();
-			spieler1=new Spieler("bernd",FarbEnum.schwarz,true, brett);
-			spieler2=new Spieler("berndy",FarbEnum.weiss, true, brett);
 			
 			
-			s1=new Spiel(spieler1, spieler2, brett);
+			
+			s1=new Spiel();
 		    sc=new Scanner(System.in);	   
 		    b= s1;
+		    b.spielerHzfg("bernd", true);
+		    b.spielerHzfg("berndy", true);
+
 		    testAusgabe();
 		    while(s1.getSpielende()==false){
 		    	
@@ -37,7 +38,7 @@ import Interfaces.iBediener;
 		
 		
 		public static void testAusgabe() {
-			Spielfeld[][] ar=brett.getNotation();
+			Spielfeld[][] ar=s1.getBrett().getNotation();
 			char rand='A';
 			int zahlrand=12;
 			
@@ -67,8 +68,8 @@ import Interfaces.iBediener;
 			String eingabe;
 			String ausgabe;
 			if(s1.getSpielerAktiv().isKI() == true){
-		    	eingabe = s1.getSpielerAktiv().getKi().wasMacheIch()[0];
-		    	ausgabe = s1.getSpielerAktiv().getKi().wasMacheIch()[1];
+		    	eingabe = s1.getSpielerAktiv().getKi().wasMacheIch(s1.getBrett())[0];
+		    	ausgabe = s1.getSpielerAktiv().getKi().wasMacheIch(s1.getBrett())[1];
 		    	System.out.println("Startfeld KI: " + eingabe);
 		    	System.out.println("Zielfeld KI: " + ausgabe);
 		    }

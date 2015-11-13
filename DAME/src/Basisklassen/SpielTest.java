@@ -14,11 +14,13 @@ public class SpielTest {
 
 	public static void main (String Args[]){
 		brett=new Spielbrett();
-		spieler1=new Spieler("bernd",FarbEnum.schwarz);
-		spieler2=new Spieler("berndy",FarbEnum.weiss);
-		s1=new Spiel(spieler1, spieler2, brett);
+
+		s1=new Spiel();
+		b = s1; 
+		b.spielerHzfg("bernd", false);
+		b.spielerHzfg("berndy", false);
 	    sc=new Scanner(System.in);	   
-	    b= s1;
+	 
 	    testAusgabe();
 	    testScanner();
 	    //testAusgabe(); //Wird nicht benötigt, da in testScanner() schon testAusgabe aufgerufen wird.
@@ -28,7 +30,7 @@ public class SpielTest {
 	
 	
 	public static void testAusgabe() {
-		Spielfeld[][] ar=brett.getNotation();
+		Spielfeld[][] ar=s1.getBrett().getNotation();
 		char rand='A';
 		int zahlrand=12;
 		

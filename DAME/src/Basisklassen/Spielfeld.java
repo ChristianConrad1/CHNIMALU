@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 import GUI.EventHandler;
 
-public class Spielfeld  extends JButton implements Serializable{
+public class Spielfeld  implements Serializable{
 	
 	private Spielfigur figur;
 	private String ID;
@@ -28,13 +28,11 @@ public class Spielfeld  extends JButton implements Serializable{
 	 *           
 	 */
 	public Spielfeld(String ID){
-		//super(ID);
-		super.setOpaque(true);
+
 		setID(ID);
 		this.figur = null;
 		this.hatFigur = false;	
-		eh=new EventHandler(this);
-		this.addActionListener(eh);
+
 		
 	}
 	
@@ -105,18 +103,17 @@ public class Spielfeld  extends JButton implements Serializable{
 		
 		//Beim setzen der Figur andere Farbe des Felds zuweisen
 		if(figur.getFarbe() == FarbEnum.schwarz){
-			this.setIcon(new ImageIcon("res/img/BLACKStone.png"));
+			this.setAusgabeID("[X]");
 			
-			this.setBackground(Color.YELLOW);
+			
 			if(figur.isDame()){
-				this.setBackground(Color.CYAN);
+				this.setAusgabeID("[*X*]");
 			}
 		}
 		else if(figur.getFarbe() == FarbEnum.weiss){
-			this.setIcon(new ImageIcon("res/img/WHITEStone.png"));
-			this.setBackground(Color.RED);
+			this.setAusgabeID("[O]");
 			if(figur.isDame()){
-				this.setBackground(Color.PINK);
+				this.setAusgabeID("[*O*]");
 			}
 		}
 		//-----------------------------------------------------
@@ -135,10 +132,7 @@ public class Spielfeld  extends JButton implements Serializable{
 		this.figur=null;
 		this.hatFigur = false;
 		setAusgabeID("[ ]");
-		//Beim entfernen einer Figur das Feld auf Standardfarbe setzen
-		this.setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
-		this.setBackground(Color.BLACK);
-		//-----------------------------------------------------------
+
 	}
 	
 	/**

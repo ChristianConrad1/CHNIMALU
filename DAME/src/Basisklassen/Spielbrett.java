@@ -17,7 +17,7 @@ public class Spielbrett extends JPanel implements Serializable{
  * Konstruktor erzeugt Spielbrett aus Spielfeldern
  */
 	public Spielbrett() {
-	//Hier wird ID gesetzt und Standartausgabe f�rs Feld
+	//Hier wird ID gesetzt und Standartausgabe f�rs Feld
 		brett=new Spielfeld[12][12];
 		char n = 'a';
 		int m=1;
@@ -43,7 +43,7 @@ public class Spielbrett extends JPanel implements Serializable{
 				this.brett[i][j].setAusgabeID("[ ]"); 
 			}
 	}
-		this.initBrett();
+		
 	}
 /**
  * gibt Array aus Spielfeldern mit Schachnotation-ID zurück
@@ -94,34 +94,34 @@ public class Spielbrett extends JPanel implements Serializable{
 		return this.KoordY;
 	}
 
-	public void initBrett() { //Hier wird Brett zum GridBagLayout und setzt Standarticons
-		int counter = 0;
-		boolean farbe = false;
-		super.setLayout(new GridBagLayout());
-		//super.set
-		super.setSize(new Dimension(768,768)); //Größe des von JPanel erbenden Spielbretts
-		GridBagConstraints c = new GridBagConstraints();
-		for (int i = 11; i >= 0; i--) {
-			c.gridy = counter;
-			for (int n = 0; n < brett[i].length; n++) {
-				c.gridx = n;
-				this.brett[n][i].setPreferredSize(new Dimension(64,64));
-				super.add(this.brett[n][i], c);
-				if (farbe){
-					this.brett[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
-					this.brett[n][i].setBackground(Color.BLACK);
-				}
-					else{
-					this.brett[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
-						this.brett[n][i].setBackground(Color.WHITE);
-					}
-				farbe=!farbe;
-				
-			}
-			farbe=!farbe;
-			counter++;
-		}
-
-	}
+//	public void initBrett() { //Hier wird Brett zum GridBagLayout und setzt Standarticons
+//		int counter = 0;
+//		boolean farbe = false;
+//		super.setLayout(new GridBagLayout());
+//		//super.set
+//		super.setSize(new Dimension(768,768)); //Größe des von JPanel erbenden Spielbretts
+//		GridBagConstraints c = new GridBagConstraints();
+//		for (int i = 11; i >= 0; i--) {
+//			c.gridy = counter;
+//			for (int n = 0; n < brett[i].length; n++) {
+//				c.gridx = n;
+//				this.brett[n][i].setPreferredSize(new Dimension(64,64));
+//				super.add(this.brett[n][i], c);
+//				if (farbe){
+//					this.brett[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
+//					this.brett[n][i].setBackground(Color.BLACK);
+//				}
+//					else{
+//					this.brett[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
+//						this.brett[n][i].setBackground(Color.WHITE);
+//					}
+//				farbe=!farbe;
+//				
+//			}
+//			farbe=!farbe;
+//			counter++;
+//		}
+//
+//	}
 
 }
