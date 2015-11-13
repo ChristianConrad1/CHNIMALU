@@ -1,14 +1,12 @@
 package Basisklassen;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.Scanner;
 
 import GUI.Sounds;
-import Interfaces.*;
+import Interfaces.iBediener;
+import Interfaces.iDatenzugriff;
+import Interfaces.iMessage;
 import SpeichernLaden.DatenzugriffCSV;
 import SpeichernLaden.DatenzugriffSerialisiert;
 
@@ -665,12 +663,16 @@ public class Spiel implements iBediener, Serializable {
 		Spielfeld[][] belegung = brett.getNotation();
 		for (int i = this.brettArray.length - 1; i >= 0; i--) {
 			for (int n = 0; n < belegung[i].length; n++) {
-				blg += belegung[i][i].getAusgabeID();
+			
+				blg +=belegung[n][i].getAusgabeID()+";";
+				
+				 }
+			//blg += "\n";
 				// pw.print(belegung[n][i].getAusgabeID() + "\t");
 			}
-			blg += "\n";
+			
 			// pw.println();
-		}
+		
 
 		// pw.close();
 		return blg;

@@ -2,8 +2,6 @@ package GUI;
 
 import javax.swing.JButton;
 
-import Basisklassen.Spielfeld;
-
 public class SpielfeldMapped extends JButton{
 	
 	private String ID;
@@ -14,6 +12,10 @@ public class SpielfeldMapped extends JButton{
 	public SpielfeldMapped(String ID){
 		
 	this.setID(ID);
+	
+	this.setOpaque(false);
+	this.setContentAreaFilled(false);
+	//this.setBorderPainted(false);
 		
 	}
 

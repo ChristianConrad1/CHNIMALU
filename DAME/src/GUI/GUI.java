@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,9 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import Basisklassen.FarbEnum;
 import Basisklassen.Spiel;
-import Basisklassen.Spielbrett;
 import Basisklassen.Spieler;
 import Interfaces.iBediener;
 import Interfaces.iMessage;
@@ -29,7 +28,6 @@ import Interfaces.iMessage;
 public class GUI extends JFrame implements iMessage{
 	
 	private  JPanel mainJpanel;
-	private  GUI g;
 	private  JMenuBar menuBar;
 	private  JMenu menuGame;
 	private  JMenuItem menuItemStart;
@@ -46,12 +44,14 @@ public class GUI extends JFrame implements iMessage{
 	private Spieler spielerB;
 	private Spiel spiel;
 	private SpielbrettMapped brettMapped; 
+	private SpielfeldMapped[][] brettArray;
 	
 	private  iBediener ibediener; 
 	
 
 	private EventHandler eh;
 
+	  private BufferedImage image;
 	
 public GUI(){
 	
@@ -67,6 +67,7 @@ public void guiStartup(){
 	this.setMinimumSize(new Dimension(1150, 900)); //MinimalgrÃ¶ÃŸe des JFrames
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
+	mainJpanel.setBackground(Color.black);
 	this.getContentPane().add(mainJpanel);
 	eh = new EventHandler(this);
 	addMenuBar();	//Fuege MenuBar hinzu
@@ -76,21 +77,22 @@ public void guiStartup(){
 
 }
 public void initNeuesSpiel(){
-	initBrett(); //dies ist das GEMAPPTE spielbrett
+
 	
 //	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz, aIstKi, spielBrett); 
 //	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
 	
-	
 	spiel = new Spiel();
 	ibediener=spiel;
+	initBrett(); //dies ist das GEMAPPTE spielbrett
+
 	
 }
 
 public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 
 	brettMapped = new SpielbrettMapped();
-	SpielfeldMapped[][] brettArray = brettMapped.getNotation();
+	brettArray = brettMapped.getNotation();
 
 	//Hier wird Brett zum GridBagLayout und setzt Standarticons
 	
@@ -108,11 +110,9 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 				brettMapped.add(brettArray[n][i], c); //Spielbrett.add
 				if (farbe){
 					brettArray[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
-					brettArray[n][i].setBackground(Color.BLACK);
 				}
 					else{
 					brettArray[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
-					brettArray[n][i].setBackground(Color.WHITE);
 					}
 				farbe=!farbe;
 				
@@ -120,8 +120,43 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 			farbe=!farbe;
 			counter++;
 		}
+		
+		drawBrett();
 
 	}
+
+public void drawBrett(){
+	
+	//Gesamte CSV Notation wird in ein eindimensionales String-Array gespeichert, jeder String[index] enthält ein Feld 0-12 entspricht a12-l12
+	String brettString = ibediener.belegungCSV();
+	
+	String[] field=brettString.split(";");
+	
+
+	//brettArray(Mapped) bekommt nun die neue Notation übertragen:
+	
+	int count=0; //Die Variable um durch unseren CSV-String zu laufen
+	for(int n=0; n<brettArray.length; n++){
+		for(int k=0; k<brettArray[n].length; k++){
+			if(field[count].equals("[O]")){
+				System.out.println("Hallo");
+			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/whiteStone.png"));
+			}
+			if(field[count].equals("[X]")){
+				System.out.println("Hallo");
+			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/blackStone.png"));
+			}
+			if(field[count].equals("[ ]")){
+				System.out.println("Hallo");
+			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/FieldEmpty.png"));
+			}
+			
+					count++;
+		}
+	}
+	
+
+}
 
 
 
@@ -172,8 +207,6 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	bSubmit = new JButton("DurchfÃ¼hren");
 	bSubmit.addActionListener(eh);
 	JButton bNORTH = new JButton("NORTH");
-	JButton bSOUTH = new JButton("SOUTH");
-	JButton bCENTER = new JButton("CENTER");
 	
 	jta = new JTextArea(5,1);
 	jsp = new JScrollPane(jta);
@@ -192,11 +225,14 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	southPanel.add(jsp);
 	southPanel.setLayout(new GridLayout(1,1));
+
 	
-	centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
+	//centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
+	
+	//centerPanel.setIcon(new ImageIcon("res/img/TEST/Background_FIELDS.png"));
 	centerPanel.add(brettMapped);
-	
-	
+	centerPanel.setBackground(Color.black);
+
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
 	this.mainJpanel.add(eastPanel, BorderLayout.EAST); 
