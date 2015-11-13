@@ -13,7 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Basisklassen.FarbEnum;
@@ -35,6 +38,9 @@ public class GUI extends JFrame implements iMessage{
 	
 	private JTextField eingabe;
 	private JButton bSubmit;
+	
+	private JScrollPane jsp;
+	private JTextArea jta;
 	
 	private Spieler spielerA;
 	private Spieler spielerB;
@@ -169,6 +175,9 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JButton bSOUTH = new JButton("SOUTH");
 	JButton bCENTER = new JButton("CENTER");
 	
+	jta = new JTextArea(5,1);
+	jsp = new JScrollPane(jta);
+	
 	westPanel.add(bWEST);
 	westPanel.add(new JLabel("Hier kommt was hin"));
 	westPanel.setLayout(new GridLayout(5,1));	//Erzeuge testhaft ein neues Gridlayout, dass seine Komponenten in 1 Spalte und 5 Zeilen unterteilt
@@ -181,7 +190,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	northPanel.add(bNORTH);
 	northPanel.setLayout(new GridLayout(1,1));
 	
-	southPanel.add(bSOUTH);
+	southPanel.add(jsp);
 	southPanel.setLayout(new GridLayout(1,1));
 	
 	centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
@@ -224,17 +233,17 @@ public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 }
 @Override
 public void printError(String msg) {
-	// TODO Auto-generated method stub
+	JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.OK_CANCEL_OPTION);
 	
 }
 @Override
 public void printOk(String msg) {
-	// TODO Auto-generated method stub
-	
+	jta.setText(jta.getText() + "\n" + msg);	
 }
 @Override
 public void printOkWindow(String msg) {
-	// TODO Auto-generated method stub
+	JOptionPane.showMessageDialog(null, msg, "Bestätigen", JOptionPane.OK_CANCEL_OPTION);
+	
 	
 }
 	

@@ -154,6 +154,7 @@ public class Spiel implements iBediener, Serializable {
 			}
 
 		} catch (Exception e) {
+			msg.printError(e.toString());
 			System.err.println(e);
 			// System.err.println(e.getMessage());
 			// e.printStackTrace();
@@ -511,7 +512,8 @@ public class Spiel implements iBediener, Serializable {
 			// }
 
 		} catch (Exception e) {
-			System.err.println(e);
+			msg.printError(e.toString());
+
 			// System.err.println(e.getMessage());
 			// e.printStackTrace();
 
