@@ -3,40 +3,47 @@ package GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import Basisklassen.Spielfeld;
+import Interfaces.iBediener;
 
 public class EventHandler implements ActionListener{
-	private GUI g;
+	private static GUI g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
 	private Menu m;
-	private Spielfeld f;
+	private SpielfeldMapped f;
 	private static boolean buttonClick; //Wenn ein button geklickt wurde, dann true, da Methode auf zweiten Button warten muss
 	private static String eingabeButton;
+	private iBediener b; 
 	
 public EventHandler(GUI g){
-		this.g = g;
+		EventHandler.g  = g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
+		b = g.getIbediener(); 
 }
 public EventHandler(Menu m){
 	this.m = m;
 }
-public EventHandler(Spielfeld f){
+public EventHandler(SpielfeldMapped f){
 	this.f = f;
+	b = g.getIbediener(); 
 }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		if (g != null) {
+			
 			if (e.getSource() == g.getMenuItemStart()) {
-				m = new Menu("Startmenü");
-				m.neuesSpielMenu();
+				
 				g.dispose();
 			}
 			if (e.getSource() == g.getMenuItemLoad()) {
-				m = new Menu("Startmenü");
-				g.dispose();
-				m.oeffneFileChooser();
-				m.geladenesSpielStarten();
+				
+				JFileChooser jfc = new JFileChooser("savegame");
+				jfc.showOpenDialog(null);
+				String pfad = jfc.getSelectedFile().getAbsolutePath();
+				b.laden(pfad);
 			}
 			if (e.getSource() == g.getMenuItemSave()) {
 				JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern",
@@ -53,7 +60,7 @@ public EventHandler(Spielfeld f){
 				
 				System.out.println(eingabe +" ausgabe:"+ ausgabe);
 				
-				g.bewegeSpielfigur(eingabe, ausgabe);
+				b.bewegeSpielfigur(eingabe, ausgabe);
 			}
 		}
 		
@@ -62,13 +69,15 @@ public EventHandler(Spielfeld f){
 				if(buttonClick==false){
 				System.out.println("Waehle Zielfeld!"); //Wird an Textbox oder so ausgegeben!
 				eingabeButton=f.getID();
+				System.out.println(f.getID());
 				buttonClick=true;
+				return; //muss sein, weil er sonst gleich beides ausführt!!
 				}
 				if(buttonClick==true){
 					String ausgabeButton=f.getID();
-
-					g.bewegeSpielfigur(eingabeButton, ausgabeButton);
-					ausgabeButton=" ";
+					b.bewegeSpielfigur(eingabeButton, ausgabeButton);
+					g.drawBrett();
+					ausgabeButton="";
 					buttonClick=false;
 				}
 			}
@@ -80,8 +89,8 @@ public EventHandler(Spielfeld f){
 			m.neuesSpielMenu();
 		}
 		if (e.getSource() == m.getLaden()) {
-			m.oeffneFileChooser();
-			m.geladenesSpielStarten();
+
+			
 		}
 		if (e.getSource() == m.getEnde()) {
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?",

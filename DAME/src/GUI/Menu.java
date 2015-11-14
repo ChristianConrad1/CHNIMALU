@@ -115,6 +115,7 @@ public class Menu extends JFrame{
 	public void neuesSpielStarten(){
 		//g = new GUI(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
 		g=new GUI();
+		g.initNeuesSpiel(nameA.getText(), aIstKi.isSelected(), nameB.getText(), bIstKi.isSelected());
 		neuesSpiel.dispose();
 		
 		
@@ -127,9 +128,12 @@ public class Menu extends JFrame{
 		
 		
 	}
-	public void oeffneFileChooser(){
+	public String oeffneFileChooser(){
 		jfc = new JFileChooser("savegame");
 		jfc.showOpenDialog(null);
+		String pfad = jfc.getSelectedFile().getPath();
+		return pfad;
+
 	}
 	public void neuesSpielMenu(){
 		

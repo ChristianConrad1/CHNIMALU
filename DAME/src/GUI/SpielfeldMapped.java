@@ -8,6 +8,8 @@ public class SpielfeldMapped extends JButton{
 	
 	String feldID;
 	
+	private EventHandler eh;
+	
 	
 	
 	public SpielfeldMapped(String ID){
@@ -18,7 +20,9 @@ public class SpielfeldMapped extends JButton{
 	this.setOpaque(false);
 	this.setContentAreaFilled(false);
 	this.setBorderPainted(false); //Falls rahmen angezeigt werden sollen, hier anschalten!
-		
+	
+	eh = new EventHandler(this);
+	this.addActionListener(eh);	
 	}
 
 	public String getID() {

@@ -15,10 +15,11 @@ public class SpielbrettMapped extends JPanel{
 	private BufferedImage image;
 	
 	
+	
 	public SpielbrettMapped(){
 		
 		
-		this.setBackground(Color.black);
+		//this.setBackground(Color.black);
 	
 		//this.setIcon();
 		
@@ -37,6 +38,12 @@ public class SpielbrettMapped extends JPanel{
 			n++;
 			m=1;
 	}
+		 try {
+	         image = ImageIO.read(new File(
+	                 "res/img/TEST/BackgroundGrafik.jpg"));
+	     } catch (IOException e) {
+	         e.printStackTrace();
+	     }
 
 		
 	}
@@ -47,15 +54,12 @@ public class SpielbrettMapped extends JPanel{
 
 @Override
 protected void paintComponent(Graphics g){
-	super.paintComponent(g);
 	
-	 try {
-         image = ImageIO.read(new File(
-                 "res/img/TEST/BackgroundGrafik.jpg"));
-     } catch (IOException e) {
-         e.printStackTrace();
-     }
+	super.paintComponent(g);
+
 	g.drawImage(image,0,0,null);
+
+	
 }
 
 }

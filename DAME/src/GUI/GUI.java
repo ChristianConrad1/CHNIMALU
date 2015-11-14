@@ -26,6 +26,10 @@ import Interfaces.iMessage;
 
 public class GUI extends JFrame implements iMessage{
 	
+	private ImageIcon blackStone;
+	private ImageIcon whiteStone;
+	
+	
 	private  JPanel mainJpanel;
 	private  JMenuBar menuBar;
 	private  JMenu menuGame;
@@ -41,7 +45,7 @@ public class GUI extends JFrame implements iMessage{
 	
 	private Spieler spielerA;
 	private Spieler spielerB;
-	private Spiel spiel;
+
 	private SpielbrettMapped brettMapped; 
 	private SpielfeldMapped[][] brettArray;
 	
@@ -54,10 +58,10 @@ public class GUI extends JFrame implements iMessage{
 	
 public GUI(){
 	
-//Spielbrett Erstellung braucht eine Methode
-	initNeuesSpiel();
-	ibediener.init(this);
+//Spielbrett Erstellung braucht eine Methode	
+	
 	guiStartup();
+	
 }
 
 public void guiStartup(){
@@ -67,22 +71,27 @@ public void guiStartup(){
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
-	eh = new EventHandler(this);
+
 	addMenuBar();	//Fuege MenuBar hinzu
-	setupLayout();	//Erstelle unser Layout
 	this.setVisible(true);
 	
 
 }
-public void initNeuesSpiel(){
+public void initNeuesSpiel(String nameA, boolean aIstKi, String nameB, boolean bIstKi){
 
 	
 //	spielerA = new Spieler(nameSpielerA, FarbEnum.schwarz, aIstKi, spielBrett); 
 //	spielerB = new Spieler(nameSpielerB, FarbEnum.weiss, bIstKi, spielBrett); 
 	
-	spiel = new Spiel();
-	ibediener=spiel;
+	ibediener=new Spiel();
+	ibediener.init(this);
+	ibediener.spielerHzfg(nameA, aIstKi);
+	ibediener.spielerHzfg(nameB, bIstKi);
+	
+	eh = new EventHandler(this);
+	
 	initBrett(); //dies ist das GEMAPPTE spielbrett
+	setupLayout();	//Erstelle unser Layout
 
 	
 }
@@ -91,11 +100,13 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 
 	brettMapped = new SpielbrettMapped();
 	brettArray = brettMapped.getNotation();
+	
+	initImg();
 
 	//Hier wird Brett zum GridBagLayout und setzt Standarticons
 	
 		int counter = 0;
-		boolean farbe = false;
+	
 		brettMapped.setLayout(new GridBagLayout()); //Layout vom Spielbrett
 		
 		brettMapped.setSize(new Dimension(768,768)); //Size vom Spielbrett
@@ -106,16 +117,10 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 				c.gridx = n;
 				brettArray[n][i].setPreferredSize(new Dimension(64,64));
 				brettMapped.add(brettArray[n][i], c); //Spielbrett.add
-				if (farbe){
-					brettArray[n][i].setIcon(new ImageIcon("res/img/Schwarz_FELD.png"));
-				}
-					else{
-					brettArray[n][i].setIcon(new ImageIcon("res/img/weiss_FELD.png"));
-					}
-				farbe=!farbe;
+
 				
 			}
-			farbe=!farbe;
+			
 			counter++;
 		}
 		
@@ -125,30 +130,31 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 
 public void drawBrett(){
 	
-	//Gesamte CSV Notation wird in ein eindimensionales String-Array gespeichert, jeder String[index] enthält ein Feld 0-12 entspricht a12-l12
+	//Gesamte CSV Notation wird in ein eindimensionales String-Array gespeichert, jeder String[index] enthï¿½lt ein Feld 0-12 entspricht a12-l12
 	String brettString = ibediener.belegungCSV();
 	
 	String[] field=brettString.split(";");
 	
 
-	//brettArray(Mapped) bekommt nun die neue Notation übertragen:
+	//brettArray(Mapped) bekommt nun die neue Notation ï¿½bertragen:
 	
 	int count=0; //Die Variable um durch unseren CSV-String zu laufen
-	for(int n=0; n<brettArray.length; n++){
+	for(int n=brettArray.length-1; n >= 0 ; n--){
 		for(int k=0; k<brettArray[n].length; k++){
 			if(field[count].equals("[O]")){
 				System.out.println("Hallo");
-			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/whiteStone.png"));
-			brettArray[k][n].setRolloverIcon(new ImageIcon("res/img/TEST/blackStone.png"));
+			brettArray[k][n].setIcon(whiteStone);
+			brettArray[k][n].setRolloverIcon(blackStone);
 			}
 			if(field[count].equals("[X]")){
 				System.out.println("Hallo");
-			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/blackStone.png"));
-			brettArray[k][n].setRolloverIcon(new ImageIcon("res/img/TEST/whiteStone.png"));
+			brettArray[k][n].setIcon(blackStone);
+			brettArray[k][n].setRolloverIcon(whiteStone);
 			}
 			if(field[count].equals("[ ]")){
 				System.out.println("Hallo");
-			brettArray[k][n].setIcon(new ImageIcon("res/img/TEST/FieldEmpty.png"));
+			brettArray[k][n].setIcon(null);
+			brettArray[k][n].setRolloverIcon(null);
 			}
 			
 					count++;
@@ -161,7 +167,7 @@ public void drawBrett(){
 
 
 public void initGeladenesSpiel(Spiel s){
-	this.spiel = s;
+	//this.spiel = s;
 //	this.spielBrett = this.spiel.getBrett();
 }
 
@@ -240,10 +246,19 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 
 }
+public void initImg(){
+	blackStone = new ImageIcon("res/img/TEST/blackStone.png");
+	whiteStone = new ImageIcon("res/img/TEST/whiteStone.png");
+}
 
+
+public iBediener getIbediener() {
+	return ibediener;
+}
 
 public Spiel getSpiel() {
-	return spiel;
+	//return spiel;
+	return null;
 }
 public JTextField getEingabe() {
 	return eingabe;
@@ -267,7 +282,7 @@ public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 }
 @Override
 public void printError(String msg) {
-	JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.OK_CANCEL_OPTION);
+	JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
 	
 }
 @Override
@@ -277,6 +292,14 @@ public void printOk(String msg) {
 @Override
 public void printOkWindow(String msg) {
 	JOptionPane.showMessageDialog(null, msg, "BestÃ¤tigen", JOptionPane.OK_CANCEL_OPTION);
+	
+	
+}
+
+@Override
+public void printPusten(String msg) {
+	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten wÃ¤hlen", JOptionPane.QUESTION_MESSAGE);
+	ibediener.pusten(feld);
 	
 	
 }
