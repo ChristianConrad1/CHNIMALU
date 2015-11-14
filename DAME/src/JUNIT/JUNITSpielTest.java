@@ -34,12 +34,14 @@ public class JUNITSpielTest {
 	public void test() {
 	
 		brett=new Spielbrett();
-		spielerA=new Spieler("Bernd", FarbEnum.schwarz);
-		spielerB=new Spieler("Berndy", FarbEnum.weiss);
-		s1=new Spiel(spielerA, spielerB, brett);
+//		spielerA=new Spieler("Bernd", FarbEnum.schwarz);
+//		spielerB=new Spieler("Berndy", FarbEnum.weiss);
+		s1=new Spiel();
+		 b = s1;
+		 b.spielerHzfg("Bernd", false);
+		 b.spielerHzfg("Berndy", false);
 		  sc=new Scanner(System.in);	   
 		  si=new Scanner(System.in);	  
-		    b = s1;
 		    ar = s1.getBrett().getNotation();
 
 		    

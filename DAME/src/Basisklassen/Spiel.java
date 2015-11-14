@@ -137,7 +137,7 @@ public class Spiel implements iBediener, Serializable {
 			}
 		}
 		figurenListe.clear();
-
+		hatGeschlagen = false;
 		spielerMussSpringen();
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
@@ -290,12 +290,15 @@ public class Spiel implements iBediener, Serializable {
 								//bis normales Ziehen fehlt noch eine abbruchbedinung, 
 								//sonst bleibt er in der While, wenn man eine Spielfigur bewegt, die eigentlich schlagen könnte
 								if (c == koordX && d == koordY) {
+									if (this.brettArray[koordX][koordY].getFigur() != null
+											&& this.brettArray[koordX][koordY].getFigur()
+													.getFarbe() == farbeGegner) {
 									while (aktiveSpielfigur.getKannSpringen() == true
 											&& this.spielerAktiv.getMussSpringen() == true
 											&& this.brettArray[koordX1][koordY1].getFigur() == null) {
-										if (this.brettArray[koordX][koordY].getFigur() != null
-												&& this.brettArray[koordX][koordY].getFigur()
-														.getFarbe() == farbeGegner) {
+//										if (this.brettArray[koordX][koordY].getFigur() != null
+//												&& this.brettArray[koordX][koordY].getFigur()
+//														.getFarbe() == farbeGegner) {
 
 											this.aktiveSpielfigur.getPosition().removeFigur();
 											this.brettArray[koordX][koordY].removeFigur();
@@ -365,11 +368,11 @@ public class Spiel implements iBediener, Serializable {
 													koordX1 = koordX + 1;
 													koordY1 = koordY - 1;
 												}
+												
 											}
-
 											System.out.println("Sprung vollendet.");
 										}
-										System.out.println("Hier hänge ich drinn -.-");
+//										System.out.println("Hier hänge ich drinn -.-");
 									}
 									
 								}
@@ -392,16 +395,7 @@ public class Spiel implements iBediener, Serializable {
 								aktiveSpielfigur.getPosition().removeFigur();
 								aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 								this.brettArray[c][d].setFigur(aktiveSpielfigur);
-								
-								// Ist die Spielfigur jetzt eine
-								// Dame?-------------------
-								if ((aktiveSpielfigur.getPosition().getPosY() == 11
-										&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
-										| (aktiveSpielfigur.getPosition().getPosY() == 0
-												&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
-									aktiveSpielfigur.setDame();
-									System.out.println("Eine Figur ist zur Dame geworden!");
-								}
+							
 								hatGeschlagen = false;
 								msg.printOk(spielerAktiv.getName() + " hat Zug von " +s1 + " nach " +s2 +" ausgeführt.");
 								System.out.println("Zug vollendet!");
@@ -507,7 +501,13 @@ public class Spiel implements iBediener, Serializable {
 //									}
 //								}
 //							}
-
+							if ((aktiveSpielfigur.getPosition().getPosY() == 11
+									&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
+									| (aktiveSpielfigur.getPosition().getPosY() == 0
+											&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
+								aktiveSpielfigur.setDame();
+								msg.printOk("Eine Figur ist zur Dame geworden!");
+							}
 							aktiveSpielfigur = null;
 							spielerAktiv.setMussSpringen(false);
 							spielerWechsel();
