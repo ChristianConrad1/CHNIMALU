@@ -1034,10 +1034,19 @@ public class Spiel implements iBediener, Serializable {
 	public void speichern(String pfad) {
 		// TODO Auto-generated method stub
 		iDatenzugriff idz;
-		String[] args = pfad.split(".");
-		String typ = args[args.length - 1].toLowerCase();
+		String Speichertyp="";
+		if(pfad.contains(".csv")){
+			Speichertyp="csv";
+		}
+		else if(pfad.contains(".ser")){
+			Speichertyp="ser";
+		}
+//		String[] substring=pfad.split(".");
+//		System.out.println(pfad);
+//
+//		String typ = substring[substring.length - 1].toLowerCase();
 
-		switch (typ) {
+		switch (Speichertyp) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
 			idz.save(this);
@@ -1056,12 +1065,18 @@ public class Spiel implements iBediener, Serializable {
 
 	@Override
 	public void laden(String pfad) {
-System.out.println("ufufufufufufu");
+		neuesSpiel();
+		
+System.out.println(pfad);
 		iDatenzugriff idz;
-		String[] args = pfad.split(".");
-		String typ = args[args.length - 1].toLowerCase();
-
-		switch (typ) {
+		String Speichertyp="";
+		if(pfad.contains(".csv")){
+			Speichertyp="csv";
+		}
+		else if(pfad.contains(".ser")){
+			Speichertyp="ser";
+		}
+		switch (Speichertyp) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
 			Spiel x = (Spiel) idz.load(pfad);
@@ -1082,13 +1097,16 @@ System.out.println("ufufufufufufu");
 			throw new RuntimeException("Filetype not supported");
 		}
 
+	
 	}
 
 	@Override
 	public void neuesSpiel() {
-		// TODO Auto-generated method stub
+		//neues Spiel erstellen! 
+	
 
 	}
+
 
 	@Override
 	public void mail() {
@@ -1151,12 +1169,14 @@ System.out.println("ufufufufufufu");
 														// kann, dann muss hier
 														// angepasst werden.
 
-		for (int x = 0; x < irgendwas.length; x++) {
-			if (x == 0) {
-				line = irgendwas[0];
+			int x=0; 
+			if (x < 12) {
+				System.out.println(irgendwas[x]);
+				
 
 				for (int i = belegung.length - 1; i >= 0; i--) {
 					c = 97;
+					line = irgendwas[x];
 					field = line.split(";");
 					
 
@@ -1176,17 +1196,19 @@ System.out.println("ufufufufufufu");
 							belegung[n][i].setFigur(new Spielfigur(FarbEnum.weiss, belegung[n][i]));
 							belegung[n][i].getFigur().setDame();
 						}
-
+						
 					}
+					x++;
 					
 				}
 				this.brett = new Spielbrett();
 				this.brett.setBrett(belegung);
-
+				x=0;
 			}
 			else{
 				// -SpielerA einlesen und im Spiel Objekt setzen-------------------
 				spielerA = new Spieler("spielerA", null);
+				x=11;
 
 				this.spielerA.setFarbe(this.toFarbEnum(irgendwas[++x]));
 				this.spielerA.setName(irgendwas[++x]);
@@ -1218,13 +1240,12 @@ System.out.println("ufufufufufufu");
 					this.spielerAktiv = this.spielerA;
 
 				// ----------------------------------------------------------------
-
-				this.spielerHzfg(spielerA.getName(), spielerA.isKI());
-				this.spielerHzfg(spielerB.getName(), spielerB.isKI());
 				
-
 				
-			}
+//
+//				this.spielerHzfg(spielerA.getName(), spielerA.isKI());
+//				this.spielerHzfg(spielerB.getName(), spielerB.isKI());
+		
 		}
 
 		// ----------------------------------------------------------------

@@ -5,10 +5,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -211,8 +214,24 @@ public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefu
 	menuGame.add(menuItemLoad);
 	
 	menuItemStart.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
-	menuItemSave.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
-	menuItemLoad.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemSave.addActionListener(new ActionListener(){
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//Choose between SER and CSV
+			ibediener.speichern("savegame/save.csv");
+		}
+	});	
+	
+	menuItemLoad.addActionListener(new ActionListener(){
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser jfc = new JFileChooser("savegame");
+			jfc.showOpenDialog(null);
+	
+			String pfad = jfc.getSelectedFile().getAbsolutePath();
+			ibediener.laden(pfad);
+		}
+	});	
 	
 	menuBar.add(menuGame);
 	this.setJMenuBar(menuBar);
@@ -238,7 +257,6 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
 	
-	JButton bWEST = new JButton("WEST");
 	bSubmit = new JButton("Durchführen");
 	bSubmit.addActionListener(eh);
 	datenSpielerAktiv = new JLabel();
@@ -249,8 +267,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	jta = new JTextArea(5,1);
 	jsp = new JScrollPane(jta);
-	
-	westPanel.add(bWEST);
+
 	westPanel.add(new JLabel("Hier kommt was hin"));
 	westPanel.setLayout(new GridLayout(5,1));	//Erzeuge testhaft ein neues Gridlayout, dass seine Komponenten in 1 Spalte und 5 Zeilen unterteilt
 	
