@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import Basisklassen.Spielfeld;
 import Interfaces.iBediener;
 
 public class EventHandler implements ActionListener{
@@ -39,15 +38,14 @@ public EventHandler(SpielfeldMapped f){
 				g.dispose();
 			}
 			if (e.getSource() == g.getMenuItemLoad()) {
-				
-				JFileChooser jfc = new JFileChooser("savegame");
-				jfc.showOpenDialog(null);
-				String pfad = jfc.getSelectedFile().getAbsolutePath();
-				b.laden(pfad);
+//				JFileChooser jfc = new JFileChooser("savegame");
+//				jfc.showOpenDialog(null);
+//				String pfad = jfc.getSelectedFile().getAbsolutePath();
+//				b.laden(pfad);
 			}
 			if (e.getSource() == g.getMenuItemSave()) {
 				JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.INFORMATION_MESSAGE);
 			}
 			if(e.getSource() == g.getbSubmit()){
 				//HIER MUSS WAS REIN
@@ -88,6 +86,15 @@ public EventHandler(SpielfeldMapped f){
 			m.neuesSpielMenu();
 		}
 		if (e.getSource() == m.getLaden()) {
+			//Muss Fenster zur Dateiauswahl aufrufen, die einen Pfad angibt
+			JFileChooser jfc = new JFileChooser("savegame");
+			jfc.showOpenDialog(null);
+			String pfad = jfc.getSelectedFile().getAbsolutePath();
+			b.laden(pfad);
+			
+//			m.dispose();
+//			g=new GUI();
+//			g.initNeuesSpiel("s", false, "ss", false);
 
 			
 		}
