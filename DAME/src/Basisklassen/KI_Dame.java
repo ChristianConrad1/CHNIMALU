@@ -31,7 +31,8 @@ public class KI_Dame extends KI implements Serializable{
 		else if  (ziehen() != null){
 			return ziehen();}		
 		else{
-			throw new RuntimeException("Alle Spielfiguren geblockt!");}
+			throw new RuntimeException("Alle Spielfiguren geblockt!");
+		}
 		
 	}
 
@@ -121,9 +122,17 @@ public class KI_Dame extends KI implements Serializable{
 								int y2 = coordY;
 
 								rueckgabe = new String[2];
-
+								
 								rueckgabe[0] = rewandler(x, y);
 								rueckgabe[1] = rewandler(x2, y2);
+								
+								if((brettArray[x][y].getHatFigur() && brettArray[x][y].getFigur().getInListe()) 
+										|| (brettArray[x2][y2].getHatFigur() && brettArray[x2][y2].getFigur().getInListe())){
+									rueckgabe = null;
+								}
+								
+
+
 
 								
 							}
@@ -158,7 +167,10 @@ public class KI_Dame extends KI implements Serializable{
 
 							rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
 							rueckgabe[1] = rewandler(links, oben);
-							return rueckgabe;
+							if(!testSpieler.getInListe()){
+								return rueckgabe;
+							}
+							
 						}
 						if(rechts <=brettArray.length  && oben == 11 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.schwarz &&
 								this.brettArray[rechts][oben].getHatFigur() == false){
@@ -166,7 +178,10 @@ public class KI_Dame extends KI implements Serializable{
 
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(rechts, oben);
-								return rueckgabe;
+								if(!testSpieler.getInListe()){
+									return rueckgabe;
+								}
+								
 					}
 						if(rechts <=brettArray.length-1 && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
 								this.brettArray[rechts][unten].getHatFigur() == false){
@@ -174,7 +189,9 @@ public class KI_Dame extends KI implements Serializable{
 
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(rechts, unten);
-								return rueckgabe;
+								if(!testSpieler.getInListe()){
+									return rueckgabe;
+								}
 					}
 						if(links >=0 && unten == 0 && this.brettArray[i][j].getFigur().getFarbe()==FarbEnum.weiss &&
 								this.brettArray[links][unten].getHatFigur() == false){
@@ -182,7 +199,9 @@ public class KI_Dame extends KI implements Serializable{
 
 								rueckgabe[0] = rewandler(testSpieler.getPosition().getPosX(), testSpieler.getPosition().getPosY());
 								rueckgabe[1] = rewandler(links, unten);
-								return rueckgabe;
+								if(!testSpieler.getInListe()){
+									return rueckgabe;
+								}
 					}
 				}
 			}
@@ -211,13 +230,26 @@ public class KI_Dame extends KI implements Serializable{
 
 		
 						while(this.spieler.getAktiv()==true && nurSpieler!=null){
-							
-						Collections.shuffle(nurSpieler);
-						Spielfigur testSpieler=nurSpieler.get(0);	
 						
+						Collections.shuffle(nurSpieler);
 						if(nurSpieler.isEmpty()==true){
 							return null;
 						}
+
+						
+			Spielfigur testSpieler = nurSpieler.get(0);
+			if (testSpieler.getInListe()) {
+				boolean settedNew = false;
+				for (int v = 1; v < nurSpieler.size(); v++) {
+					if (!nurSpieler.get(v).getInListe()) {
+						testSpieler = nurSpieler.get(v);
+						settedNew = true;
+					}
+				}
+				if(!settedNew){
+					return null;
+				}
+			}
 			
 						
 						//durchlaufe komplettes array

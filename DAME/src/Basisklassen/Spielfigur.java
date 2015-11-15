@@ -7,6 +7,7 @@ public class Spielfigur implements Serializable{
 	private String anzeigeID;
 	private boolean dame = false;
 	private boolean kannSpringen=false;
+	private boolean inListe = false;
 	private boolean[] sprungCases;
 	private boolean[] ziehCases;
 
@@ -123,6 +124,12 @@ public class Spielfigur implements Serializable{
 
 	public void setZiehCases(boolean[] ziehCases) {
 		this.ziehCases = ziehCases;
+	}
+	public boolean getInListe(){
+		return inListe;
+	}
+	public void setInListe(boolean inListe){
+		this.inListe = inListe;
 	}
 
 }

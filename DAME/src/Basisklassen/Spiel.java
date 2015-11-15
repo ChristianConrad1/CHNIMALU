@@ -18,11 +18,12 @@ public class Spiel implements iBediener, Serializable {
 
 	private boolean darfPusten;
 	private boolean hatGeschlagen;
-	private ArrayList<Spielfigur> figurenListe;
+	private boolean warKi;
+	private ArrayList<Spielfigur> figurenListe;                                                   
 	
 	private Spieler winner;
 	private Spieler spielerA;
-	private Spieler spielerB;
+	private Spieler spielerB;       
 	private Spieler spielerAktiv; // der spieler der gerade am zug ist, nicht zu
 									// verwechseln mit der aktiven Spielfigur
 	private Spielbrett brett;
@@ -34,6 +35,7 @@ public class Spiel implements iBediener, Serializable {
 									// kommen entsteht ein Konflikt! (zaehlt
 									// hoch, Konflikt ab 2!)
 	private FarbEnum farbeAktiv = null;
+	private FarbEnum farbeGegner = null;
 	private transient Scanner sc;
 
 	private transient Sounds sound;
@@ -122,22 +124,29 @@ public class Spiel implements iBediener, Serializable {
 
 		if (!hatGeschlagen) {
 			if (figurenListe.size() == 1) {
+				System.out.println("Spielfigur mit ID: "+figurenListe.get(0).getPosition().getID() +" wird ENTFERNT!");
 				figurenListe.get(0).getPosition().removeFigur();
 				figurenListe.clear();
+				warKi = false;
 			} else if (!figurenListe.isEmpty()) {
-				FarbEnum gegnerFarbe;
-				if (spielerAktiv.getFarbe() == FarbEnum.schwarz) {
-					gegnerFarbe = FarbEnum.weiss;
-				} else {
-					gegnerFarbe = FarbEnum.schwarz;
+				if(warKi){
+					System.out.println("Spielfigur mit ID: "+figurenListe.get(0).getPosition().getID() +" wird ENTFERNT!");
+					figurenListe.get(0).getPosition().removeFigur();
+					figurenListe.clear();
+					warKi = false;
 				}
+				else{
 				darfPusten = true;
-				msg.printPusten("Der " + gegnerFarbe.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
+				msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
 						+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
+				}
+			for(int f = 0; f < figurenListe.size()-1; f++){
+				figurenListe.get(f).setInListe(false);
+			}
 			}
 		}
-		figurenListe.clear();
-		hatGeschlagen = false;
+		//figurenListe.clear();
+		//hatGeschlagen = false;
 		spielerMussSpringen();
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
@@ -149,22 +158,23 @@ public class Spiel implements iBediener, Serializable {
 			throw new RuntimeException("Ihre Y Koordinate ist nicht in unserem Spielfeld!");
 		}
 
-		Spieler spielerAktiv = null;
-		Spieler spielerGegner = null;
-		FarbEnum farbeAktiv = null;
-		FarbEnum farbeGegner = null;
-		if (spielerA.getAktiv() == true) {
-			spielerAktiv = spielerA;
-			spielerGegner = spielerB;
-			farbeAktiv = FarbEnum.schwarz;
-			farbeGegner = FarbEnum.weiss;
-		}
-		if (spielerB.getAktiv() == true) {
-			spielerAktiv = spielerB;
-			spielerGegner = spielerA;
-			farbeAktiv = FarbEnum.weiss;
-			farbeGegner = FarbEnum.schwarz;
-		}
+		//Spieler spielerAktiv = null; //WAS SOLL DIESER SCHEISS?
+//		Spieler spielerGegner = null;
+//		FarbEnum farbeAktiv = null;
+//		FarbEnum farbeGegner = null;
+//		farbeAktiv = this.spielerAktiv.getFarbe();
+//		if (spielerA.getAktiv() == true) {
+//			spielerAktiv = spielerA;
+//			spielerGegner = spielerB;
+//			farbeAktiv = FarbEnum.schwarz;
+//			farbeGegner = FarbEnum.weiss;
+//		}
+//		if (spielerB.getAktiv() == true) {
+//			spielerAktiv = spielerB;
+//			spielerGegner = spielerA;
+//			farbeAktiv = FarbEnum.weiss;
+//			farbeGegner = FarbEnum.schwarz;
+//		}
 
 		// ------------------------------W�hle
 		// Spielfigur--------------------------
@@ -174,8 +184,8 @@ public class Spiel implements iBediener, Serializable {
 					this.aktiveSpielfigur = brettArray[a][b].getFigur();
 					this.aktiveSpielfigur.setPosition(brettArray[a][b]);
 				} else {
-					//msg.printError("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
-					throw new RuntimeException("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!" + a + b);
+					msg.printError("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
+					throw new RuntimeException("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
 					
 				}
 			}
@@ -306,7 +316,7 @@ public class Spiel implements iBediener, Serializable {
 											aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
 											sound.schlagSound();
 											hatGeschlagen = true;
-											msg.printOk(spielerAktiv.getName() + " hat Sprung von " +s1 + " nach " +s2 +" ausgeführt.");
+											msg.printOk(this.spielerAktiv.getName()  + " hat Sprung von " +s1 + " nach " +s2 +" ausgeführt.");
 											
 											System.out.println(
 													"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
@@ -372,7 +382,7 @@ public class Spiel implements iBediener, Serializable {
 											}
 											System.out.println("Sprung vollendet.");
 										}
-//										System.out.println("Hier hänge ich drinn -.-");
+
 									}
 									
 								}
@@ -649,24 +659,33 @@ public class Spiel implements iBediener, Serializable {
 	// #########################################
 
 	public void spielerWechsel() {
-
+		
 		if (spielerA.getAktiv() == true) {
 			spielerA.setAktiv(false);
 			spielerB.setAktiv(true);
 			spielerAktiv = spielerB;
+			this.farbeAktiv = spielerAktiv.getFarbe();
+			this.farbeGegner = spielerA.getFarbe();
 
 		} else {
 			spielerA.setAktiv(true);
 			spielerB.setAktiv(false);
 			spielerAktiv = spielerA;
+			this.farbeAktiv = spielerAktiv.getFarbe();
+			this.farbeGegner = spielerB.getFarbe();
 
 		}
-		//spielerMussSpringen();
+		System.out.println("Spieler mit der Farbe >>" +spielerAktiv.getFarbe().toString() + "<< und dem Namen >>" + spielerAktiv.getName() + "<< ist aktiv.");
+		msg.printSpielerAktiv("Spieler mit der Farbe >>" +spielerAktiv.getFarbe().toString() + "<< und dem Namen >>" + spielerAktiv.getName() + "<< ist aktiv.");
 		if (spielerAktiv.isKI()) {
+			
 			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
-			msg.printOkWindow("KI hat Zug ausgeführt.");
+			System.out.println("KI die Zug durchführen wird, gehört dem Spieler: "+spielerAktiv.getKi().spieler.getName());
+			if(spielerA.isKI() && spielerB.isKI()){ //Zugbestätigungen bei Ki nur, wenn Ki gegen Ki
+			msg.printOkWindow("KI mit der Farbe -" +spielerAktiv.getFarbe().toString().toUpperCase()+"-\nmoechte die Spielfigur von "+zug[0].toUpperCase()+" nach "+zug[1].toUpperCase()+" bewegen.");
+			}
 			bewegeSpielfigur(zug[0], zug[1]);
-
+			
 		}
 	}
 
@@ -721,20 +740,19 @@ public class Spiel implements iBediener, Serializable {
 		
 		spielerAktiv.setMussSpringen(false);
 
-		Spieler spielerAktiv = null;
+		//Spieler spielerAktiv = null;
 
-		FarbEnum farbeGegner = null;
+		//FarbEnum farbeGegner = null;
 
-		if (spielerA.getAktiv() == true) {
-			spielerAktiv = spielerA;
-			farbeAktiv = FarbEnum.schwarz;
-			farbeGegner = FarbEnum.weiss;
-		}
-		if (spielerB.getAktiv() == true) {
-			spielerAktiv = spielerB;
-			farbeAktiv = FarbEnum.weiss;
-			farbeGegner = FarbEnum.schwarz;
-		}
+//		if(this.spielerAktiv.getFarbe().equals(FarbEnum.schwarz)){
+//			farbeAktiv = FarbEnum.schwarz;
+//			farbeGegner = FarbEnum.weiss;
+//		}
+//		else if(this.spielerAktiv.getFarbe().equals(FarbEnum.weiss)){
+//			farbeAktiv = FarbEnum.weiss;
+//			farbeGegner = FarbEnum.schwarz;
+//		}
+
 
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
@@ -757,7 +775,6 @@ public class Spiel implements iBediener, Serializable {
 		// ----------------------------------KANN SPIELER MIT EINER FIGUR
 		// SPRINGEN??--------------------------
 		if (spielerAktiv.getAktiv() == true) {
-			System.out.println("da häng ich auch noch drinnn");
 			for (int i = 0; i < this.brettArray.length; i++) {
 				for (int j = 0; j < this.brettArray[i].length; j++) {
 					if (this.brettArray[i][j].getFigur() != null
@@ -867,7 +884,11 @@ public class Spiel implements iBediener, Serializable {
 							
 						}
 						if (testSpieler.getKannSpringen() == true) {											
-							figurenListe.add(testSpieler);		
+							figurenListe.add(testSpieler);	
+							testSpieler.setInListe(true);
+							System.out.println("Spielfigur mit ID: " + testSpieler.getPosition().getID().toUpperCase() + " wird zur Liste hinzugefügt.");
+							warKi = false;
+							if(spielerAktiv.isKI()) warKi = true;
 						}
 					}
 				}
@@ -897,35 +918,35 @@ public class Spiel implements iBediener, Serializable {
 		return spielerB;
 	}
 
-	public void setSpielerA(Spieler spielerA) {
-		if (spielerA != null) {
-			this.spielerA = spielerA;
-		} else
-			throw new NullPointerException("SpielerA ist NULL!");
-	}
+//	public void setSpielerA(Spieler spielerA) {
+//		if (spielerA != null) {
+//			this.spielerA = spielerA;
+//		} else
+//			throw new NullPointerException("SpielerA ist NULL!");
+//	}
+//
+//	public void setSpielerB(Spieler spielerB) {
+//		if (spielerB != null) {
+//			this.spielerB = spielerB;
+//		} else
+//			throw new NullPointerException("SpielerB ist NULL!");
+//	}
 
-	public void setSpielerB(Spieler spielerB) {
-		if (spielerB != null) {
-			this.spielerB = spielerB;
-		} else
-			throw new NullPointerException("SpielerB ist NULL!");
-	}
-
-	public void setSpielerAktiv(Spieler spielerAktiv) {
-		if (spielerAktiv != null) {
-			this.spielerAktiv = spielerAktiv;
-			// this.farbeAktiv = spielerAktiv.getFarbe();
-			if (spielerAktiv.getFarbe() == FarbEnum.schwarz) {
-				this.spielerA.setAktiv(true);
-				this.spielerB.setAktiv(false);
-			} else if (spielerAktiv.getFarbe() == FarbEnum.weiss) {
-				this.spielerB.setAktiv(true);
-				this.spielerA.setAktiv(false);
-			}
-			System.out.println("SpielerAktiv:" + farbeAktiv);
-		} else
-			throw new NullPointerException("SpielerAktiv ist NULL!");
-	}
+//	public void setSpielerAktiv(Spieler spielerAktiv) {
+//		if (spielerAktiv != null) {
+//			this.spielerAktiv = spielerAktiv;
+//			// this.farbeAktiv = spielerAktiv.getFarbe();
+//			if (spielerAktiv.getFarbe() == FarbEnum.schwarz) {
+//				this.spielerA.setAktiv(true);
+//				this.spielerB.setAktiv(false);
+//			} else if (spielerAktiv.getFarbe() == FarbEnum.weiss) {
+//				this.spielerB.setAktiv(true);
+//				this.spielerA.setAktiv(false);
+//			}
+//			System.out.println("SpielerAktiv:" + farbeAktiv);
+//		} else
+//			throw new NullPointerException("SpielerAktiv ist NULL!");
+//	}
 
 	public Spieler getSpielerAktiv() {
 		return spielerAktiv;
@@ -998,9 +1019,11 @@ public class Spiel implements iBediener, Serializable {
 		if (spielerA == null) {
 			spielerA = new Spieler(name, FarbEnum.schwarz, ki);
 			this.spielerAktiv = spielerA;
+			this.farbeAktiv = spielerA.getFarbe();
 			this.spielerA.setAktiv(true);
 		} else if (spielerB == null) {
 			spielerB = new Spieler(name, FarbEnum.weiss, ki);
+			this.farbeGegner = spielerB.getFarbe();
 		} else
 			throw new RuntimeException("Schon zwei Spieler vorhanden");
 		if (spielerA != null && spielerB != null) {

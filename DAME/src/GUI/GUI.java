@@ -1,5 +1,6 @@
 package GUI;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,16 +19,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import Basisklassen.Spiel;
 import Basisklassen.Spieler;
 import Interfaces.iBediener;
 import Interfaces.iMessage;
 
-public class GUI extends JFrame implements iMessage{
+public class GUI extends JFrame implements iMessage, Runnable{
 	
 	private ImageIcon blackStone;
 	private ImageIcon whiteStone;
+
 	
 	
 	private  JPanel mainJpanel;
@@ -42,14 +45,16 @@ public class GUI extends JFrame implements iMessage{
 	
 	private JScrollPane jsp;
 	private JTextArea jta;
+	private JPanel felderPanel;
+	private JLabel datenSpielerAktiv;
 	
-	private Spieler spielerA;
-	private Spieler spielerB;
-
-	private SpielbrettMapped brettMapped; 
+	private SpielbrettMapped brettMapped;
 	private SpielfeldMapped[][] brettArray;
 	
 	private  iBediener ibediener; 
+	
+	private String[] spielerNamen;
+	private boolean[] spielerSindKi;
 	
 
 	private EventHandler eh;
@@ -66,14 +71,15 @@ public GUI(){
 
 public void guiStartup(){
 	this.setTitle("Dame V1.0");
-	this.setSize(1150, 900); //Groe�e des JFrames
-	this.setMinimumSize(new Dimension(1150, 900)); //Minimalgröße des JFrames
+	 //Groe�e des JFrames
+	 //Minimalgröße des JFrames
+	this.setSize(1200, 1000);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
 
 	addMenuBar();	//Fuege MenuBar hinzu
-	this.setVisible(true);
+	
 	
 
 }
@@ -85,8 +91,17 @@ public void initNeuesSpiel(String nameA, boolean aIstKi, String nameB, boolean b
 	
 	ibediener=new Spiel();
 	ibediener.init(this);
-	ibediener.spielerHzfg(nameA, aIstKi);
-	ibediener.spielerHzfg(nameB, bIstKi);
+	
+	spielerNamen = new String[2];
+	spielerSindKi = new boolean[2];
+	spielerNamen[0] = nameA;
+	spielerNamen[1] = nameB;
+	spielerSindKi[0] = aIstKi;
+	spielerSindKi[1] = bIstKi;
+	
+	
+//	ibediener.spielerHzfg(nameA, aIstKi);
+//	ibediener.spielerHzfg(nameB, bIstKi);
 	
 	eh = new EventHandler(this);
 	
@@ -98,8 +113,12 @@ public void initNeuesSpiel(String nameA, boolean aIstKi, String nameB, boolean b
 
 public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 
-	brettMapped = new SpielbrettMapped();
+    brettMapped = new SpielbrettMapped();
+    brettMapped.setLayout(null);
+    brettMapped.setPreferredSize(new Dimension(816,816));
+    brettMapped.setMinimumSize(new Dimension(816,816));
 	brettArray = brettMapped.getNotation();
+	felderPanel = new JPanel();
 	
 	initImg();
 
@@ -107,23 +126,24 @@ public void initBrett() { //HIER WIRD ZU MAPPENDES BRETT ERSTELLT
 	
 		int counter = 0;
 	
-		brettMapped.setLayout(new GridBagLayout()); //Layout vom Spielbrett
-		
-		brettMapped.setSize(new Dimension(768,768)); //Size vom Spielbrett
+		felderPanel.setLayout(new GridBagLayout()); //Layout vom Spielbrett
+		felderPanel.setOpaque(false);
+		felderPanel.setPreferredSize(new Dimension(720,720)); //Size vom Spielbrett
 		GridBagConstraints c = new GridBagConstraints();
 		for (int i = 11; i >= 0; i--) {
 			c.gridy = counter;
 			for (int n = 0; n < brettArray[i].length; n++) {
 				c.gridx = n;
-				brettArray[n][i].setPreferredSize(new Dimension(64,64));
-				brettMapped.add(brettArray[n][i], c); //Spielbrett.add
+				brettArray[n][i].setPreferredSize(new Dimension(60,60));
+				felderPanel.add(brettArray[n][i], c); //Spielbrett.add
 
 				
 			}
 			
 			counter++;
 		}
-		
+		felderPanel.setBounds(50, 44, 720, 720);
+		brettMapped.add(felderPanel);
 		drawBrett();
 
 	}
@@ -142,17 +162,14 @@ public void drawBrett(){
 	for(int n=brettArray.length-1; n >= 0 ; n--){
 		for(int k=0; k<brettArray[n].length; k++){
 			if(field[count].equals("[O]")){
-				System.out.println("Hallo");
 			brettArray[k][n].setIcon(whiteStone);
 			brettArray[k][n].setRolloverIcon(blackStone);
 			}
 			if(field[count].equals("[X]")){
-				System.out.println("Hallo");
 			brettArray[k][n].setIcon(blackStone);
 			brettArray[k][n].setRolloverIcon(whiteStone);
 			}
 			if(field[count].equals("[ ]")){
-				System.out.println("Hallo");
 			brettArray[k][n].setIcon(null);
 			brettArray[k][n].setRolloverIcon(null);
 			}
@@ -205,6 +222,9 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JPanel southPanel = new JPanel();
 	JPanel centerPanel = new JPanel();
 	
+	
+	
+	
 	eingabe = new JTextField("a4-b5");
 	
 	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
@@ -212,7 +232,11 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JButton bWEST = new JButton("WEST");
 	bSubmit = new JButton("Durchführen");
 	bSubmit.addActionListener(eh);
-	JButton bNORTH = new JButton("NORTH");
+	datenSpielerAktiv = new JLabel();
+	datenSpielerAktiv.setHorizontalAlignment(SwingConstants.CENTER);
+	datenSpielerAktiv.setBackground(Color.CYAN);
+	datenSpielerAktiv.setOpaque(true);
+	
 	
 	jta = new JTextArea(5,1);
 	jsp = new JScrollPane(jta);
@@ -226,16 +250,17 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	eastPanel.add(bSubmit);
 	eastPanel.setLayout(new GridLayout(3,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
 	
-	northPanel.add(bNORTH);
 	northPanel.setLayout(new GridLayout(1,1));
+	northPanel.add(datenSpielerAktiv);
+	
 	
 	southPanel.add(jsp);
 	southPanel.setLayout(new GridLayout(1,1));
 
 	
-	//centerPanel.setLayout(null); //kein layoutmanager, da spielBrett schon ein layout hat
-	
-	centerPanel.add(brettMapped);
+	centerPanel.setLayout(new BorderLayout());
+
+	centerPanel.add(brettMapped, BorderLayout.CENTER);
 
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
@@ -244,11 +269,20 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	this.mainJpanel.add(southPanel, BorderLayout.SOUTH); 
 	this.mainJpanel.add(centerPanel, BorderLayout.CENTER); 
 	
+	this.setVisible(true);
+	Thread t1 = new Thread(this);
+	t1.start();
+	
+	ibediener.spielerHzfg(spielerNamen[0], spielerSindKi[0]);
+	ibediener.spielerHzfg(spielerNamen[1], spielerSindKi[1]);
+	
+	
 
 }
 public void initImg(){
-	blackStone = new ImageIcon("res/img/TEST/blackStone.png");
-	whiteStone = new ImageIcon("res/img/TEST/whiteStone.png");
+	
+	blackStone = new ImageIcon("res/img/blackStone.png");
+	whiteStone = new ImageIcon("res/img/whiteStone.png");
 }
 
 
@@ -285,23 +319,45 @@ public void printError(String msg) {
 	JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
 	
 }
-@Override
-public void printOk(String msg) {
-	jta.setText(jta.getText() + "\n" + msg);	
-}
+
+	@Override
+	public void printOk(String msg) {
+		if (jta.getText().length() > 0) {
+			jta.setText(jta.getText() + "\n" + msg);
+		}
+		else{
+			jta.setText(msg);
+		}
+	}
 @Override
 public void printOkWindow(String msg) {
-	JOptionPane.showMessageDialog(null, msg, "Bestätigen", JOptionPane.OK_CANCEL_OPTION);
-	
-	
+	JOptionPane.showMessageDialog(null, msg, "Bestätigen", JOptionPane.OK_CANCEL_OPTION);	
 }
 
 @Override
 public void printPusten(String msg) {
 	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten wählen", JOptionPane.QUESTION_MESSAGE);
 	ibediener.pusten(feld);
-	
+
+}
+@Override
+public void printSpielerAktiv(String msg) {
+	this.datenSpielerAktiv.setText(msg);	
+}
+
+@Override
+public void run() {
+	while(true){
+		this.drawBrett();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
+
+
 	
 }

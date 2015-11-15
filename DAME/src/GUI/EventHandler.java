@@ -76,7 +76,6 @@ public EventHandler(SpielfeldMapped f){
 				if(buttonClick==true){
 					String ausgabeButton=f.getID();
 					b.bewegeSpielfigur(eingabeButton, ausgabeButton);
-					g.drawBrett();
 					ausgabeButton="";
 					buttonClick=false;
 				}

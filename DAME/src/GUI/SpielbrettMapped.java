@@ -19,9 +19,7 @@ public class SpielbrettMapped extends JPanel{
 	public SpielbrettMapped(){
 		
 		
-		//this.setBackground(Color.black);
-	
-		//this.setIcon();
+		this.setOpaque(true);
 		
 		//Setze jedem Spielfeld(Mapped) seine ID nach Schachnotation a12 - l1
 		
@@ -40,7 +38,7 @@ public class SpielbrettMapped extends JPanel{
 	}
 		 try {
 	         image = ImageIO.read(new File(
-	                 "res/img/TEST/BackgroundGrafik.jpg"));
+	                 "res/img/spielbrettBackground.png"));
 	     } catch (IOException e) {
 	         e.printStackTrace();
 	     }
@@ -58,8 +56,6 @@ protected void paintComponent(Graphics g){
 	super.paintComponent(g);
 
 	g.drawImage(image,0,0,null);
-
-	
 }
 
 }
