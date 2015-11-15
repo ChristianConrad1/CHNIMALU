@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Basisklassen.Spiel;
-import Basisklassen.Spieler;
 import Interfaces.iBediener;
 import Interfaces.iMessage;
 
@@ -30,6 +29,8 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	
 	private ImageIcon blackStone;
 	private ImageIcon whiteStone;
+	private ImageIcon blackStoneDAME;
+	private ImageIcon whiteStoneDAME;
 
 	
 	
@@ -169,6 +170,14 @@ public void drawBrett(){
 			brettArray[k][n].setIcon(blackStone);
 			brettArray[k][n].setRolloverIcon(whiteStone);
 			}
+			if(field[count].equals("[*X*]")){
+			brettArray[k][n].setIcon(blackStoneDAME);
+			brettArray[k][n].setRolloverIcon(whiteStoneDAME);
+			}
+			if(field[count].equals("[*O*]")){
+			brettArray[k][n].setIcon(whiteStoneDAME);
+			brettArray[k][n].setRolloverIcon(blackStoneDAME);
+			}
 			if(field[count].equals("[ ]")){
 			brettArray[k][n].setIcon(null);
 			brettArray[k][n].setRolloverIcon(null);
@@ -283,6 +292,8 @@ public void initImg(){
 	
 	blackStone = new ImageIcon("res/img/blackStone.png");
 	whiteStone = new ImageIcon("res/img/whiteStone.png");
+	blackStoneDAME = new ImageIcon("res/img/blackStoneDAME.png");
+	whiteStoneDAME = new ImageIcon("res/img/whiteStoneDAME.png");
 }
 
 
