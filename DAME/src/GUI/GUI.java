@@ -336,7 +336,7 @@ public void printOkWindow(String msg) {
 
 @Override
 public void printPusten(String msg) {
-	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten w√§hlen", JOptionPane.QUESTION_MESSAGE);
+	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten w‰hlen", JOptionPane.QUESTION_MESSAGE);
 	ibediener.pusten(feld);
 
 }
