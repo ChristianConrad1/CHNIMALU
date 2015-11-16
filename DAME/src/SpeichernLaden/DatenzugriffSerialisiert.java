@@ -21,6 +21,7 @@ public class DatenzugriffSerialisiert implements iDatenzugriff{
 	public void save(Object o) {
 		try{
 			oos = new ObjectOutputStream(new FileOutputStream("savegame/save.ser"));
+			System.out.println("Datei angelegt");
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -28,6 +29,7 @@ public class DatenzugriffSerialisiert implements iDatenzugriff{
 		
 		try {
 			oos.writeObject(o);
+			System.out.println("Datei beschrieben");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

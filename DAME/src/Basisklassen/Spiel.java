@@ -14,7 +14,7 @@ import SpeichernLaden.DatenzugriffCSV;
 import SpeichernLaden.DatenzugriffSerialisiert;
 
 public class Spiel implements iBediener, Serializable {
-	private iMessage msg;
+	private transient iMessage msg;
 
 	private boolean darfPusten;
 	private boolean hatGeschlagen;
@@ -395,7 +395,7 @@ public class Spiel implements iBediener, Serializable {
 
 						// --------------------------------------ALLGEMEINESZIEHEN----------------------------
 
-						if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
+						else if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
 							if (aktiveSpielfigur != null 
 									&& (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
 											&& d > aktiveSpielfigur.getPosition().getPosY())
@@ -511,18 +511,18 @@ public class Spiel implements iBediener, Serializable {
 //									}
 //								}
 //							}
-							if ((aktiveSpielfigur.getPosition().getPosY() == 11
+							if ((aktiveSpielfigur.getPosition().getPosY() == brettArray.length-1 //geändert von 11
 									&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
 									| (aktiveSpielfigur.getPosition().getPosY() == 0
 											&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
 								aktiveSpielfigur.setDame();
 								msg.printOk("Eine Figur ist zur Dame geworden!");
 							}
-							aktiveSpielfigur = null;
-							spielerAktiv.setMussSpringen(false);
-							spielerWechsel();
-
+							
+							
+						
 						}
+					
 
 						else {
 							if (this.spielerAktiv.isKI() == false) {
@@ -530,7 +530,9 @@ public class Spiel implements iBediener, Serializable {
 							}
 						}
 
-
+						aktiveSpielfigur = null;
+						spielerAktiv.setMussSpringen(false);
+						spielerWechsel();
 						
 						}	
 						}

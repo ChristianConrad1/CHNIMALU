@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import Interfaces.iBediener;
 
-public class EventHandler implements ActionListener,Serializable{
+public class EventHandler implements ActionListener{
 	private static GUI g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
 	private Menu m;
 	private SpielfeldMapped f;
