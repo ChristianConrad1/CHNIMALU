@@ -704,7 +704,7 @@ public class Spiel implements iBediener, Serializable {
 		 */
 		String blg = "";
 
-		Spielfeld[][] belegung = brett.getNotation();
+		Spielfeld[][] belegung = this.brettArray;
 		for (int i = this.brettArray.length - 1; i >= 0; i--) {
 			for (int n = 0; n < belegung[i].length; n++) {
 			
@@ -719,6 +719,7 @@ public class Spiel implements iBediener, Serializable {
 		
 
 		// pw.close();
+
 		return blg;
 	}
 
@@ -1156,20 +1157,21 @@ System.out.println("ufufufufufufu");
 														// angepasst werden.
 
 		for (int x = 0; x < irgendwas.length; x++) {
-			line = irgendwas[x];
+			line = irgendwas[0];
+			field = line.split(";");
+			int d=0; 
+			
 			if (x == 0) {
 				
 
 				for (int i = belegung.length - 1; i >= 0; i--) {
 					c = 97;
-					field = line.split(";");
-					
 
 					for (int n = 0; n < belegung[i].length; n++) {
 
 						belegung[n][i] = new Spielfeld((char) (c + n) + "" + (i + 1));
 						belegung[n][i].setXY(belegung[n][i].getID());
-						belegung[n][i].setAusgabeID(field[n]);
+						belegung[n][i].setAusgabeID(field[d]);
 						if (belegung[n][i].getAusgabeID().equals("[X]")) {
 							belegung[n][i].setFigur(new Spielfigur(FarbEnum.schwarz, belegung[n][i]));
 						} else if (belegung[n][i].getAusgabeID().equals("[O]")) {
@@ -1181,11 +1183,11 @@ System.out.println("ufufufufufufu");
 							belegung[n][i].setFigur(new Spielfigur(FarbEnum.weiss, belegung[n][i]));
 							belegung[n][i].getFigur().setDame();
 						}
-
+						d++;
 					}
 					
 				}
-				this.brett.setBrett(belegung);
+				this.brettArray=belegung;
 
 			}
 			else{

@@ -2,13 +2,14 @@ package GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import Interfaces.iBediener;
 
-public class EventHandler implements ActionListener{
+public class EventHandler implements ActionListener,Serializable{
 	private static GUI g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
 	private Menu m;
 	private SpielfeldMapped f;
