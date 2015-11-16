@@ -5,13 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Basisklassen.Spiel;
+import Basisklassen.Spieler;
 import Interfaces.iBediener;
 import Interfaces.iMessage;
 
@@ -32,8 +30,6 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	
 	private ImageIcon blackStone;
 	private ImageIcon whiteStone;
-	private ImageIcon blackStoneDAME;
-	private ImageIcon whiteStoneDAME;
 
 	
 	
@@ -66,11 +62,7 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	  private BufferedImage image;
 	
 public GUI(){
-	
-//Spielbrett Erstellung braucht eine Methode	
-	
-	guiStartup();
-	
+		
 }
 
 public void guiStartup(){
@@ -81,7 +73,6 @@ public void guiStartup(){
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
-
 	addMenuBar();	//Fuege MenuBar hinzu
 	
 	
@@ -108,7 +99,7 @@ public void initNeuesSpiel(String nameA, boolean aIstKi, String nameB, boolean b
 //	ibediener.spielerHzfg(nameB, bIstKi);
 	
 	eh = new EventHandler(this);
-	
+	guiStartup();
 	initBrett(); //dies ist das GEMAPPTE spielbrett
 	setupLayout();	//Erstelle unser Layout
 
@@ -173,14 +164,6 @@ public void drawBrett(){
 			brettArray[k][n].setIcon(blackStone);
 			brettArray[k][n].setRolloverIcon(whiteStone);
 			}
-			if(field[count].equals("[*X*]")){
-			brettArray[k][n].setIcon(blackStoneDAME);
-			brettArray[k][n].setRolloverIcon(whiteStoneDAME);
-			}
-			if(field[count].equals("[*O*]")){
-			brettArray[k][n].setIcon(whiteStoneDAME);
-			brettArray[k][n].setRolloverIcon(blackStoneDAME);
-			}
 			if(field[count].equals("[ ]")){
 			brettArray[k][n].setIcon(null);
 			brettArray[k][n].setRolloverIcon(null);
@@ -214,24 +197,8 @@ public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefu
 	menuGame.add(menuItemLoad);
 	
 	menuItemStart.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
-	menuItemSave.addActionListener(new ActionListener(){
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//Choose between SER and CSV
-			ibediener.speichern("savegame/save.csv");
-		}
-	});	
-	
-	menuItemLoad.addActionListener(new ActionListener(){
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JFileChooser jfc = new JFileChooser("savegame");
-			jfc.showOpenDialog(null);
-	
-			String pfad = jfc.getSelectedFile().getAbsolutePath();
-			ibediener.laden(pfad);
-		}
-	});	
+	menuItemSave.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	menuItemLoad.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
 	
 	menuBar.add(menuGame);
 	this.setJMenuBar(menuBar);
@@ -257,6 +224,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
 	
+	JButton bWEST = new JButton("WEST");
 	bSubmit = new JButton("Durchführen");
 	bSubmit.addActionListener(eh);
 	datenSpielerAktiv = new JLabel();
@@ -267,7 +235,8 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	jta = new JTextArea(5,1);
 	jsp = new JScrollPane(jta);
-
+	
+	westPanel.add(bWEST);
 	westPanel.add(new JLabel("Hier kommt was hin"));
 	westPanel.setLayout(new GridLayout(5,1));	//Erzeuge testhaft ein neues Gridlayout, dass seine Komponenten in 1 Spalte und 5 Zeilen unterteilt
 	
@@ -309,8 +278,6 @@ public void initImg(){
 	
 	blackStone = new ImageIcon("res/img/blackStone.png");
 	whiteStone = new ImageIcon("res/img/whiteStone.png");
-	blackStoneDAME = new ImageIcon("res/img/blackStoneDAME.png");
-	whiteStoneDAME = new ImageIcon("res/img/whiteStoneDAME.png");
 }
 
 
@@ -364,7 +331,7 @@ public void printOkWindow(String msg) {
 
 @Override
 public void printPusten(String msg) {
-	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten w�hlen", JOptionPane.QUESTION_MESSAGE);
+	String feld = JOptionPane.showInputDialog(null, msg, "Figur zum Pusten wählen", JOptionPane.QUESTION_MESSAGE);
 	ibediener.pusten(feld);
 
 }

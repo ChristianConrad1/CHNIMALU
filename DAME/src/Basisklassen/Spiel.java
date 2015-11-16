@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import GUI.Sounds;
 import Interfaces.iBediener;
 import Interfaces.iDatenzugriff;
@@ -1034,19 +1036,11 @@ public class Spiel implements iBediener, Serializable {
 	public void speichern(String pfad) {
 		// TODO Auto-generated method stub
 		iDatenzugriff idz;
-		String Speichertyp="";
-		if(pfad.contains(".csv")){
-			Speichertyp="csv";
-		}
-		else if(pfad.contains(".ser")){
-			Speichertyp="ser";
-		}
-//		String[] substring=pfad.split(".");
-//		System.out.println(pfad);
-//
-//		String typ = substring[substring.length - 1].toLowerCase();
+		System.out.println(pfad);
+		String[] args = pfad.split("\\.");
+		String typ = args[args.length-1].toLowerCase();
 
-		switch (Speichertyp) {
+		switch (typ) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
 			idz.save(this);
@@ -1065,18 +1059,12 @@ public class Spiel implements iBediener, Serializable {
 
 	@Override
 	public void laden(String pfad) {
-		neuesSpiel();
-		
-System.out.println(pfad);
+System.out.println("ufufufufufufu");
 		iDatenzugriff idz;
-		String Speichertyp="";
-		if(pfad.contains(".csv")){
-			Speichertyp="csv";
-		}
-		else if(pfad.contains(".ser")){
-			Speichertyp="ser";
-		}
-		switch (Speichertyp) {
+		String[] args = pfad.split("\\.");
+		String typ = args[args.length - 1].toLowerCase();
+
+		switch (typ) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
 			Spiel x = (Spiel) idz.load(pfad);
@@ -1097,16 +1085,13 @@ System.out.println(pfad);
 			throw new RuntimeException("Filetype not supported");
 		}
 
-	
 	}
 
 	@Override
 	public void neuesSpiel() {
-		//neues Spiel erstellen! 
-	
+		// TODO Auto-generated method stub
 
 	}
-
 
 	@Override
 	public void mail() {
@@ -1132,8 +1117,9 @@ System.out.println(pfad);
 			for (int n = 0; n < belegung[i].length; n++) {
 				s += (belegung[n][i].getAusgabeID() + ";");
 			}
-			s += "\n";
+			//s += "\n";
 		}
+		s += "\n";
 		// --------------------------------------------------------
 		// -Spieler A speichern------------------------------------
 		s += (this.getSpielerA().getFarbe() + "\n");
@@ -1169,14 +1155,13 @@ System.out.println(pfad);
 														// kann, dann muss hier
 														// angepasst werden.
 
-			int x=0; 
-			if (x < 12) {
-				System.out.println(irgendwas[x]);
+		for (int x = 0; x < irgendwas.length; x++) {
+			line = irgendwas[x];
+			if (x == 0) {
 				
 
 				for (int i = belegung.length - 1; i >= 0; i--) {
 					c = 97;
-					line = irgendwas[x];
 					field = line.split(";");
 					
 
@@ -1196,56 +1181,54 @@ System.out.println(pfad);
 							belegung[n][i].setFigur(new Spielfigur(FarbEnum.weiss, belegung[n][i]));
 							belegung[n][i].getFigur().setDame();
 						}
-						
+
 					}
-					x++;
 					
 				}
-				this.brett = new Spielbrett();
 				this.brett.setBrett(belegung);
-				x=0;
+
 			}
 			else{
 				// -SpielerA einlesen und im Spiel Objekt setzen-------------------
-				spielerA = new Spieler("spielerA", null);
-				x=11;
+				spielerA = null;
+				Spieler spielerC = new Spieler("spielerA", null);
 
-				this.spielerA.setFarbe(this.toFarbEnum(irgendwas[++x]));
-				this.spielerA.setName(irgendwas[++x]);
-				this.spielerA.setMussSpringen(toBoolean(irgendwas[++x]));
-				if (toBoolean(irgendwas[++x]) == true) {
-					KI ki = new KI_Dame(spielerA);
-					this.spielerA.setKi(ki);
+				spielerC.setFarbe(this.toFarbEnum(irgendwas[x++]));
+				spielerC.setName(irgendwas[++x]);
+				spielerC.setMussSpringen(toBoolean(irgendwas[x++]));
+				if (toBoolean(irgendwas[x++]) == true) {
+					KI ki = new KI_Dame(spielerC);
+					spielerC.setKi(ki);
 				}
 
 				// ----------------------------------------------------------------
 
 				// -SpielerB einlesen und im Spiel Objekt setzen-------------------
-				spielerB = new Spieler("spielerB", null);
+				spielerB = null;
+				Spieler spielerD = new Spieler("spielerB", null);
 
-				this.spielerB.setFarbe(this.toFarbEnum(irgendwas[++x]));
-				this.spielerB.setName(irgendwas[++x]);
-				this.spielerA.setMussSpringen(toBoolean(irgendwas[++x]));
-				if (toBoolean(irgendwas[++x]) == true) {
-					KI ki = new KI_Dame(spielerB);
-					this.spielerB.setKi(ki);
+				spielerD.setFarbe(this.toFarbEnum(irgendwas[x++]));
+				spielerD.setName(irgendwas[++x]);
+				spielerD.setMussSpringen(toBoolean(irgendwas[x++]));
+				if (toBoolean(irgendwas[x++]) == true) {
+					KI ki = new KI_Dame(spielerD);
+					spielerD.setKi(ki);
 				}
+				spielerD.setAktiv(toBoolean(irgendwas[x++]));
 
 				// ----------------------------------------------------------------
 				// -SpielerB.getAktiv() einlesen und spielerAktiv setzen-----------
 
-				if (irgendwas[++x].equals("true")) {
-					this.spielerAktiv = this.spielerB;
-				} else
-					this.spielerAktiv = this.spielerA;
+
 
 				// ----------------------------------------------------------------
+
+				this.spielerHzfg(spielerC.getName(), spielerC.isKI());
+				this.spielerHzfg(spielerD.getName(), spielerD.isKI());
+			break;	
+
 				
-				
-//
-//				this.spielerHzfg(spielerA.getName(), spielerA.isKI());
-//				this.spielerHzfg(spielerB.getName(), spielerB.isKI());
-		
+			}
 		}
 
 		// ----------------------------------------------------------------

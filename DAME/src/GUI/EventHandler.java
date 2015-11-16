@@ -17,8 +17,8 @@ public class EventHandler implements ActionListener{
 	private iBediener b; 
 	
 public EventHandler(GUI g){
-		EventHandler.g  = g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
-		b = g.getIbediener(); 
+		this.g  = g; //Ich weiß nicht ob das so passt, aber mir fiel nix anderes ein....
+		b = this.g.getIbediener(); 
 }
 public EventHandler(Menu m){
 	this.m = m;
@@ -30,7 +30,7 @@ public EventHandler(SpielfeldMapped f){
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		System.out.println("Kennen sich �berhaupt...");
 		if (g != null) {
 			
 			if (e.getSource() == g.getMenuItemStart()) {
@@ -38,14 +38,18 @@ public EventHandler(SpielfeldMapped f){
 				g.dispose();
 			}
 			if (e.getSource() == g.getMenuItemLoad()) {
-//				JFileChooser jfc = new JFileChooser("savegame");
-//				jfc.showOpenDialog(null);
-//				String pfad = jfc.getSelectedFile().getAbsolutePath();
-//				b.laden(pfad);
+				JFileChooser jfc = new JFileChooser("savegame");
+				jfc.showOpenDialog(null);
+				String pfad = jfc.getSelectedFile().getAbsolutePath();
+				b.laden(pfad);
 			}
 			if (e.getSource() == g.getMenuItemSave()) {
-				JOptionPane.showMessageDialog(null, "Hier wird noch Speichern implementiert", "Speichern",
-				JOptionPane.INFORMATION_MESSAGE);
+				JFileChooser jfc = new JFileChooser("savegame");
+				jfc.showSaveDialog(null);
+				String pfad = jfc.getSelectedFile().getAbsolutePath();
+				System.out.println(pfad);
+				b.speichern(pfad);
+
 			}
 			if(e.getSource() == g.getbSubmit()){
 				//HIER MUSS WAS REIN
@@ -85,19 +89,19 @@ public EventHandler(SpielfeldMapped f){
 		if (e.getSource() == m.getNeues()) {
 			m.neuesSpielMenu();
 		}
-		if (e.getSource() == m.getLaden()) {
-			//Muss Fenster zur Dateiauswahl aufrufen, die einen Pfad angibt
-			JFileChooser jfc = new JFileChooser("savegame");
-			jfc.showOpenDialog(null);
-			String pfad = jfc.getSelectedFile().getAbsolutePath();
-			b.laden(pfad);
-			
-//			m.dispose();
-//			g=new GUI();
-//			g.initNeuesSpiel("s", false, "ss", false);
-
-			
-		}
+//		if (e.getSource() == m.getLaden()) {
+//			//Muss Fenster zur Dateiauswahl aufrufen, die einen Pfad angibt
+//			JFileChooser jfc = new JFileChooser("savegame");
+//			jfc.showOpenDialog(null);
+//			String pfad = jfc.getSelectedFile().getAbsolutePath();
+//			b.laden(pfad);
+//			
+////			m.dispose();
+////			g=new GUI();
+////			g.initNeuesSpiel("s", false, "ss", false);
+//
+//			
+//		}
 		if (e.getSource() == m.getEnde()) {
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?",
 					JOptionPane.YES_NO_OPTION);
