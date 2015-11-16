@@ -522,17 +522,19 @@ public class Spiel implements iBediener, Serializable {
 							
 						
 						}
+						
 					
-
+					
 						else {
 							if (this.spielerAktiv.isKI() == false) {
 								throw new RuntimeException("Waehlen sie bitte ein Feld, auf das sie ziehen koennen!");
 							}
+							
 						}
 
-						aktiveSpielfigur = null;
-						spielerAktiv.setMussSpringen(false);
-						spielerWechsel();
+					aktiveSpielfigur = null;
+					spielerAktiv.setMussSpringen(false);
+					spielerWechsel();
 						
 						}	
 						}

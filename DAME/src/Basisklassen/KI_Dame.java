@@ -41,8 +41,8 @@ public class KI_Dame extends KI implements Serializable{
 		// wasMacheIch() diese weitergeben kann
 
 		String[] rueckgabe = null;
-	
 		for (int i = 0; i < this.brettArray.length; i++) {
+			
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if(this.brettArray[i][j].getFigur()!=null){
 				if (this.brettArray[i][j].getFigur().getKannSpringen() == true) {
