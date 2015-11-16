@@ -27,7 +27,7 @@ public class SpielTestSpeichern {
 		brett=new Spielbrett();
 		spieler1=new Spieler("bernd",FarbEnum.schwarz);
 		spieler2=new Spieler("berndy",FarbEnum.weiss);
-		s1=new Spiel(spieler1, spieler2, brett);
+		s1=new Spiel();
 	    sc=new Scanner(System.in);	   
 	    d1 = new DatenzugriffSerialisiert();
 	    d2 = new DatenzugriffCSV();
