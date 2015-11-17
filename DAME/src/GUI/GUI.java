@@ -35,7 +35,8 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	private ImageIcon DAMESelected;
 	private ImageIcon StoneSelected;
 
-	
+	private int counter = 0;
+	private boolean wechsel = false;
 	
 	private  JPanel mainJpanel;
 	private  JMenuBar menuBar;
@@ -51,6 +52,8 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	private JTextArea jta;
 	private JPanel felderPanel;
 	private JLabel datenSpielerAktiv;
+	
+	private JLabel ueberschrift;
 	
 	private SpielbrettMapped brettMapped;
 	private SpielfeldMapped[][] brettArray;
@@ -73,7 +76,7 @@ public void guiStartup(){
 	this.setTitle("Dame V1.0");
 	 //Groe�e des JFrames
 	 //Minimalgröße des JFrames
-	this.setSize(1200, 1000);
+	this.setSize(1050, 975);
 	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	mainJpanel = new JPanel();
 	this.getContentPane().add(mainJpanel);
@@ -234,12 +237,13 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	
 	
-	eingabe = new JTextField("a4-b5");
+	eingabe = new JTextField("z.B. b4-a5");
+	eingabe.setHorizontalAlignment(SwingConstants.CENTER);
 	
-	JLabel ueberschrift = new JLabel("(ID-Startfeld)-(ID-Zielfeld) eingeben");
+	ueberschrift = new JLabel("(STARTFELD)-(ZIELFELD)");
+	ueberschrift.setHorizontalAlignment(SwingConstants.CENTER);
 	
-	JButton bWEST = new JButton("WEST");
-	bSubmit = new JButton("Durchführen");
+	bSubmit = new JButton("Zug durchführen");
 	bSubmit.addActionListener(eh);
 	datenSpielerAktiv = new JLabel();
 	datenSpielerAktiv.setHorizontalAlignment(SwingConstants.CENTER);
@@ -255,6 +259,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	eastPanel.add(ueberschrift);
 	eastPanel.add(eingabe);	
 	eastPanel.add(bSubmit);
+	eastPanel.setPreferredSize(new Dimension(200, 975));
 	eastPanel.setLayout(new GridLayout(3,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
 	
 	northPanel.setLayout(new GridLayout(1,1));
@@ -360,6 +365,18 @@ public void printSpielerAktiv(String msg) {
 public void run() {
 	while(true){
 		this.drawBrett();
+		counter++;
+		if(counter == 25){
+			if(wechsel){
+				ueberschrift.setText("(STARTFELD)-(ZIELFELD)");
+				wechsel = false;
+			}else{
+				
+				ueberschrift.setText("EINGEBEN");
+				wechsel = true;
+			}
+			counter = 0;
+		}
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {

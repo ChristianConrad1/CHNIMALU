@@ -192,8 +192,8 @@ public class Spiel implements iBediener, Serializable {
 					this.aktiveSpielfigur = brettArray[a][b].getFigur();
 					this.aktiveSpielfigur.setPosition(brettArray[a][b]);
 				} else {
-					msg.printError("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
-					throw new RuntimeException("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgew�hlt!");
+					msg.printError("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgewaehlt!");
+					throw new RuntimeException("Keine " + this.spielerAktiv.getFarbe() + "e Spielfigur ausgewaehlt!");
 
 				}
 			}
@@ -329,8 +329,9 @@ public class Spiel implements iBediener, Serializable {
 											aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
 											sound.schlagSound();
 											hatGeschlagen = true;
-											msg.printOk(this.spielerAktiv.getName() + " hat Sprung von " + s1 + " nach "
-													+ s2 + " ausgeführt.");
+
+											msg.printOk(this.spielerAktiv.getName() + " hat Sprung von " + this.rewandler(koordX, koordY) + " nach "
+													+ this.rewandler(koordX1, koordY1) + " ausgeführt.");
 
 											System.out.println(
 													"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
@@ -1189,6 +1190,19 @@ public class Spiel implements iBediener, Serializable {
 			return false;
 		else
 			throw new RuntimeException("Gelesener Wert ist kein boolean!");
+	}
+	public String rewandler(int x, int y) {
+		Character a;
+		Integer b;
+
+		a = (char) ((char)x + 97);
+		b = y + 1;
+
+		String c = a.toString();
+		String d = b.toString();
+
+		String s = c + d;
+		return s;
 	}
 
 }

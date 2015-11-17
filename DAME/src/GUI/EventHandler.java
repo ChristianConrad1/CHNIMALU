@@ -31,7 +31,7 @@ public EventHandler(SpielfeldMapped f){
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Kennen sich überhaupt...");
+		System.out.println("Kennen sich ï¿½berhaupt...");
 		if (g != null) {
 			
 			if (e.getSource() == g.getMenuItemStart()) {
