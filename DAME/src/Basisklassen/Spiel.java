@@ -398,6 +398,16 @@ public class Spiel implements iBediener, Serializable {
 										}
 
 									}
+									if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
+											// von
+											// 11
+											&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
+											|| (aktiveSpielfigur.getPosition().getPosY() == 0
+													&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
+										aktiveSpielfigur.setDame();
+										sound.promoteSound();
+										msg.printOk("Eine Figur ist zur Dame geworden!");
+									}
 
 								}
 							}
@@ -425,125 +435,6 @@ public class Spiel implements iBediener, Serializable {
 								sound.ziehSound();
 
 							}
-
-							// else if (aktiveSpielfigur != null &&
-							// aktiveSpielfigur.getKannSpringen() == true) {
-							// //aktiveSpielfigur.getPosition().removeFigur();
-							// }
-							// // else{
-							// // throw new RuntimeException("Ung�ltiges
-							// // Zielfeld!");
-							// // }
-							//
-							// if (spielerAktiv.getMussSpringen() == true) {
-							// if (this.sprungKonflikt > 1) { // Im Moment
-							// // haben wir 2
-							// // Steine die
-							// // Springen
-							// // koennen
-							//
-							// spielerAktiv.setAktiv(false);
-							// spielerGegner.setAktiv(true);// Spielerwechsel
-							// // fuer
-							// // Eingabe,
-							// // dann
-							// // zueruck
-							// // zum
-							// // aktuellen
-							// // Spieler!
-							//
-							// if (spielerGegner.isKI() == false) {
-							// System.out.println(
-							// "Sie hatten mehrere Steine mit
-							// Sprungmoeglichkeiten! Spieler B, Sie duerfen nun
-							// eines dieser Steinchen von Spieler A waehlen,so
-							// dass dieses vom Feld geloescht wird!");
-							//
-							// String eingabe = sc.nextLine();
-							// brett.Umwandler(eingabe);
-							// int x = brett.getKoordX();
-							// int y = brett.getKoordY();
-							// if (this.brettArray[x][y].getFigur() != null) {
-							// if (this.brettArray[x][y].getFigur().getFarbe()
-							// == farbeAktiv
-							// &&
-							// this.brettArray[x][y].getFigur().getKannSpringen())
-							// {
-							// //this.brettArray[x][y].removeFigur();
-							//
-							// }
-							// } else {
-							// throw new RuntimeException(
-							// "Waehlen sie bitte nur eine der Steine die in
-							// beim vorhergehenden Zug eine Sprungmoeglichkeit
-							// hatten, die von ihrem Gegner nicht wahrgenommen
-							// wurde!");
-							// }
-							// }
-							// System.out.println(
-							// "Sprungkonflikt! Sie hatten mehrere
-							// Sprungmoeglichkeiten die Sie nicht genutzt haben!
-							// Ihr Gegner hat die Moeglichkeit genutzt und ihnen
-							// eines dieser Steinchen geloescht!");
-							// if (spielerGegner.isKI() == true) {
-							// // Finde ein Steinchen das haette
-							// // Springen duerfen:
-							// for (int i = 0; i < brettArray.length; i++) {
-							// for (int j = 0; j < brettArray[i].length; j++) {
-							// if (this.brettArray[i][j].getFigur() != null
-							// && this.brettArray[i][j].getFigur()
-							// .getFarbe() == this.spielerAktiv.getFarbe()
-							// &&
-							// this.brettArray[i][j].getFigur().getKannSpringen()
-							// == true) {
-							// this.brettArray[i][j].getFigur().getPosition().removeFigur();
-							// }
-							// }
-							// }
-							//
-							// }
-							//
-							// spielerAktiv.setAktiv(true); // Eingabe
-							// // Beendet,
-							// // zueruck
-							// // zum
-							// // aktuellen
-							// // Spieler!
-							// // Scheint
-							// // zwar
-							// // unn�tig,
-							// // weil
-							// // danach
-							// // Spielerwechsel
-							// // kommt,
-							// // ist es
-							// // aber
-							// // nicht, da
-							// // Spielerwechsel methode noch weitere
-							// // ueberpruefungen macht ;)
-							// spielerGegner.setAktiv(false);
-							//
-							// } else {
-							// // Gibt es nur eine Spielfigur die springen
-							// // kann, suchen wir diese einfach in unserem
-							// // Array
-							// for (int i = 0; i < this.brettArray.length; i++)
-							// {
-							// for (int j = 0; j < this.brettArray[i].length;
-							// j++) {
-							// if (this.brettArray[i][j].getFigur() != null
-							// && this.brettArray[i][j].getFigur().getFarbe() ==
-							// farbeAktiv
-							// &&
-							// this.brettArray[i][j].getFigur().getKannSpringen())
-							// {
-							//
-							// //figurenListe.add(this.brettArray[i][j].getFigur());
-							// }
-							// }
-							// }
-							// }
-							// }
 							if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
 																									// von
 																									// 11
@@ -667,10 +558,7 @@ public class Spiel implements iBediener, Serializable {
 
 				}
 			}
-			aktiveSpielfigur = null;
-			System.out.println("Zug vollendet");
-			spielerWechsel();
-			isSpielende();
+
 			
 		} else {
 			throw new RuntimeException("Nicht diagonal");
@@ -679,6 +567,10 @@ public class Spiel implements iBediener, Serializable {
 		// Pruefen ob beide Spieler noch Spielfiguren haben---------------				
 		
 		// -------------------------------------------------------
+		aktiveSpielfigur = null;
+		System.out.println("Zug vollendet");
+		spielerWechsel();
+		isSpielende();
 	}
 
 	// ############################### SPIELER WECHSEL
