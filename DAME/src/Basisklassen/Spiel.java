@@ -725,12 +725,11 @@ public class Spiel implements iBediener, Serializable {
 				msg.printOkWindow("KI mit der Farbe -" + spielerAktiv.getFarbe().toString().toUpperCase()
 						+ "-\nmoechte die Spielfigur von " + zug[0].toUpperCase() + " nach " + zug[1].toUpperCase()
 						+ " bewegen.");
-				if(this.spielerAktiv.isWirdSchlagen()==true){
-					this.hatGeschlagen=true;
-				
-				}
+
 			}	
-			
+			if(this.spielerAktiv.isWirdSchlagen()==true){
+				this.hatGeschlagen=true;
+			}
 			
 			bewegeSpielfigur(zug[0], zug[1]);
 		
