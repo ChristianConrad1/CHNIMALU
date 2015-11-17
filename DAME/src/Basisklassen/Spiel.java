@@ -148,7 +148,8 @@ public class Spiel implements iBediener, Serializable {
 		}
 		figurenListe.clear();
 		hatGeschlagen = false;
-		spielerMussSpringen();
+		this.spielerAktiv.setWirdSchlagen(false);
+//     	spielerMussSpringen();
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
@@ -703,6 +704,7 @@ public class Spiel implements iBediener, Serializable {
 			this.farbeGegner = spielerB.getFarbe();
 
 		}
+		spielerMussSpringen();
 		System.out.println("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
@@ -717,9 +719,14 @@ public class Spiel implements iBediener, Serializable {
 				msg.printOkWindow("KI mit der Farbe -" + spielerAktiv.getFarbe().toString().toUpperCase()
 						+ "-\nmoechte die Spielfigur von " + zug[0].toUpperCase() + " nach " + zug[1].toUpperCase()
 						+ " bewegen.");
+			}	
+			if(this.spielerAktiv.isWirdSchlagen()==true){
+				this.hatGeschlagen=true;
+			
 			}
+			
 			bewegeSpielfigur(zug[0], zug[1]);
-
+		
 		}
 	}
 
@@ -762,22 +769,28 @@ public class Spiel implements iBediener, Serializable {
 	// ######################### BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN -
 	// NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
 
+	// ############################################################# SPIELER
+	// MUSS SPRINGEN ()
+	// #######################################################################
+	// ######################### BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN -
+	// NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
+	
 	private void spielerMussSpringen() {
-
+	
 		// Bevor Spieler gewechselt wird und alles neu �berpr�ft wird, setze
 		// bei allen Steinen kannSchlagen auf false. Auch spielerA,B
 		// mussSpringen() wird auf false zur�ckgesetzt.
-
+	
 		// figurenListe.clear();
-
+	
 		this.sprungKonflikt = 0;
-
+	
 		spielerAktiv.setMussSpringen(false);
-
+	
 		// Spieler spielerAktiv = null;
-
+	
 		// FarbEnum farbeGegner = null;
-
+	
 		// if(this.spielerAktiv.getFarbe().equals(FarbEnum.schwarz)){
 		// farbeAktiv = FarbEnum.schwarz;
 		// farbeGegner = FarbEnum.weiss;
@@ -786,7 +799,7 @@ public class Spiel implements iBediener, Serializable {
 		// farbeAktiv = FarbEnum.weiss;
 		// farbeGegner = FarbEnum.schwarz;
 		// }
-
+	
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if (this.brettArray[i][j].getFigur() != null) {
@@ -800,37 +813,37 @@ public class Spiel implements iBediener, Serializable {
 																				// die
 																				// springen
 																				// kann
-
+	
 				}
 			}
 		}
-
+	
 		// ----------------------------------KANN SPIELER MIT EINER FIGUR
 		// SPRINGEN??--------------------------
 		if (spielerAktiv.getAktiv() == true) {
 			for (int i = 0; i < this.brettArray.length; i++) {
 				for (int j = 0; j < this.brettArray[i].length; j++) {
 					if (this.brettArray[i][j].getFigur() != null
-							&& this.brettArray[i][j].getFigur().getFarbe() == farbeAktiv) {
+							&& this.brettArray[i][j].getFigur().getFarbe() == this.spielerAktiv.getFarbe()) {
 						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
-
+	
 						int links = testSpieler.getPosition().getPosX() - 1;
 						int rechts = testSpieler.getPosition().getPosX() + 1;
 						int oben = testSpieler.getPosition().getPosY() + 1;
 						int unten = testSpieler.getPosition().getPosY() - 1;
-
+	
 						// ----------------------------ALLE 4 FAELLE DER
 						// DIAGONALEN UEBERPRUEFUNG-------------------------
-
+	
 						int coordX = 0;
 						int coordY = 0;
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
 						boolean[] sprungCases = new boolean[4];
-
+	
 						while (caseNumber < 5) {
-
+	
 							switch (caseNumber) {
 							case 1: // OBEN LINKS
 								coordX = links;
@@ -838,22 +851,22 @@ public class Spiel implements iBediener, Serializable {
 								a = -1;
 								b = 1;
 								break;
-
+	
 							case 2: // OBEN RECHTS
 								coordX = rechts;
 								coordY = oben;
 								a = 1;
 								b = 1;
-
+	
 								break;
-
+	
 							case 3: // UNTEN LINKS
 								coordX = links;
 								coordY = unten;
 								a = -1;
 								b = -1;
 								break;
-
+	
 							case 4: // UNTEN RECHTS
 								coordX = rechts;
 								coordY = unten;
@@ -861,18 +874,18 @@ public class Spiel implements iBediener, Serializable {
 								b = -1;
 								break;
 							}
-
+	
 							while (this.brettArray.length - (coordX) > 1
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
 									&& this.brettArray.length - (coordY) > 1 && testSpieler.isDame() == true
 									&& brettArray[coordX][coordY].getFigur() == null) {
-
+	
 								coordX += a;
 								coordY += b;
-
+	
 							}
-
+	
 							if (this.brettArray.length - (coordX) > 1
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
@@ -882,7 +895,7 @@ public class Spiel implements iBediener, Serializable {
 										&& brettArray[(coordX + a)][(coordY + b)].getFigur() == null) {
 									testSpieler.setKannSpringen(true);
 									this.spielerAktiv.setMussSpringen(true);
-
+	
 									switch (caseNumber) { // Es kann entweder
 															// nur fuer case 1
 															// oder 2 bzw beide
@@ -907,14 +920,14 @@ public class Spiel implements iBediener, Serializable {
 										sprungCases[3] = true;
 										testSpieler.setSprungCases(sprungCases);
 										break;
-
+	
 									}
-
+	
 								}
-
+	
 							}
 							caseNumber++;
-
+	
 						}
 						if (testSpieler.getKannSpringen() == true) {
 							figurenListe.add(testSpieler);
@@ -928,13 +941,14 @@ public class Spiel implements iBediener, Serializable {
 					}
 				}
 			}
-
+	
 			if (spielerAktiv.getMussSpringen() == false) {
 				System.out.println("Spieler " + spielerAktiv.getName() + " Sie sind am Zug!");
-
+	
 			}
 		}
 	}
+
 
 	// #############################################################################
 	// ENDE SPIELER MUSS SPRINGEN

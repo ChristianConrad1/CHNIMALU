@@ -7,6 +7,7 @@ public class Spieler implements Serializable{
 	private KI ki;
 	private boolean istAktiv=false; 
 	private boolean mussSpringen=false;
+	private boolean wirdSchlagen;
 	
 
 	/**
@@ -98,6 +99,13 @@ public class Spieler implements Serializable{
 		return false;
 	}
 
+	public boolean isWirdSchlagen() {
+		return wirdSchlagen;
+	}
+
+	public void setWirdSchlagen(boolean wirdSchlagen) {
+		this.wirdSchlagen = wirdSchlagen;
+	}
 
 	
 }

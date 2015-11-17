@@ -7,6 +7,7 @@ import org.omg.Messaging.SyncScopeHelper;
 
 public class KI_Dame extends KI implements Serializable{
 	private Spielfeld[][] brettArray;
+
 	public KI_Dame(Spieler s) {
 		super(s);
 	}
@@ -24,6 +25,7 @@ public class KI_Dame extends KI implements Serializable{
 			brettArray = brett.getNotation();
 		}
 		if (schlagen() != null){
+			this.spieler.setWirdSchlagen(true);
 			return schlagen();}
 		else if  (dameWerden() != null){
 			System.out.println("Ich bin intelligent!");
@@ -39,13 +41,15 @@ public class KI_Dame extends KI implements Serializable{
 	public String[] schlagen() { // muss Koordinaten von Spielfeld zurückgeben,
 									// damit
 		// wasMacheIch() diese weitergeben kann
-
+	
 		String[] rueckgabe = null;
 		for (int i = 0; i < this.brettArray.length; i++) {
 			
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if(this.brettArray[i][j].getFigur()!=null){
+
 				if (this.brettArray[i][j].getFigur().getKannSpringen() == true) {
+					System.out.println("Gibt schlagen zuerueck");
 					int x = this.brettArray[i][j].getPosX();
 					int y = this.brettArray[i][j].getPosY();
 					int links = this.brettArray[i][j].getPosX() - 1;
@@ -94,6 +98,7 @@ public class KI_Dame extends KI implements Serializable{
 							b = -1;
 							break;
 						}
+						System.out.println("TEST1");
 
 						while (this.brettArray.length - (coordX) > 1
 								&& this.brettArray.length - (coordX) < this.brettArray.length
@@ -117,7 +122,7 @@ public class KI_Dame extends KI implements Serializable{
 								&& brettArray[coordX + a][coordY + b].getFigur() == null) {
 							if (brettArray[coordX][coordY].getFigur().getFarbe() != this.brettArray[i][j].getFigur()
 									.getFarbe()) {
-
+								System.out.println("TEST2");
 								int x2 = coordX;
 								int y2 = coordY;
 
@@ -126,14 +131,14 @@ public class KI_Dame extends KI implements Serializable{
 								rueckgabe[0] = rewandler(x, y);
 								rueckgabe[1] = rewandler(x2, y2);
 								
-								if((brettArray[x][y].getHatFigur() && brettArray[x][y].getFigur().getInListe()) 
-										|| (brettArray[x2][y2].getHatFigur() && brettArray[x2][y2].getFigur().getInListe())){
-									rueckgabe = null;
-								}
+								System.out.println(rueckgabe[0]+"rueckgabe: "+rueckgabe[1] );
+								System.out.println(spieler.getFarbe());
+								return rueckgabe;
 								
-
-
-
+//								if((brettArray[x][y].getHatFigur() && brettArray[x][y].getFigur().getInListe()) 
+//										|| (brettArray[x2][y2].getHatFigur() && brettArray[x2][y2].getFigur().getInListe())){
+//									rueckgabe = null;
+//								}
 								
 							}
 
@@ -146,8 +151,8 @@ public class KI_Dame extends KI implements Serializable{
 				}
 			}
 		}
-
-		return rueckgabe;
+		return null;
+		
 	}
 
 	public String[] dameWerden() {
@@ -437,5 +442,7 @@ public class KI_Dame extends KI implements Serializable{
 		String s = c + d;
 		return s;
 	}
+
+
 
 }
