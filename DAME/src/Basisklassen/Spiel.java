@@ -122,7 +122,7 @@ public class Spiel implements iBediener, Serializable {
 		int c = brett.getKoordX();
 		int d = brett.getKoordY();
 
-		if (!hatGeschlagen) {
+		if (hatGeschlagen==false) {
 			if (figurenListe.size() == 1) {
 				System.out
 						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
@@ -149,7 +149,7 @@ public class Spiel implements iBediener, Serializable {
 		figurenListe.clear();
 		hatGeschlagen = false;
 		this.spielerAktiv.setWirdSchlagen(false);
-//     	spielerMussSpringen();
+    	spielerMussSpringen();
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
@@ -538,7 +538,7 @@ public class Spiel implements iBediener, Serializable {
 							// }
 							// }
 							// }
-							if ((aktiveSpielfigur.getPosition().getPosY() == brettArray.length - 1 // ge�ndert
+							if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
 																									// von
 																									// 11
 									&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
@@ -704,13 +704,13 @@ public class Spiel implements iBediener, Serializable {
 			this.farbeGegner = spielerB.getFarbe();
 
 		}
-		spielerMussSpringen();
+		
 		System.out.println("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		if (spielerAktiv.isKI()) {
-
+			spielerMussSpringen();
 			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
 			System.out.println(
 					"KI die Zug durchführen wird, gehört dem Spieler: " + spielerAktiv.getKi().spieler.getName());
@@ -719,11 +719,12 @@ public class Spiel implements iBediener, Serializable {
 				msg.printOkWindow("KI mit der Farbe -" + spielerAktiv.getFarbe().toString().toUpperCase()
 						+ "-\nmoechte die Spielfigur von " + zug[0].toUpperCase() + " nach " + zug[1].toUpperCase()
 						+ " bewegen.");
+				if(this.spielerAktiv.isWirdSchlagen()==true){
+					this.hatGeschlagen=true;
+				
+				}
 			}	
-			if(this.spielerAktiv.isWirdSchlagen()==true){
-				this.hatGeschlagen=true;
 			
-			}
 			
 			bewegeSpielfigur(zug[0], zug[1]);
 		

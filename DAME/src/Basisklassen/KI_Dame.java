@@ -98,7 +98,6 @@ public class KI_Dame extends KI implements Serializable{
 							b = -1;
 							break;
 						}
-						System.out.println("TEST1");
 
 						while (this.brettArray.length - (coordX) > 1
 								&& this.brettArray.length - (coordX) < this.brettArray.length
@@ -122,7 +121,6 @@ public class KI_Dame extends KI implements Serializable{
 								&& brettArray[coordX + a][coordY + b].getFigur() == null) {
 							if (brettArray[coordX][coordY].getFigur().getFarbe() != this.brettArray[i][j].getFigur()
 									.getFarbe()) {
-								System.out.println("TEST2");
 								int x2 = coordX;
 								int y2 = coordY;
 
@@ -130,9 +128,7 @@ public class KI_Dame extends KI implements Serializable{
 								
 								rueckgabe[0] = rewandler(x, y);
 								rueckgabe[1] = rewandler(x2, y2);
-								
-								System.out.println(rueckgabe[0]+"rueckgabe: "+rueckgabe[1] );
-								System.out.println(spieler.getFarbe());
+				
 								return rueckgabe;
 								
 //								if((brettArray[x][y].getHatFigur() && brettArray[x][y].getFigur().getInListe()) 
