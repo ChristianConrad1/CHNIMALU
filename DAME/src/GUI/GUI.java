@@ -227,6 +227,8 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	JPanel southPanel = new JPanel();
 	JPanel centerPanel = new JPanel();
 	
+	JScrollPane gameScroll;
+	
 	
 	
 	
@@ -246,9 +248,7 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	jta = new JTextArea(5,1);
 	jsp = new JScrollPane(jta);
 	
-	westPanel.add(bWEST);
-	westPanel.add(new JLabel("Hier kommt was hin"));
-	westPanel.setLayout(new GridLayout(5,1));	//Erzeuge testhaft ein neues Gridlayout, dass seine Komponenten in 1 Spalte und 5 Zeilen unterteilt
+	
 	
 	eastPanel.add(ueberschrift);
 	eastPanel.add(eingabe);	
@@ -262,10 +262,10 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	southPanel.add(jsp);
 	southPanel.setLayout(new GridLayout(1,1));
 
+	gameScroll = new JScrollPane(brettMapped);
 	
 	centerPanel.setLayout(new BorderLayout());
-
-	centerPanel.add(brettMapped, BorderLayout.CENTER);
+	centerPanel.add(gameScroll, BorderLayout.CENTER);
 
 	
 	this.mainJpanel.add(westPanel, BorderLayout.WEST); //Fuege alle Panels ihres Zustaendigkeitsbereichs zu
@@ -357,7 +357,7 @@ public void run() {
 	while(true){
 		this.drawBrett();
 		try {
-			Thread.sleep(500);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

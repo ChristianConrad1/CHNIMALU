@@ -19,6 +19,7 @@ public class Spiel implements iBediener, Serializable {
 	private boolean darfPusten;
 	private boolean hatGeschlagen;
 	private boolean warKi;
+	private boolean schlagTestZwei = false;
 	private ArrayList<Spielfigur> figurenListe;
 
 	private Spieler winner;
@@ -128,6 +129,7 @@ public class Spiel implements iBediener, Serializable {
 						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
 				figurenListe.get(0).getPosition().removeFigur();
 				figurenListe.clear();
+				
 				warKi = false;
 			} else if (!figurenListe.isEmpty()) {
 				if (warKi) {
@@ -135,11 +137,13 @@ public class Spiel implements iBediener, Serializable {
 							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
 					figurenListe.get(0).getPosition().removeFigur();
 					figurenListe.clear();
+					
 					warKi = false;
 				} else {
 					darfPusten = true;
 					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
 							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
+					
 				}
 				for (int f = 0; f < figurenListe.size() - 1; f++) {
 					figurenListe.get(f).setInListe(false);
@@ -150,7 +154,7 @@ public class Spiel implements iBediener, Serializable {
 		hatGeschlagen = false;
 		this.spielerAktiv.setWirdSchlagen(false);
     
-			spielerMussSpringen();
+		spielerMussSpringen();
 
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
@@ -339,9 +343,9 @@ public class Spiel implements iBediener, Serializable {
 																										// fuer
 																										// erneutes
 																										// Springen
-
+											
 											spielerMussSpringen();
-
+										
 											if (aktiveSpielfigur.getKannSpringen() == true) {
 												System.out.println(
 														"Der selbe Stein konnte weitere Steine ueberspringen!");
@@ -404,7 +408,7 @@ public class Spiel implements iBediener, Serializable {
 
 						// --------------------------------------ALLGEMEINESZIEHEN----------------------------
 
-						else if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
+						if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
 							if (aktiveSpielfigur != null && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
 									&& d > aktiveSpielfigur.getPosition().getPosY())
 									| (aktiveSpielfigur.getFarbe() == FarbEnum.weiss
@@ -544,7 +548,7 @@ public class Spiel implements iBediener, Serializable {
 																									// von
 																									// 11
 									&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
-									| (aktiveSpielfigur.getPosition().getPosY() == 0
+									|| (aktiveSpielfigur.getPosition().getPosY() == 0
 											&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
 								aktiveSpielfigur.setDame();
 								msg.printOk("Eine Figur ist zur Dame geworden!");
@@ -706,7 +710,7 @@ public class Spiel implements iBediener, Serializable {
 			this.farbeGegner = spielerB.getFarbe();
 
 		}
-		
+		//spielerMussSpringen();
 		System.out.println("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
@@ -950,6 +954,7 @@ public class Spiel implements iBediener, Serializable {
 	
 			}
 		}
+	
 	}
 
 
