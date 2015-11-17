@@ -32,6 +32,8 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	private ImageIcon whiteStone;
 	private ImageIcon blackStoneDAME;
 	private ImageIcon whiteStoneDAME;
+	private ImageIcon DAMESelected;
+	private ImageIcon StoneSelected;
 
 	
 	
@@ -160,11 +162,11 @@ public void drawBrett(){
 		for(int k=0; k<brettArray[n].length; k++){
 			if(field[count].equals("[O]")){
 			brettArray[k][n].setIcon(whiteStone);
-			brettArray[k][n].setRolloverIcon(blackStone);
+			brettArray[k][n].setRolloverIcon(StoneSelected);
 			}
 			if(field[count].equals("[X]")){
 			brettArray[k][n].setIcon(blackStone);
-			brettArray[k][n].setRolloverIcon(whiteStone);
+			brettArray[k][n].setRolloverIcon(StoneSelected);
 			}
 			if(field[count].equals("[ ]")){
 			brettArray[k][n].setIcon(null);
@@ -172,11 +174,11 @@ public void drawBrett(){
 			}
 			if(field[count].equals("[*X*]")){
 				brettArray[k][n].setIcon(blackStoneDAME);
-				brettArray[k][n].setRolloverIcon(whiteStoneDAME);
+				brettArray[k][n].setRolloverIcon(DAMESelected);
 			}
 			if(field[count].equals("[*O*]")){
 				brettArray[k][n].setIcon(whiteStoneDAME);
-				brettArray[k][n].setRolloverIcon(blackStoneDAME);
+				brettArray[k][n].setRolloverIcon(DAMESelected);
 			}
 			
 					count++;
@@ -290,6 +292,8 @@ public void initImg(){
 	whiteStone = new ImageIcon("res/img/whiteStone.png");
 	blackStoneDAME = new ImageIcon("res/img/blackStoneDAME.png");
 	whiteStoneDAME = new ImageIcon("res/img/whiteStoneDAME.png");
+	DAMESelected = new ImageIcon("res/img/DAMESELECTED.png");
+	StoneSelected = new ImageIcon("res/img/StoneSELECTED.png");
 }
 
 
