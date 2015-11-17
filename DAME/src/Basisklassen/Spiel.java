@@ -551,6 +551,7 @@ public class Spiel implements iBediener, Serializable {
 									|| (aktiveSpielfigur.getPosition().getPosY() == 0
 											&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
 								aktiveSpielfigur.setDame();
+								sound.promoteSound();
 								msg.printOk("Eine Figur ist zur Dame geworden!");
 							}
 
@@ -603,8 +604,6 @@ public class Spiel implements iBediener, Serializable {
 				this.brettArray[c][d].setFigur(aktiveSpielfigur);
 				aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 				aktiveSpielfigur = null;
-				System.out.println("Zug vollendet");
-				spielerWechsel();
 
 			}
 
@@ -625,11 +624,8 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c - 1][d + 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d + 1]);
-						this.brettArray[c][d].removeFigur();
-						aktiveSpielfigur = null;
-						System.out.println("Zug vollendet");
-						spielerWechsel();
-
+						this.brettArray[c][d].removeFigur();				
+						
 					}
 
 					else {
@@ -641,10 +637,6 @@ public class Spiel implements iBediener, Serializable {
 							this.brettArray[c + 1][d + 1].setFigur(aktiveSpielfigur);
 							aktiveSpielfigur.setPosition(this.brettArray[c + 1][d + 1]);
 							this.brettArray[c][d].removeFigur();
-							aktiveSpielfigur = null;
-							System.out.println("Zug vollendet");
-							spielerWechsel();
-
 						}
 					}
 				}
@@ -658,10 +650,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c - 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d - 1]);
-						this.brettArray[c][d].removeFigur();
-						aktiveSpielfigur = null;
-						System.out.println("Zug vollendet");
-						spielerWechsel();
+						this.brettArray[c][d].removeFigur();				
 
 					}
 
@@ -672,21 +661,23 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c + 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c + 1][d - 1]);
-						this.brettArray[c][d].removeFigur();
-						aktiveSpielfigur = null;
-						System.out.println("Zug vollendet");
-						spielerWechsel();
+						this.brettArray[c][d].removeFigur();						
 
 					}
 
 				}
 			}
+			aktiveSpielfigur = null;
+			System.out.println("Zug vollendet");
+			spielerWechsel();
+			isSpielende();
+			
 		} else {
 			throw new RuntimeException("Nicht diagonal");
 		}
 
-		// Pruefen ob beide Spieler noch Spielfiguren haben---------------
-		isSpielende();
+		// Pruefen ob beide Spieler noch Spielfiguren haben---------------				
+		
 		// -------------------------------------------------------
 	}
 
