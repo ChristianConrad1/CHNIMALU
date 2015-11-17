@@ -149,7 +149,9 @@ public class Spiel implements iBediener, Serializable {
 		figurenListe.clear();
 		hatGeschlagen = false;
 		this.spielerAktiv.setWirdSchlagen(false);
-    	spielerMussSpringen();
+    
+			spielerMussSpringen();
+
 
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
