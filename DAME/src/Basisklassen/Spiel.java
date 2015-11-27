@@ -22,7 +22,7 @@ public class Spiel implements iBediener, Serializable {
 	private boolean schlagTestZwei = false;
 	private ArrayList<Spielfigur> figurenListe;
 	private boolean wurdeBewegt;
-	
+
 	private Spieler winner;
 	private Spieler spielerA;
 	private Spieler spielerB;
@@ -106,7 +106,8 @@ public class Spiel implements iBediener, Serializable {
 	}
 
 	/**
-	 * bewegt eine Spielfigur von gew�hltem Feld auf ein anderes g�ltiges Feld
+	 * bewegt eine Spielfigur von gew�hltem Feld auf ein anderes g�ltiges
+	 * Feld
 	 * 
 	 * @param String1
 	 *            eingabe Feld von Spielfigur
@@ -117,16 +118,18 @@ public class Spiel implements iBediener, Serializable {
 	// **************************************BEWEGE SPIELFIGUR
 	// METHODE********************************************
 	public void bewegeSpielfigur(String s1, String s2) {
+		System.out.println(this.figurenListe);
 		brett.Umwandler(s1);
 		int a = brett.getKoordX();
 		int b = brett.getKoordY();
 		brett.Umwandler(s2);
 		int c = brett.getKoordX();
-		int d = brett.getKoordY();		
-    
+		int d = brett.getKoordY();
+
 		spielerMussSpringen();
 		this.setHatGeschlagen(false);
-		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
+		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem
+		// Array-Feld
 		// enthalten sind
 		if (a < 0 | a > this.brettArray.length - 1) {
 			throw new RuntimeException("Ihre X Koordinate ist nicht in unserem Spielfeld!");
@@ -246,7 +249,8 @@ public class Spiel implements iBediener, Serializable {
 								// EINE VON VIER
 								// RICHTUNGEN---------------------------------------
 
-								// Spezialfall: Gew�hlte Spielfigur hat Sprung,
+								// Spezialfall: Gew�hlte Spielfigur hat
+								// Sprung,
 								// nutzt diesen aber nicht! L�sche sie!!
 
 								// -------------------------------------------------------SPRINGEN----------------------------------------------------
@@ -267,7 +271,7 @@ public class Spiel implements iBediener, Serializable {
 										while (aktiveSpielfigur.getKannSpringen() == true
 												&& this.spielerAktiv.getMussSpringen() == true
 												&& this.brettArray[koordX1][koordY1].getFigur() == null) {
-								
+
 											this.aktiveSpielfigur.getPosition().removeFigur();
 											this.brettArray[koordX][koordY].removeFigur();
 											this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
@@ -275,7 +279,8 @@ public class Spiel implements iBediener, Serializable {
 											sound.schlagSound();
 											this.setHatGeschlagen(true);
 											this.setWurdeBewegt(true);
-											msg.printOk(this.spielerAktiv.getName() + " hat Sprung von " + this.rewandler(koordX, koordY) + " nach "
+											msg.printOk(this.spielerAktiv.getName() + " hat Sprung von "
+													+ this.rewandler(koordX, koordY) + " nach "
 													+ this.rewandler(koordX1, koordY1) + " ausgeführt.");
 
 											System.out.println(
@@ -289,9 +294,9 @@ public class Spiel implements iBediener, Serializable {
 																										// fuer
 																										// erneutes
 																										// Springen
-											
+
 											spielerMussSpringen();
-										
+
 											if (aktiveSpielfigur.getKannSpringen() == true) {
 												System.out.println(
 														"Der selbe Stein konnte weitere Steine ueberspringen!");
@@ -338,8 +343,9 @@ public class Spiel implements iBediener, Serializable {
 													koordX1 = koordX + 1;
 													koordY1 = koordY - 1;
 												}
-
+												spielerMussSpringen();
 											}
+											
 											System.out.println("Sprung vollendet.");
 										}
 
@@ -358,32 +364,32 @@ public class Spiel implements iBediener, Serializable {
 								}
 							}
 						}
-
+						System.out.println(hatGeschlagen);
 						// *******************************************NORMALES
 						// ZIEHEN!****************************************
 
 						// --------------------------------------ALLGEMEINESZIEHEN----------------------------
 						if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
-							if (this.getHatGeschlagen() == false &&  aktiveSpielfigur != null && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
-									&& d > aktiveSpielfigur.getPosition().getPosY())
-									| (aktiveSpielfigur.getFarbe() == FarbEnum.weiss
-											&& d < aktiveSpielfigur.getPosition().getPosY())) {
+							if (this.getHatGeschlagen() == false && aktiveSpielfigur != null
+									&& (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
+											&& d > aktiveSpielfigur.getPosition().getPosY())
+											| (aktiveSpielfigur.getFarbe() == FarbEnum.weiss
+													&& d < aktiveSpielfigur.getPosition().getPosY())) {
 
 								aktiveSpielfigur.getPosition().removeFigur();
 								aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 								this.brettArray[c][d].setFigur(aktiveSpielfigur);
 
-								
-								msg.printOk(
-										spielerAktiv.getName() + " hat Zug von " + s1 + " nach " + s2 + " ausgeführt.");
+								msg.printOk(spielerAktiv.getName() + " hat Zug von " + s1 + " nach " + s2
+										+ " ausgeführt.");
 								System.out.println("Zug vollendet!");
 								this.setWurdeBewegt(true);
 								sound.ziehSound();
 								this.setHatGeschlagen(false);
 							}
 							if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
-																									// von
-																									// 11
+																				// von
+																				// 11
 									&& aktiveSpielfigur.getFarbe() == FarbEnum.schwarz)
 									|| (aktiveSpielfigur.getPosition().getPosY() == 0
 											&& aktiveSpielfigur.getFarbe() == FarbEnum.weiss)) {
@@ -424,38 +430,10 @@ public class Spiel implements iBediener, Serializable {
 			// e.printStackTrace();
 
 		}
-		
-		if (this.getHatGeschlagen() ==false && this.getWurdeBewegt() == true) {
-			if (figurenListe.size() == 1) {
-				System.out
-						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
-				figurenListe.get(0).getPosition().removeFigur();
-				figurenListe.clear();
-				
-				warKi = false;
-			} else if (!figurenListe.isEmpty()) {
-				if (warKi) {
-					System.out.println(
-							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
-					figurenListe.get(0).getPosition().removeFigur();
-					figurenListe.clear();
-					
-					warKi = false;
-				} else {
-					darfPusten = true;
-					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
-							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
-					
-				}
-				for (int f = 0; f < figurenListe.size() - 1; f++) {
-					figurenListe.get(f).setInListe(false);
-				}
-			}
-		}
-		
-		figurenListe.clear();
+		pustenCheck();
 		this.setHatGeschlagen(false);
 		this.setWurdeBewegt(false);
+		isSpielende();
 
 	}
 
@@ -482,8 +460,7 @@ public class Spiel implements iBediener, Serializable {
 			// Spielfigur -------------------------------------------
 			else if (this.brettArray[c][d].getFigur() != null
 					&& this.brettArray[c][d].getFigur().getFarbe() != aktiveSpielfigur.getFarbe()) {
-								
-				
+
 				// Sprung nach oben
 				if (richtung > 0) {
 					if (c < (aktiveSpielfigur.getPosition().getPosX())) { // Sprung
@@ -498,7 +475,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d + 1]);
 						this.brettArray[c][d].removeFigur();
 						aktiveSpielfigur = brettArray[c - 1][d + 1].getFigur();
-						
+
 					}
 
 					else {
@@ -524,7 +501,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c - 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d - 1]);
-						this.brettArray[c][d].removeFigur();				
+						this.brettArray[c][d].removeFigur();
 						aktiveSpielfigur = brettArray[c - 1][d - 1].getFigur();
 					}
 
@@ -535,7 +512,7 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c + 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c + 1][d - 1]);
-						this.brettArray[c][d].removeFigur();						
+						this.brettArray[c][d].removeFigur();
 						aktiveSpielfigur = brettArray[c + 1][d - 1].getFigur();
 					}
 
@@ -543,67 +520,67 @@ public class Spiel implements iBediener, Serializable {
 				sound.schlagSound();
 				this.setHatGeschlagen(true);
 				this.setWurdeBewegt(true);
-				msg.printOk(this.spielerAktiv.getName() + " hat Sprung nach "
-						+ this.rewandler(c, d) + " ausgeführt.");
+				msg.printOk(this.spielerAktiv.getName() + " hat Sprung nach " + this.rewandler(c, d) + " ausgeführt.");
 
-				System.out.println(
-						"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
+				System.out.println("Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
 				spielerAktiv.setMussSpringen(false);
 				aktiveSpielfigur.setKannSpringen(false);
 				spielerMussSpringen();
-				while(aktiveSpielfigur.getKannSpringen() == true
-						&& this.spielerAktiv.getMussSpringen() == true){
-					
-				if(aktiveSpielfigur.getKannSpringen() == true){
-					
-					int[] zielfeld = aktiveSpielfigur.getZielfeld();
-					int x = zielfeld[0];
-					int y = zielfeld[1];
-					aktiveSpielfigur.getPosition().removeFigur();
-					this.brettArray[x][y].removeFigur();
-					
-					if(x > aktiveSpielfigur.getPosition().getPosX() && y > aktiveSpielfigur.getPosition().getPosY()){
-						System.out.println("rechts oben");
-						this.brettArray[x + 1][y + 1].setFigur(aktiveSpielfigur);
-						aktiveSpielfigur.setPosition(this.brettArray[x + 1][y + 1]);						
-						aktiveSpielfigur = brettArray[x + 1][y + 1].getFigur();	
+				while (aktiveSpielfigur.getKannSpringen() == true && this.spielerAktiv.getMussSpringen() == true) {
+
+					if (aktiveSpielfigur.getKannSpringen() == true) {
+
+						int[] zielfeld = aktiveSpielfigur.getZielfeld();
+						int x = zielfeld[0];
+						int y = zielfeld[1];
+						aktiveSpielfigur.getPosition().removeFigur();
+						this.brettArray[x][y].removeFigur();
+
+						if (x > aktiveSpielfigur.getPosition().getPosX()
+								&& y > aktiveSpielfigur.getPosition().getPosY()) {
+							System.out.println("rechts oben");
+							this.brettArray[x + 1][y + 1].setFigur(aktiveSpielfigur);
+							aktiveSpielfigur.setPosition(this.brettArray[x + 1][y + 1]);
+							aktiveSpielfigur = brettArray[x + 1][y + 1].getFigur();
+						} else if (x > aktiveSpielfigur.getPosition().getPosX()
+								&& y < aktiveSpielfigur.getPosition().getPosY()) {
+							System.out.println("links oben");
+							this.brettArray[x + 1][y - 1].setFigur(aktiveSpielfigur);
+							aktiveSpielfigur.setPosition(this.brettArray[x + 1][y - 1]);
+							aktiveSpielfigur = brettArray[x + 1][y - 1].getFigur();
+						}
+
+						else if (x < aktiveSpielfigur.getPosition().getPosX()
+								&& y > aktiveSpielfigur.getPosition().getPosY()) {
+							System.out.println("rechts unten");
+							this.brettArray[x - 1][y + 1].setFigur(aktiveSpielfigur);
+							aktiveSpielfigur.setPosition(this.brettArray[x - 1][y + 1]);
+							aktiveSpielfigur = brettArray[x - 1][y + 1].getFigur();
+						} else if (x < aktiveSpielfigur.getPosition().getPosX()
+								&& y < aktiveSpielfigur.getPosition().getPosY()) {
+							System.out.println("links unten");
+							this.brettArray[x - 1][y - 1].setFigur(aktiveSpielfigur);
+							aktiveSpielfigur.setPosition(this.brettArray[x - 1][y - 1]);
+							aktiveSpielfigur = brettArray[x - 1][y - 1].getFigur();
+						}
+
 					}
-					else if(x > aktiveSpielfigur.getPosition().getPosX() && y < aktiveSpielfigur.getPosition().getPosY()){
-						System.out.println("links oben");
-						this.brettArray[x + 1][y - 1].setFigur(aktiveSpielfigur);
-						aktiveSpielfigur.setPosition(this.brettArray[x + 1][y - 1]);						
-						aktiveSpielfigur = brettArray[x + 1][y - 1].getFigur();	
-					}
-					
-					else if(x < aktiveSpielfigur.getPosition().getPosX() && y >aktiveSpielfigur.getPosition().getPosY()){
-						System.out.println("rechts unten");
-						this.brettArray[x - 1][y + 1].setFigur(aktiveSpielfigur);
-						aktiveSpielfigur.setPosition(this.brettArray[x - 1][y + 1]);						
-						aktiveSpielfigur = brettArray[x - 1][y + 1].getFigur();	
-					}
-					else if(x < aktiveSpielfigur.getPosition().getPosX() && y < aktiveSpielfigur.getPosition().getPosY()){
-						System.out.println("links unten");
-						this.brettArray[x - 1][y - 1].setFigur(aktiveSpielfigur);
-						aktiveSpielfigur.setPosition(this.brettArray[x - 1][y - 1]);						
-						aktiveSpielfigur = brettArray[x - 1][y - 1].getFigur();	
-					}
-					
+					spielerMussSpringen();
 				}
-				spielerMussSpringen();
 			}
-			}
-			
+
 		} else {
 			throw new RuntimeException("Nicht diagonal");
 		}
 
-		// Pruefen ob beide Spieler noch Spielfiguren haben---------------				
-		
+		// Pruefen ob beide Spieler noch Spielfiguren haben---------------
 		// -------------------------------------------------------
+		pustenCheck();
 		aktiveSpielfigur = null;
 		System.out.println("Zug vollendet");
 		spielerWechsel();
 		isSpielende();
+		
 	}
 
 	// ############################### SPIELER WECHSEL
@@ -626,7 +603,7 @@ public class Spiel implements iBediener, Serializable {
 			this.farbeGegner = spielerB.getFarbe();
 
 		}
-		//spielerMussSpringen();
+		// spielerMussSpringen();
 		System.out.println("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
@@ -636,17 +613,49 @@ public class Spiel implements iBediener, Serializable {
 			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
 			System.out.println(
 					"KI die Zug durchführen wird, gehört dem Spieler: " + spielerAktiv.getKi().spieler.getName());
-			if (spielerA.isKI() && spielerB.isKI()) { // Zugbestätigungen bei Ki
+			if (spielerA.isKI() && spielerB.isKI()) { // Zugbestätigungen bei
+														// Ki
 														// nur, wenn Ki gegen Ki
 				msg.printOkWindow("KI mit der Farbe -" + spielerAktiv.getFarbe().toString().toUpperCase()
 						+ "-\nmoechte die Spielfigur von " + zug[0].toUpperCase() + " nach " + zug[1].toUpperCase()
 						+ " bewegen.");
 
-			}	
-			
+			}
+
 			bewegeSpielfigur(zug[0], zug[1]);
-		
+
 		}
+	}
+
+	private void pustenCheck() {
+		if (this.getHatGeschlagen() == false && this.getWurdeBewegt() == true) {
+			if (figurenListe.size() == 1) {
+				System.out
+						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
+				figurenListe.get(0).getPosition().removeFigur();
+				figurenListe.clear();
+
+				warKi = false;
+			} else if (!figurenListe.isEmpty()) {
+				if (warKi) {
+					System.out.println(
+							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
+					figurenListe.get(0).getPosition().removeFigur();
+					figurenListe.clear();
+
+					warKi = false;
+				} else {
+					darfPusten = true;
+					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
+							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
+
+				}
+				for (int f = 0; f < figurenListe.size() - 1; f++) {
+					figurenListe.get(f).setInListe(false);
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -693,32 +702,19 @@ public class Spiel implements iBediener, Serializable {
 	// #######################################################################
 	// ######################### BEREITS NOCHMAL KURZ UND SCHOEN GESCHRIEBEN -
 	// NOCH NICHT IMPLEMENTIERT DA NOCH FEHLER AUSGEARBEITET WERDEN MUESSEN
-	
+
 	private void spielerMussSpringen() {
-	
+
 		// Bevor Spieler gewechselt wird und alles neu �berpr�ft wird, setze
 		// bei allen Steinen kannSchlagen auf false. Auch spielerA,B
 		// mussSpringen() wird auf false zur�ckgesetzt.
-	
-		// figurenListe.clear();
-	
+
+		figurenListe.clear();
+
 		this.sprungKonflikt = 0;
-	
+
 		spielerAktiv.setMussSpringen(false);
-	
-		// Spieler spielerAktiv = null;
-	
-		// FarbEnum farbeGegner = null;
-	
-		// if(this.spielerAktiv.getFarbe().equals(FarbEnum.schwarz)){
-		// farbeAktiv = FarbEnum.schwarz;
-		// farbeGegner = FarbEnum.weiss;
-		// }
-		// else if(this.spielerAktiv.getFarbe().equals(FarbEnum.weiss)){
-		// farbeAktiv = FarbEnum.weiss;
-		// farbeGegner = FarbEnum.schwarz;
-		// }
-	
+
 		for (int i = 0; i < this.brettArray.length; i++) {
 			for (int j = 0; j < this.brettArray[i].length; j++) {
 				if (this.brettArray[i][j].getFigur() != null) {
@@ -732,11 +728,11 @@ public class Spiel implements iBediener, Serializable {
 																				// die
 																				// springen
 																				// kann
-	
+
 				}
 			}
 		}
-	
+
 		// ----------------------------------KANN SPIELER MIT EINER FIGUR
 		// SPRINGEN??--------------------------
 		if (spielerAktiv.getAktiv() == true) {
@@ -745,24 +741,24 @@ public class Spiel implements iBediener, Serializable {
 					if (this.brettArray[i][j].getFigur() != null
 							&& this.brettArray[i][j].getFigur().getFarbe() == this.spielerAktiv.getFarbe()) {
 						Spielfigur testSpieler = this.brettArray[i][j].getFigur();
-	
+
 						int links = testSpieler.getPosition().getPosX() - 1;
 						int rechts = testSpieler.getPosition().getPosX() + 1;
 						int oben = testSpieler.getPosition().getPosY() + 1;
 						int unten = testSpieler.getPosition().getPosY() - 1;
-	
+
 						// ----------------------------ALLE 4 FAELLE DER
 						// DIAGONALEN UEBERPRUEFUNG-------------------------
-	
+
 						int coordX = 0;
 						int coordY = 0;
 						int a = 0;
 						int b = 0;
 						int caseNumber = 1;
 						boolean[] sprungCases = new boolean[4];
-	
+
 						while (caseNumber < 5) {
-	
+
 							switch (caseNumber) {
 							case 1: // OBEN LINKS
 								coordX = links;
@@ -770,22 +766,22 @@ public class Spiel implements iBediener, Serializable {
 								a = -1;
 								b = 1;
 								break;
-	
+
 							case 2: // OBEN RECHTS
 								coordX = rechts;
 								coordY = oben;
 								a = 1;
 								b = 1;
-	
+
 								break;
-	
+
 							case 3: // UNTEN LINKS
 								coordX = links;
 								coordY = unten;
 								a = -1;
 								b = -1;
 								break;
-	
+
 							case 4: // UNTEN RECHTS
 								coordX = rechts;
 								coordY = unten;
@@ -793,18 +789,18 @@ public class Spiel implements iBediener, Serializable {
 								b = -1;
 								break;
 							}
-	
+
 							while (this.brettArray.length - (coordX) > 1
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
 									&& this.brettArray.length - (coordY) > 1 && testSpieler.isDame() == true
 									&& brettArray[coordX][coordY].getFigur() == null) {
-	
+
 								coordX += a;
 								coordY += b;
-	
+
 							}
-	
+
 							if (this.brettArray.length - (coordX) > 1
 									&& this.brettArray.length - (coordX) < this.brettArray.length
 									&& this.brettArray.length - (coordY) < brettArray.length
@@ -815,7 +811,7 @@ public class Spiel implements iBediener, Serializable {
 									testSpieler.setKannSpringen(true);
 									testSpieler.setZielfeld(coordX, coordY);
 									this.spielerAktiv.setMussSpringen(true);
-	
+
 									switch (caseNumber) { // Es kann entweder
 															// nur fuer case 1
 															// oder 2 bzw beide
@@ -840,14 +836,14 @@ public class Spiel implements iBediener, Serializable {
 										sprungCases[3] = true;
 										testSpieler.setSprungCases(sprungCases);
 										break;
-	
+
 									}
-	
+
 								}
-	
+
 							}
 							caseNumber++;
-	
+
 						}
 						if (testSpieler.getKannSpringen() == true) {
 							figurenListe.add(testSpieler);
@@ -861,15 +857,14 @@ public class Spiel implements iBediener, Serializable {
 					}
 				}
 			}
-	
+
 			if (spielerAktiv.getMussSpringen() == false) {
 				System.out.println("Spieler " + spielerAktiv.getName() + " Sie sind am Zug!");
-	
+
 			}
 		}
-	
-	}
 
+	}
 
 	// #############################################################################
 	// ENDE SPIELER MUSS SPRINGEN
@@ -1237,11 +1232,12 @@ public class Spiel implements iBediener, Serializable {
 		else
 			throw new RuntimeException("Gelesener Wert ist kein boolean!");
 	}
+
 	public String rewandler(int x, int y) {
 		Character a;
 		Integer b;
 
-		a = (char) ((char)x + 97);
+		a = (char) ((char) x + 97);
 		b = y + 1;
 
 		String c = a.toString();
