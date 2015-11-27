@@ -21,7 +21,8 @@ public class Spiel implements iBediener, Serializable {
 	private boolean warKi;
 	private boolean schlagTestZwei = false;
 	private ArrayList<Spielfigur> figurenListe;
-
+	private boolean wurdeBewegt;
+	
 	private Spieler winner;
 	private Spieler spielerA;
 	private Spieler spielerB;
@@ -121,42 +122,10 @@ public class Spiel implements iBediener, Serializable {
 		int b = brett.getKoordY();
 		brett.Umwandler(s2);
 		int c = brett.getKoordX();
-		int d = brett.getKoordY();
-
-		if (hatGeschlagen==false) {
-			if (figurenListe.size() == 1) {
-				System.out
-						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
-				figurenListe.get(0).getPosition().removeFigur();
-				figurenListe.clear();
-				
-				warKi = false;
-			} else if (!figurenListe.isEmpty()) {
-				if (warKi) {
-					System.out.println(
-							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
-					figurenListe.get(0).getPosition().removeFigur();
-					figurenListe.clear();
-					
-					warKi = false;
-				} else {
-					darfPusten = true;
-					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
-							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
-					
-				}
-				for (int f = 0; f < figurenListe.size() - 1; f++) {
-					figurenListe.get(f).setInListe(false);
-				}
-			}
-		}
-		figurenListe.clear();
-		hatGeschlagen = false;
-		this.spielerAktiv.setWirdSchlagen(false);
+		int d = brett.getKoordY();		
     
 		spielerMussSpringen();
-
-
+		this.setHatGeschlagen(false);
 		// �berpr�fe ob unsere �bergebenen Koordinaten in unserem Array-Feld
 		// enthalten sind
 		if (a < 0 | a > this.brettArray.length - 1) {
@@ -165,24 +134,6 @@ public class Spiel implements iBediener, Serializable {
 		if (b < 0 | b > this.brettArray.length - 1) {
 			throw new RuntimeException("Ihre Y Koordinate ist nicht in unserem Spielfeld!");
 		}
-
-		// Spieler spielerAktiv = null; //WAS SOLL DIESER SCHEISS?
-		// Spieler spielerGegner = null;
-		// FarbEnum farbeAktiv = null;
-		// FarbEnum farbeGegner = null;
-		// farbeAktiv = this.spielerAktiv.getFarbe();
-		// if (spielerA.getAktiv() == true) {
-		// spielerAktiv = spielerA;
-		// spielerGegner = spielerB;
-		// farbeAktiv = FarbEnum.schwarz;
-		// farbeGegner = FarbEnum.weiss;
-		// }
-		// if (spielerB.getAktiv() == true) {
-		// spielerAktiv = spielerB;
-		// spielerGegner = spielerA;
-		// farbeAktiv = FarbEnum.weiss;
-		// farbeGegner = FarbEnum.schwarz;
-		// }
 
 		// ------------------------------W�hle
 		// Spielfigur--------------------------
@@ -316,20 +267,14 @@ public class Spiel implements iBediener, Serializable {
 										while (aktiveSpielfigur.getKannSpringen() == true
 												&& this.spielerAktiv.getMussSpringen() == true
 												&& this.brettArray[koordX1][koordY1].getFigur() == null) {
-											// if
-											// (this.brettArray[koordX][koordY].getFigur()
-											// != null
-											// &&
-											// this.brettArray[koordX][koordY].getFigur()
-											// .getFarbe() == farbeGegner) {
-
+								
 											this.aktiveSpielfigur.getPosition().removeFigur();
 											this.brettArray[koordX][koordY].removeFigur();
 											this.brettArray[koordX1][koordY1].setFigur(aktiveSpielfigur);
 											aktiveSpielfigur.setPosition(this.brettArray[koordX1][koordY1]);
 											sound.schlagSound();
-											hatGeschlagen = true;
-
+											this.setHatGeschlagen(true);
+											this.setWurdeBewegt(true);
 											msg.printOk(this.spielerAktiv.getName() + " hat Sprung von " + this.rewandler(koordX, koordY) + " nach "
 													+ this.rewandler(koordX1, koordY1) + " ausgeführt.");
 
@@ -418,9 +363,8 @@ public class Spiel implements iBediener, Serializable {
 						// ZIEHEN!****************************************
 
 						// --------------------------------------ALLGEMEINESZIEHEN----------------------------
-
 						if (c == koordX && d == koordY && this.brettArray[c][d].getFigur() == null) {
-							if (aktiveSpielfigur != null && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
+							if (this.getHatGeschlagen() == false &&  aktiveSpielfigur != null && (aktiveSpielfigur.getFarbe() == FarbEnum.schwarz
 									&& d > aktiveSpielfigur.getPosition().getPosY())
 									| (aktiveSpielfigur.getFarbe() == FarbEnum.weiss
 											&& d < aktiveSpielfigur.getPosition().getPosY())) {
@@ -429,12 +373,13 @@ public class Spiel implements iBediener, Serializable {
 								aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 								this.brettArray[c][d].setFigur(aktiveSpielfigur);
 
-								hatGeschlagen = false;
+								
 								msg.printOk(
 										spielerAktiv.getName() + " hat Zug von " + s1 + " nach " + s2 + " ausgeführt.");
 								System.out.println("Zug vollendet!");
+								this.setWurdeBewegt(true);
 								sound.ziehSound();
-
+								this.setHatGeschlagen(false);
 							}
 							if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
 																									// von
@@ -479,6 +424,38 @@ public class Spiel implements iBediener, Serializable {
 			// e.printStackTrace();
 
 		}
+		
+		if (this.getHatGeschlagen() ==false && this.getWurdeBewegt() == true) {
+			if (figurenListe.size() == 1) {
+				System.out
+						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
+				figurenListe.get(0).getPosition().removeFigur();
+				figurenListe.clear();
+				
+				warKi = false;
+			} else if (!figurenListe.isEmpty()) {
+				if (warKi) {
+					System.out.println(
+							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
+					figurenListe.get(0).getPosition().removeFigur();
+					figurenListe.clear();
+					
+					warKi = false;
+				} else {
+					darfPusten = true;
+					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
+							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
+					
+				}
+				for (int f = 0; f < figurenListe.size() - 1; f++) {
+					figurenListe.get(f).setInListe(false);
+				}
+			}
+		}
+		
+		figurenListe.clear();
+		this.setHatGeschlagen(false);
+		this.setWurdeBewegt(false);
 
 	}
 
@@ -496,14 +473,17 @@ public class Spiel implements iBediener, Serializable {
 				this.brettArray[c][d].setFigur(aktiveSpielfigur);
 				aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 				aktiveSpielfigur = null;
-
+				sound.ziehSound();
 			}
 
 			// -----------------------------------Zielfeld hat gegnerische
 			// Spielfigur -------------------------------------------
 			else if (this.brettArray[c][d].getFigur() != null
 					&& this.brettArray[c][d].getFigur().getFarbe() != aktiveSpielfigur.getFarbe()) {
-
+				while(aktiveSpielfigur.getKannSpringen() == true
+						&& this.spielerAktiv.getMussSpringen() == true){
+					
+				
 				// Sprung nach oben
 				if (richtung > 0) {
 					if (c < (aktiveSpielfigur.getPosition().getPosX())) { // Sprung
@@ -516,7 +496,8 @@ public class Spiel implements iBediener, Serializable {
 						aktiveSpielfigur.getPosition().removeFigur();
 						this.brettArray[c - 1][d + 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d + 1]);
-						this.brettArray[c][d].removeFigur();				
+						this.brettArray[c][d].removeFigur();
+						aktiveSpielfigur = brettArray[c - 1][d + 1].getFigur();
 						
 					}
 
@@ -529,6 +510,7 @@ public class Spiel implements iBediener, Serializable {
 							this.brettArray[c + 1][d + 1].setFigur(aktiveSpielfigur);
 							aktiveSpielfigur.setPosition(this.brettArray[c + 1][d + 1]);
 							this.brettArray[c][d].removeFigur();
+							aktiveSpielfigur = brettArray[c + 1][d + 1].getFigur();
 						}
 					}
 				}
@@ -543,7 +525,7 @@ public class Spiel implements iBediener, Serializable {
 						this.brettArray[c - 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c - 1][d - 1]);
 						this.brettArray[c][d].removeFigur();				
-
+						aktiveSpielfigur = brettArray[c - 1][d - 1].getFigur();
 					}
 
 					else if (this.brettArray[c + 1][d - 1].getFigur() != null) {
@@ -554,12 +536,35 @@ public class Spiel implements iBediener, Serializable {
 						this.brettArray[c + 1][d - 1].setFigur(aktiveSpielfigur);
 						aktiveSpielfigur.setPosition(this.brettArray[c + 1][d - 1]);
 						this.brettArray[c][d].removeFigur();						
-
+						aktiveSpielfigur = brettArray[c + 1][d - 1].getFigur();
 					}
 
 				}
-			}
+				sound.schlagSound();
+				this.setHatGeschlagen(true);
+				this.setWurdeBewegt(true);
+				msg.printOk(this.spielerAktiv.getName() + " hat Sprung nach "
+						+ this.rewandler(c, d) + " ausgeführt.");
 
+				System.out.println(
+						"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
+				spielerAktiv.setMussSpringen(false);
+				aktiveSpielfigur.setKannSpringen(false);				
+				spielerMussSpringen();
+				if(aktiveSpielfigur.getKannSpringen() == true){
+					int[] zielfeld = aktiveSpielfigur.getZielfeld();
+					int x = zielfeld[0];
+					int y = zielfeld[1];
+					aktiveSpielfigur.getPosition().removeFigur();
+					this.brettArray[x + 1][y + 1].setFigur(aktiveSpielfigur);
+					aktiveSpielfigur.setPosition(this.brettArray[x + 1][y + 1]);
+					this.brettArray[x][y].removeFigur();						
+					aktiveSpielfigur = brettArray[x + 1][y + 1].getFigur();
+					
+				}
+				
+			}
+			}
 			
 		} else {
 			throw new RuntimeException("Nicht diagonal");
@@ -611,9 +616,6 @@ public class Spiel implements iBediener, Serializable {
 						+ " bewegen.");
 
 			}	
-			if(this.spielerAktiv.isWirdSchlagen()==true){
-				this.hatGeschlagen=true;
-			}
 			
 			bewegeSpielfigur(zug[0], zug[1]);
 		
@@ -784,6 +786,7 @@ public class Spiel implements iBediener, Serializable {
 								if (brettArray[coordX][coordY].getFigur().getFarbe() == farbeGegner
 										&& brettArray[(coordX + a)][(coordY + b)].getFigur() == null) {
 									testSpieler.setKannSpringen(true);
+									testSpieler.setZielfeld(coordX, coordY);
 									this.spielerAktiv.setMussSpringen(true);
 	
 									switch (caseNumber) { // Es kann entweder
@@ -901,6 +904,22 @@ public class Spiel implements iBediener, Serializable {
 
 	public Spieler getWinner() {
 		return this.winner;
+	}
+
+	public boolean getHatGeschlagen() {
+		return hatGeschlagen;
+	}
+
+	public void setHatGeschlagen(boolean hatGeschlagen) {
+		this.hatGeschlagen = hatGeschlagen;
+	}
+
+	public boolean getWurdeBewegt() {
+		return wurdeBewegt;
+	}
+
+	public void setWurdeBewegt(boolean wurdeBewegt) {
+		this.wurdeBewegt = wurdeBewegt;
 	}
 
 	public void isSpielende() {

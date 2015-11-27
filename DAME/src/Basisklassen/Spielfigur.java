@@ -10,6 +10,8 @@ public class Spielfigur implements Serializable{
 	private boolean inListe = false;
 	private boolean[] sprungCases;
 	private boolean[] ziehCases;
+	
+	private int[] zielfeld = new int[2];
 
 	/**
 	 * Konstruktor der Klasse Spielfigur. Setzt die Position und die Spielfigur
@@ -131,5 +133,15 @@ public class Spielfigur implements Serializable{
 	public void setInListe(boolean inListe){
 		this.inListe = inListe;
 	}
+
+	public int[] getZielfeld() {
+		return zielfeld;
+	}
+
+	public void setZielfeld(int x, int y) {
+		this.zielfeld[0] = x;
+		this.zielfeld[1] = y;
+	}
+
 
 }
