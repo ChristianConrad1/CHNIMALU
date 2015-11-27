@@ -474,15 +474,15 @@ public class Spiel implements iBediener, Serializable {
 				aktiveSpielfigur.setPosition(this.brettArray[c][d]);
 				aktiveSpielfigur = null;
 				sound.ziehSound();
+				this.setWurdeBewegt(true);
+				this.setHatGeschlagen(false);
 			}
 
 			// -----------------------------------Zielfeld hat gegnerische
 			// Spielfigur -------------------------------------------
 			else if (this.brettArray[c][d].getFigur() != null
 					&& this.brettArray[c][d].getFigur().getFarbe() != aktiveSpielfigur.getFarbe()) {
-				while(aktiveSpielfigur.getKannSpringen() == true
-						&& this.spielerAktiv.getMussSpringen() == true){
-					
+								
 				
 				// Sprung nach oben
 				if (richtung > 0) {
@@ -549,20 +549,47 @@ public class Spiel implements iBediener, Serializable {
 				System.out.println(
 						"Zug vollendet, muss allerdings nochmal springen wenn nochmal kann!");
 				spielerAktiv.setMussSpringen(false);
-				aktiveSpielfigur.setKannSpringen(false);				
+				aktiveSpielfigur.setKannSpringen(false);
 				spielerMussSpringen();
+				while(aktiveSpielfigur.getKannSpringen() == true
+						&& this.spielerAktiv.getMussSpringen() == true){
+					
 				if(aktiveSpielfigur.getKannSpringen() == true){
+					
 					int[] zielfeld = aktiveSpielfigur.getZielfeld();
 					int x = zielfeld[0];
 					int y = zielfeld[1];
 					aktiveSpielfigur.getPosition().removeFigur();
-					this.brettArray[x + 1][y + 1].setFigur(aktiveSpielfigur);
-					aktiveSpielfigur.setPosition(this.brettArray[x + 1][y + 1]);
-					this.brettArray[x][y].removeFigur();						
-					aktiveSpielfigur = brettArray[x + 1][y + 1].getFigur();
+					this.brettArray[x][y].removeFigur();
+					
+					if(x > aktiveSpielfigur.getPosition().getPosX() && y > aktiveSpielfigur.getPosition().getPosY()){
+						System.out.println("rechts oben");
+						this.brettArray[x + 1][y + 1].setFigur(aktiveSpielfigur);
+						aktiveSpielfigur.setPosition(this.brettArray[x + 1][y + 1]);						
+						aktiveSpielfigur = brettArray[x + 1][y + 1].getFigur();	
+					}
+					else if(x > aktiveSpielfigur.getPosition().getPosX() && y < aktiveSpielfigur.getPosition().getPosY()){
+						System.out.println("links oben");
+						this.brettArray[x + 1][y - 1].setFigur(aktiveSpielfigur);
+						aktiveSpielfigur.setPosition(this.brettArray[x + 1][y - 1]);						
+						aktiveSpielfigur = brettArray[x + 1][y - 1].getFigur();	
+					}
+					
+					else if(x < aktiveSpielfigur.getPosition().getPosX() && y >aktiveSpielfigur.getPosition().getPosY()){
+						System.out.println("rechts unten");
+						this.brettArray[x - 1][y + 1].setFigur(aktiveSpielfigur);
+						aktiveSpielfigur.setPosition(this.brettArray[x - 1][y + 1]);						
+						aktiveSpielfigur = brettArray[x - 1][y + 1].getFigur();	
+					}
+					else if(x < aktiveSpielfigur.getPosition().getPosX() && y < aktiveSpielfigur.getPosition().getPosY()){
+						System.out.println("links unten");
+						this.brettArray[x - 1][y - 1].setFigur(aktiveSpielfigur);
+						aktiveSpielfigur.setPosition(this.brettArray[x - 1][y - 1]);						
+						aktiveSpielfigur = brettArray[x - 1][y - 1].getFigur();	
+					}
 					
 				}
-				
+				spielerMussSpringen();
 			}
 			}
 			

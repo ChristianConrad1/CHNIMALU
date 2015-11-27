@@ -90,19 +90,19 @@ public EventHandler(SpielfeldMapped f){
 		if (e.getSource() == m.getNeues()) {
 			m.neuesSpielMenu();
 		}
-//		if (e.getSource() == m.getLaden()) {
-//			//Muss Fenster zur Dateiauswahl aufrufen, die einen Pfad angibt
-//			JFileChooser jfc = new JFileChooser("savegame");
-//			jfc.showOpenDialog(null);
-//			String pfad = jfc.getSelectedFile().getAbsolutePath();
-//			b.laden(pfad);
-//			
-////			m.dispose();
-////			g=new GUI();
-////			g.initNeuesSpiel("s", false, "ss", false);
-//
-//			
-//		}
+		if (e.getSource() == m.getLaden()) {
+			JFileChooser jfc = new JFileChooser("savegame");
+			jfc.showOpenDialog(null);
+			String pfad = jfc.getSelectedFile().getAbsolutePath();
+			g=new GUI();
+			g.initNeuesSpiel("s", false, "ss", false);
+			b = g.getIbediener(); 
+			b.laden(pfad);			
+			m.dispose();
+			
+
+			
+		}
 		if (e.getSource() == m.getEnde()) {
 			int yn = JOptionPane.showConfirmDialog(null, "Wollen Sie das Spiel beenden?", "Sicher?",
 					JOptionPane.YES_NO_OPTION);
