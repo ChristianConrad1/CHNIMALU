@@ -2,8 +2,10 @@ package GUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -45,6 +47,19 @@ public EventHandler(SpielfeldMapped f){
 				b.laden(pfad);
 			}
 			if (e.getSource() == g.getMenuItemSave()) {
+				//Mache Screenshot vom aktuellen Stand:
+				Screenshot s = new Screenshot(g.getBrettMapped());
+				BufferedImage img = s.makeScreenshot();
+
+				
+			    try {
+	                // write the image as a PNG
+	                ImageIO.write(img,"png",new File("savegame/screenshotDame.png"));
+	              } catch(Exception ex) {
+	                ex.printStackTrace();
+	              }
+				
+				//Übergebe Pfad für zu speichernde Datei:
 				JFileChooser jfc = new JFileChooser("savegame");
 				jfc.showSaveDialog(null);
 				String pfad = jfc.getSelectedFile().getAbsolutePath();

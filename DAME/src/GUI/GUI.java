@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Basisklassen.Spiel;
-import Basisklassen.Spieler;
 import Interfaces.iBediener;
 import Interfaces.iMessage;
 
@@ -330,6 +329,10 @@ public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 	ibediener.bewegeSpielfigur(s1, s2);
 	
 }
+public SpielbrettMapped getBrettMapped(){
+	return this.brettMapped;
+}
+
 @Override
 public void printError(String msg) {
 	JOptionPane.showMessageDialog(null, msg, "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -361,6 +364,7 @@ public void printPusten(String msg) {
 public void printSpielerAktiv(String msg) {
 	this.datenSpielerAktiv.setText(msg);	
 }
+
 
 @Override
 public void run() {

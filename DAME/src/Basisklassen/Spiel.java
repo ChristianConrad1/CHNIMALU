@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 import GUI.Sounds;
 import Interfaces.iBediener;
 import Interfaces.iDatenzugriff;
 import Interfaces.iMessage;
 import SpeichernLaden.DatenzugriffCSV;
+import SpeichernLaden.DatenzugriffPDF;
 import SpeichernLaden.DatenzugriffSerialisiert;
 
 public class Spiel implements iBediener, Serializable {
@@ -1030,7 +1029,8 @@ public class Spiel implements iBediener, Serializable {
 			idz.save(this.toCSV());
 			break;
 		case "pdf":
-			break;
+			idz = new DatenzugriffPDF();
+			idz.save(this);
 		default:
 			throw new RuntimeException("Filetype not supported");
 		}

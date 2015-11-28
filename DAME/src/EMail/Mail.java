@@ -87,7 +87,7 @@ public class Mail extends Thread {
 					//1. Teil ist die Nachricht
 					MimeBodyPart bodyNachricht = new MimeBodyPart();
 					bodyNachricht.setText(p.getProperty("text"));
-					Multipart body = new MimeMultipart();
+					Multipart body = new MimeMultipart(); //Multipart is a container that holds multiple body parts. Multipart provides methods to retrieve and set its subparts.
 					body.addBodyPart(bodyNachricht);
 					//2. Teil sind Anhänge
 					for(int i=1; i<=2; i++){
