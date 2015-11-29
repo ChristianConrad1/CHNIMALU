@@ -848,10 +848,12 @@ public class Spiel implements iBediener, Serializable {
 
 						}
 						if (testSpieler.getKannSpringen() == true) {
+							if(!this.spielerAktiv.isKI()){
 							figurenListe.add(testSpieler);
 							testSpieler.setInListe(true);
 							System.out.println("Spielfigur mit ID: " + testSpieler.getPosition().getID().toUpperCase()
 									+ " wird zur Liste hinzugefügt.");
+							}
 							warKi = false;
 							if (spielerAktiv.isKI())
 								warKi = true;
