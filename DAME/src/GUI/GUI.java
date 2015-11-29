@@ -43,6 +43,8 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	private  JMenuItem menuItemStart;
 	private  JMenuItem menuItemSave;
 	private  JMenuItem menuItemLoad;
+
+	private  JMenuItem sendMail;
 	
 	private JTextField eingabe;
 	private JButton bSubmit;
@@ -204,15 +206,18 @@ public void addMenuBar(){ //Hier werden alle Buttons etc fuer das Menu hinzugefu
 	menuItemStart = new JMenuItem("Neues Spiel starten");
 	menuItemSave = new JMenuItem("Spiel speichern");
 	menuItemLoad = new JMenuItem("Spiel laden");
+	sendMail = new JMenuItem("Sende Email");
 	
 	
 	menuGame.add(menuItemStart);
 	menuGame.add(menuItemSave);
 	menuGame.add(menuItemLoad);
+	menuGame.add(sendMail);
 	
 	menuItemStart.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
 	menuItemSave.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
 	menuItemLoad.addActionListener(eh);	//Fuege fuer alle Menupunkte die etwas ausfuehren/aufrufen einen Action-Listener ein
+	sendMail.addActionListener(eh);
 	
 	menuBar.add(menuGame);
 	this.setJMenuBar(menuBar);
@@ -323,6 +328,9 @@ public JMenuItem getMenuItemSave() {
 }
 public JMenuItem getMenuItemLoad() {
 	return menuItemLoad;
+}
+public JMenuItem getSendMail() {
+	return sendMail;
 }
 public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 	String s1=eingabe; String s2=ausgabe;

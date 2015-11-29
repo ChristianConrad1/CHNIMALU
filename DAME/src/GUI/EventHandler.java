@@ -36,6 +36,10 @@ public EventHandler(SpielfeldMapped f){
 		System.out.println("Kennen sich �berhaupt...");
 		if (g != null) {
 			
+			if(e.getSource() == g.getSendMail()){
+				b.mail();
+			}
+			
 			if (e.getSource() == g.getMenuItemStart()) {
 				
 				g.dispose();

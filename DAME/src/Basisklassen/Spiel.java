@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import EMail.Mail;
 import GUI.Sounds;
 import Interfaces.iBediener;
 import Interfaces.iDatenzugriff;
@@ -1074,9 +1075,8 @@ public class Spiel implements iBediener, Serializable {
 	}
 
 	@Override
-	public void mail() {
-		// TODO Auto-generated method stub
-
+	public void mail() { //Sendet Email mit PDF als Anhang! -> Sollte Fehler werfen wenn keine PDF vorhanden
+		Mail m = new Mail("ZeebNiki@Googlemail.com", "test JAVAEMAIL", "INHALT", "savegame/Dame.pdf", "Dame.pdf", null, null);
 	}
 
 	@Override
