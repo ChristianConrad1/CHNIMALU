@@ -31,7 +31,7 @@ public class Mail extends Thread {
 		}
 		 @Override
 		public PasswordAuthentication getPasswordAuthentication(){
-			 //String to Chararray umgeändert(?)
+			 //String to Chararray umgeï¿½ndert(?)
 			return new PasswordAuthentication(user, password);
 		}
 	}
@@ -77,7 +77,7 @@ public class Mail extends Thread {
 	@Override
 	public void run(){
 		try{
-			System.out.println("Start Mailing an"+p.getProperty("an"));
+			System.out.println("Starte Mailing an "+p.getProperty("an"));
 			MailAuthenticator auth=new MailAuthenticator();
 			Session session = Session.getDefaultInstance(p, auth);
 			Message msg=new MimeMessage(session);
@@ -89,7 +89,7 @@ public class Mail extends Thread {
 					bodyNachricht.setText(p.getProperty("text"));
 					Multipart body = new MimeMultipart(); //Multipart is a container that holds multiple body parts. Multipart provides methods to retrieve and set its subparts.
 					body.addBodyPart(bodyNachricht);
-					//2. Teil sind Anhänge
+					//2. Teil sind Anhï¿½nge
 					for(int i=1; i<=2; i++){
 						if((!p.getProperty("anhangPfad"+i).equals(""))&&(!p.getProperty("anhangName"+i).equals(""))){
 							MimeBodyPart bodyAnhang = new MimeBodyPart();

@@ -18,8 +18,10 @@ public class DatenzugriffPDF implements iDatenzugriff{
 	@Override
 	public void save(Object o) {
 		
-		this.s=s; //Könnte wichtig sein, um weitere Informationen in die PDF zu schreiben, bisher noch nicht benutzt
-		
+		if(o instanceof Spiel){
+		this.s = (Spiel) o; //Kï¿½nnte wichtig sein, um weitere Informationen in die PDF zu schreiben, bisher noch nicht benutzt
+		}
+		else throw new RuntimeException("Gespeichertes Objekt ist kein Spiel");
 		try{
 		Document document = new Document();
 		Image img=null;
@@ -29,7 +31,19 @@ public class DatenzugriffPDF implements iDatenzugriff{
 		PdfWriter.getInstance(document, new FileOutputStream("savegame/Dame.pdf"));
 		document.open();
 		document.add(img);
-		document.add(new Paragraph("TEXT!"));
+		if(s.getSpielerA().isKI()){
+			document.add(new Paragraph("Spieler 1 mit dem Namen: "+s.getSpielerA().getName()+" ist eine KI"));
+		}
+		else{
+			document.add(new Paragraph("Spieler 1 mit dem Namen: "+s.getSpielerA().getName()));
+		}
+		if(s.getSpielerB().isKI()){
+			document.add(new Paragraph("Spieler 2 mit dem Namen: "+s.getSpielerB().getName()+" ist eine KI"));
+		}
+		else{
+			document.add(new Paragraph("Spieler 2 mit dem Namen: "+s.getSpielerB().getName()));
+		}
+		document.add(new Paragraph("Aktiver Spieler: "+s.getSpielerAktiv().getName()));
 		document.close();
 		}
 		catch(Exception e){

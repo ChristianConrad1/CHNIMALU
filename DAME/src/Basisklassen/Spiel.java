@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import EMail.Mail;
 import GUI.Sounds;
 import Interfaces.iBediener;
@@ -1019,7 +1021,6 @@ public class Spiel implements iBediener, Serializable {
 		System.out.println(pfad);
 		String[] args = pfad.split("\\.");
 		String typ = args[args.length - 1].toLowerCase();
-
 		switch (typ) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
@@ -1032,6 +1033,7 @@ public class Spiel implements iBediener, Serializable {
 		case "pdf":
 			idz = new DatenzugriffPDF();
 			idz.save(this);
+			break;
 		default:
 			throw new RuntimeException("Filetype not supported");
 		}
@@ -1076,7 +1078,9 @@ public class Spiel implements iBediener, Serializable {
 
 	@Override
 	public void mail() { //Sendet Email mit PDF als Anhang! -> Sollte Fehler werfen wenn keine PDF vorhanden
-		Mail m = new Mail("ZeebNiki@Googlemail.com", "test JAVAEMAIL", "INHALT", "savegame/Dame.pdf", "Dame.pdf", null, null);
+		this.speichern("savegame/Dame.pdf");
+		String empf = JOptionPane.showInputDialog(null,"Bitte geben Sie die E-Mail-Adresse des Empfängers ein.", "Empfänger E-Mail eingeben", JOptionPane.QUESTION_MESSAGE);
+		Mail m = new Mail(empf, "Aktuelle Spielbelegung", "Guten Tag,\n\ndiese E-Mail enthält eine PDF mit der aktuellen Spielbrettbelegung und anderen essentiellen Infos des Spiels.\n\nMit freundlichen Grüßen\n\nGruppe A3\n\n", "savegame/Dame.pdf", "Dame.pdf", null, null);
 	}
 
 	@Override

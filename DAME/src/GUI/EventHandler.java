@@ -10,7 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import Interfaces.iBediener;
-
+import java.util.regex.Pattern;
 public class EventHandler implements ActionListener{
 	private static GUI g; //Ich weiÃŸ nicht ob das so passt, aber mir fiel nix anderes ein....
 	private Menu m;
@@ -37,6 +37,17 @@ public EventHandler(SpielfeldMapped f){
 		if (g != null) {
 			
 			if(e.getSource() == g.getSendMail()){
+				//Mache Screenshot vom aktuellen Stand:
+				Screenshot s = new Screenshot(g.getBrettMapped());
+				BufferedImage img = s.makeScreenshot();
+
+				
+			    try {
+	                // write the image as a PNG
+	                ImageIO.write(img,"png",new File("savegame/screenshotDame.png"));
+	              } catch(Exception ex) {
+	                ex.printStackTrace();
+	              }
 				b.mail();
 			}
 			
@@ -51,19 +62,9 @@ public EventHandler(SpielfeldMapped f){
 				b.laden(pfad);
 			}
 			if (e.getSource() == g.getMenuItemSave()) {
-				//Mache Screenshot vom aktuellen Stand:
-				Screenshot s = new Screenshot(g.getBrettMapped());
-				BufferedImage img = s.makeScreenshot();
 
 				
-			    try {
-	                // write the image as a PNG
-	                ImageIO.write(img,"png",new File("savegame/screenshotDame.png"));
-	              } catch(Exception ex) {
-	                ex.printStackTrace();
-	              }
-				
-				//Übergebe Pfad für zu speichernde Datei:
+				//ï¿½bergebe Pfad fï¿½r zu speichernde Datei:
 				JFileChooser jfc = new JFileChooser("savegame");
 				jfc.showSaveDialog(null);
 				String pfad = jfc.getSelectedFile().getAbsolutePath();
@@ -74,15 +75,19 @@ public EventHandler(SpielfeldMapped f){
 			if(e.getSource() == g.getbSubmit()){
 				//HIER MUSS WAS REIN
 				String s=g.getEingabe().getText();	//Unser String mit Strich Notation z.B. a4-b5
-				System.out.println(s);
+				if(s.matches("\\p{Lower}\\d-\\p{Lower}\\d")){
 				int split=s.indexOf('-');
-				
+	
 				String eingabe = s.substring(0,split);
 				String ausgabe = s.substring(split+1);
 				
 				System.out.println(eingabe +" ausgabe:"+ ausgabe);
 				
 				b.bewegeSpielfigur(eingabe, ausgabe);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Eingabe entspricht nicht den vorgaben!");
+				}
 			}
 		}
 		
