@@ -445,8 +445,39 @@ public class Spiel implements iBediener, Serializable {
 		int richtung = d - aktiveSpielfigur.getPosition().getPosY();
 		int abstandx = Math.abs(c - aktiveSpielfigur.getPosition().getPosX());
 		int abstandy = Math.abs(d - aktiveSpielfigur.getPosition().getPosY());
+		try{
 		if (abstandx == abstandy) { // Figur darf nur diagonal laufen
-
+			
+			if(c > aktiveSpielfigur.getPosition().getPosX() && d > aktiveSpielfigur.getPosition().getPosY()) {
+				for(int i = 1; i < abstandx; i++){
+					System.out.println(i);
+					if (this.brettArray[aktiveSpielfigur.getPosition().getPosX() + i][aktiveSpielfigur.getPosition().getPosY() + i].getHatFigur() == true){
+						throw new RuntimeException("bla 1");
+					}
+				}
+			}
+			if(c < aktiveSpielfigur.getPosition().getPosX() && d > aktiveSpielfigur.getPosition().getPosY()) {
+				for(int i = 1; i < abstandx; i++){
+					if (this.brettArray[aktiveSpielfigur.getPosition().getPosX() - i][aktiveSpielfigur.getPosition().getPosY() + i].getHatFigur() == true){
+						throw new RuntimeException("bla 2");
+					}
+				}
+			}
+			if(c > aktiveSpielfigur.getPosition().getPosX() && d < aktiveSpielfigur.getPosition().getPosY()) {
+				for(int i = 1; i < abstandx; i++){
+					if (this.brettArray[aktiveSpielfigur.getPosition().getPosX() + i][aktiveSpielfigur.getPosition().getPosY() - i].getHatFigur() == true){
+						throw new RuntimeException("bla 3");
+					}
+				}
+			}
+			if(c < aktiveSpielfigur.getPosition().getPosX() && d < aktiveSpielfigur.getPosition().getPosY()) {
+				for(int i = 1; i < abstandx; i++){
+					if (this.brettArray[aktiveSpielfigur.getPosition().getPosX() - i][aktiveSpielfigur.getPosition().getPosY() - i].getHatFigur() == true){
+						throw new RuntimeException("bla 4");
+					}
+				}
+			}
+		
 			if (this.brettArray[c][d].getFigur() == null) { // nur Bewegen
 
 				aktiveSpielfigur.getPosition().removeFigur();
@@ -457,7 +488,7 @@ public class Spiel implements iBediener, Serializable {
 				this.setWurdeBewegt(true);
 				this.setHatGeschlagen(false);
 			}
-
+			
 			// -----------------------------------Zielfeld hat gegnerische
 			// Spielfigur -------------------------------------------
 			else if (this.brettArray[c][d].getFigur() != null
@@ -577,10 +608,15 @@ public class Spiel implements iBediener, Serializable {
 
 		// Pruefen ob beide Spieler noch Spielfiguren haben---------------
 		// -------------------------------------------------------
-		pustenCheck();
 		aktiveSpielfigur = null;
 		System.out.println("Zug vollendet");
 		spielerWechsel();
+	}
+		catch(Exception e){
+			msg.printError(e.getMessage());
+		}
+		
+		pustenCheck();
 		isSpielende();
 		
 	}
