@@ -589,7 +589,7 @@ public class Spiel implements iBediener, Serializable {
 	// #########################################
 
 	public void spielerWechsel() {
-
+		pustenCheck();
 		if (spielerA.getAktiv() == true) {
 			spielerA.setAktiv(false);
 			spielerB.setAktiv(true);
@@ -610,9 +610,14 @@ public class Spiel implements iBediener, Serializable {
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
-		if (spielerAktiv.isKI()) {
-			spielerMussSpringen();
+		if (spielerAktiv.isKI()) { // spielerAktiv ist KI wenn ich gerade am Zug war und meinen Zug verkackt habe
+			spielerMussSpringen(); //Hier müsste ich ja dann eigentlich zuürkc bekommen ob gepustet werden kann?
+			//pustenCheck();
+			//Müsste hier pusten, dann weiter machen?
+			
+			
 			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
+		
 			System.out.println(
 					"KI die Zug durchfÃ¼hren wird, gehÃ¶rt dem Spieler: " + spielerAktiv.getKi().spieler.getName());
 			if (spielerA.isKI() && spielerB.isKI()) { // ZugbestÃ¤tigungen bei
@@ -631,7 +636,9 @@ public class Spiel implements iBediener, Serializable {
 
 	private void pustenCheck() {
 		if (this.getHatGeschlagen() == false && this.getWurdeBewegt() == true) {
+			System.out.println("Ist hier rein gogoingt");
 			if (figurenListe.size() == 1) {
+				System.out.println("Ist hier rein gogoingt YOYOYO");
 				System.out
 						.println("Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
 				figurenListe.get(0).getPosition().removeFigur();
@@ -639,14 +646,14 @@ public class Spiel implements iBediener, Serializable {
 
 				warKi = false;
 			} else if (!figurenListe.isEmpty()) {
-				if (warKi) {
+				if (warKi) {// Doppelt Springen -> bei KI wird der erste Stein gelöscht
 					System.out.println(
 							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
 					figurenListe.get(0).getPosition().removeFigur();
 					figurenListe.clear();
 
 					warKi = false;
-				} else {
+				} else { //Der Spieler darf hingegen auswählen, welcher Stein entfernt wird
 					darfPusten = true;
 					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere SchlagmÃ¶glichkeiten!"
 							+ "\nWÃ¤hlen Sie einen Stein des Gegners, der entfernt werden soll.");
@@ -847,8 +854,9 @@ public class Spiel implements iBediener, Serializable {
 							caseNumber++;
 
 						}
+						System.out.println("testSpieler kann springen: "+ testSpieler.getKannSpringen());
 						if (testSpieler.getKannSpringen() == true) {
-							if(!this.spielerAktiv.isKI()){
+							if(spielerA.isKI()==false | spielerB.isKI()==false){
 							figurenListe.add(testSpieler);
 							testSpieler.setInListe(true);
 							System.out.println("Spielfigur mit ID: " + testSpieler.getPosition().getID().toUpperCase()
@@ -856,8 +864,14 @@ public class Spiel implements iBediener, Serializable {
 							}
 							warKi = false;
 							if (spielerAktiv.isKI())
+						
 								warKi = true;
+								System.out.println("der BOI ist in der LISTE");
 						}
+						for(Spielfigur list: figurenListe){
+							System.out.println("Boi in da list: "+list);
+						}
+					
 					}
 				}
 			}
