@@ -349,8 +349,9 @@ public class Spiel implements iBediener, Serializable {
 											}
 											
 											System.out.println("Sprung vollendet.");
+											
 										}
-
+										this.spielerWechsel();
 									}
 									if ((aktiveSpielfigur.getPosition().getPosY() == 11 // ge�ndert
 											// von
@@ -687,7 +688,7 @@ public class Spiel implements iBediener, Serializable {
 					warKi = false;
 				} else { //Der Spieler darf hingegen ausw�hlen, welcher Stein entfernt wird
 					darfPusten = true;
-					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
+					msg.printPusten("Der " + this.spielerAktiv.getFarbe() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
 							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
 
 				}
@@ -931,37 +932,6 @@ public class Spiel implements iBediener, Serializable {
 	public Spieler getSpielerB() {
 		return spielerB;
 	}
-
-	// public void setSpielerA(Spieler spielerA) {
-	// if (spielerA != null) {
-	// this.spielerA = spielerA;
-	// } else
-	// throw new NullPointerException("SpielerA ist NULL!");
-	// }
-	//
-	// public void setSpielerB(Spieler spielerB) {
-	// if (spielerB != null) {
-	// this.spielerB = spielerB;
-	// } else
-	// throw new NullPointerException("SpielerB ist NULL!");
-	// }
-
-	// public void setSpielerAktiv(Spieler spielerAktiv) {
-	// if (spielerAktiv != null) {
-	// this.spielerAktiv = spielerAktiv;
-	// // this.farbeAktiv = spielerAktiv.getFarbe();
-	// if (spielerAktiv.getFarbe() == FarbEnum.schwarz) {
-	// this.spielerA.setAktiv(true);
-	// this.spielerB.setAktiv(false);
-	// } else if (spielerAktiv.getFarbe() == FarbEnum.weiss) {
-	// this.spielerB.setAktiv(true);
-	// this.spielerA.setAktiv(false);
-	// }
-	// System.out.println("SpielerAktiv:" + farbeAktiv);
-	// } else
-	// throw new NullPointerException("SpielerAktiv ist NULL!");
-	// }
-
 	public Spieler getSpielerAktiv() {
 		return spielerAktiv;
 	}
@@ -1033,9 +1003,10 @@ public class Spiel implements iBediener, Serializable {
 					}
 				}
 			}
-			if (spzeGesetzt && brettArray[spalte][zeile].getFigur().getFarbe() != spielerAktiv.getFarbe()
+			if (spzeGesetzt && brettArray[spalte][zeile].getFigur().getFarbe() == spielerAktiv.getFarbe()
 					&& figurenListe.contains(brettArray[spalte][zeile].getFigur())) {
 				brettArray[spalte][zeile].removeFigur();
+				this.figurenListe.clear();
 			} else {
 				throw new RuntimeException("Gewählte Figur kann nicht entfernt werden!");
 			}
