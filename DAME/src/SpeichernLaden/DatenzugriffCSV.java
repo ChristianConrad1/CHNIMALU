@@ -28,10 +28,10 @@ public class DatenzugriffCSV implements iDatenzugriff{
 	
 
 	@Override
-	public void save(Object o) {
+	public void save(Object o, String pfad) {
 	
 		try {
-			pw = new PrintWriter(new FileWriter("savegame/save.csv"));
+			pw = new PrintWriter(new FileWriter(pfad));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

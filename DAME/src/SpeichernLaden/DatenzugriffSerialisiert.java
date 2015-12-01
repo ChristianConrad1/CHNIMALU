@@ -18,9 +18,9 @@ public class DatenzugriffSerialisiert implements iDatenzugriff{
 	}
 
 	@Override
-	public void save(Object o) {
+	public void save(Object o, String pfad) {
 		try{
-			oos = new ObjectOutputStream(new FileOutputStream("savegame/save.ser"));
+			oos = new ObjectOutputStream(new FileOutputStream(pfad));
 			System.out.println("Datei angelegt");
 		}
 		catch(Exception e){

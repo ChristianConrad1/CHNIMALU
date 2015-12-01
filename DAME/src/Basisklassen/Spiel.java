@@ -1043,15 +1043,15 @@ public class Spiel implements iBediener, Serializable {
 		switch (typ) {
 		case "ser":
 			idz = new DatenzugriffSerialisiert();
-			idz.save(this);
+			idz.save(this, pfad);
 			break;
 		case "csv":
 			idz = new DatenzugriffCSV();
-			idz.save(this.toCSV());
+			idz.save(this.toCSV(), pfad);
 			break;
 		case "pdf":
 			idz = new DatenzugriffPDF();
-			idz.save(this);
+			idz.save(this, pfad);
 			break;
 		default:
 			throw new RuntimeException("Filetype not supported");

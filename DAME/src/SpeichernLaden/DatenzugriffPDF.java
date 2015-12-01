@@ -16,7 +16,7 @@ public class DatenzugriffPDF implements iDatenzugriff{
 	
 
 	@Override
-	public void save(Object o) {
+	public void save(Object o, String pfad) {
 		
 		if(o instanceof Spiel){
 		this.s = (Spiel) o; //K�nnte wichtig sein, um weitere Informationen in die PDF zu schreiben, bisher noch nicht benutzt
@@ -28,7 +28,7 @@ public class DatenzugriffPDF implements iDatenzugriff{
 		img = Image.getInstance("savegame/screenshotDame.png");
 		img.scaleToFit(400, 400);
 		
-		PdfWriter.getInstance(document, new FileOutputStream("savegame/Dame.pdf"));
+		PdfWriter.getInstance(document, new FileOutputStream(pfad));
 		document.open();
 		document.add(img);
 		if(s.getSpielerA().isKI()){
