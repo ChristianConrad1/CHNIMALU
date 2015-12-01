@@ -53,6 +53,7 @@ public class Spiel implements iBediener, Serializable {
 		sound = new Sounds();
 
 		figurenListe = new ArrayList<Spielfigur>();
+		DamenMaker();
 	}
 
 	public void setAlleFiguren() {
@@ -104,7 +105,7 @@ public class Spiel implements iBediener, Serializable {
 			}
 			// -----------------------------------------------------------------------------------
 		}
-
+		
 	}
 
 	/**
@@ -1277,5 +1278,11 @@ public class Spiel implements iBediener, Serializable {
 		String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
 		return zug;
 	}
-
+	public void DamenMaker(){
+		
+//		this.brettArray[1][3].getFigur().setDame();
+//		this.brettArray[3][3].getFigur().setDame();
+//		this.brettArray[0][8].getFigur().setDame();
+//		this.brettArray[2][8].getFigur().setDame();
+	}
 }
