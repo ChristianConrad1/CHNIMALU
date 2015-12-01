@@ -613,7 +613,7 @@ public class Spiel implements iBediener, Serializable {
 		spielerWechsel();
 	}
 		catch(Exception e){
-			msg.printError(e.getMessage());
+			msg.printError("Ungueltiger Spielzug!");
 		}
 		
 		pustenCheck();
@@ -647,9 +647,9 @@ public class Spiel implements iBediener, Serializable {
 		msg.printSpielerAktiv("Spieler mit der Farbe >>" + spielerAktiv.getFarbe().toString() + "<< und dem Namen >>"
 				+ spielerAktiv.getName() + "<< ist aktiv.");
 		if (spielerAktiv.isKI()) { // spielerAktiv ist KI wenn ich gerade am Zug war und meinen Zug verkackt habe
-			spielerMussSpringen(); //Hier m�sste ich ja dann eigentlich zu�rkc bekommen ob gepustet werden kann?
+			spielerMussSpringen(); //Hier m�sste ich ja dann eigentlich zu�rkc bekommen ob gepustet werden kann?
 			//pustenCheck();
-			//M�sste hier pusten, dann weiter machen?
+			//M�sste hier pusten, dann weiter machen?
 			
 			
 			String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
@@ -657,14 +657,10 @@ public class Spiel implements iBediener, Serializable {
 			System.out.println(
 					"KI die Zug durchführen wird, gehört dem Spieler: " + spielerAktiv.getKi().spieler.getName());
 			if (spielerA.isKI() && spielerB.isKI()) { // Zugbestätigungen bei
-														// Ki
-														// nur, wenn Ki gegen Ki
-				msg.printOkWindow("KI mit der Farbe -" + spielerAktiv.getFarbe().toString().toUpperCase()
-						+ "-\nmoechte die Spielfigur von " + zug[0].toUpperCase() + " nach " + zug[1].toUpperCase()
-						+ " bewegen.");
+														// Ki										// nur, wenn Ki gegen Ki
+				return;
 
 			}
-
 			bewegeSpielfigur(zug[0], zug[1]);
 
 		}
@@ -682,14 +678,14 @@ public class Spiel implements iBediener, Serializable {
 
 				warKi = false;
 			} else if (!figurenListe.isEmpty()) {
-				if (warKi) {// Doppelt Springen -> bei KI wird der erste Stein gel�scht
+				if (warKi) {// Doppelt Springen -> bei KI wird der erste Stein gel�scht
 					System.out.println(
 							"Spielfigur mit ID: " + figurenListe.get(0).getPosition().getID() + " wird ENTFERNT!");
 					figurenListe.get(0).getPosition().removeFigur();
 					figurenListe.clear();
 
 					warKi = false;
-				} else { //Der Spieler darf hingegen ausw�hlen, welcher Stein entfernt wird
+				} else { //Der Spieler darf hingegen ausw�hlen, welcher Stein entfernt wird
 					darfPusten = true;
 					msg.printPusten("Der " + farbeGegner.toString() + "e Spieler hatte mehrere Schlagmöglichkeiten!"
 							+ "\nWählen Sie einen Stein des Gegners, der entfernt werden soll.");
@@ -1014,10 +1010,10 @@ public class Spiel implements iBediener, Serializable {
 		}
 		if (schwarz == 0) {
 			this.winner = spielerB;
-			this.spielende = true;
+			msg.printOkWindow("Der weisse Spieler mit dem Namen "+spielerB.getName()+"hat gewonnen!");
 		} else if (weiss == 0) {
 			this.winner = spielerA;
-			this.spielende = true;
+			msg.printOkWindow("Der schwarze Spieler mit dem Namen "+spielerA.getName()+" hat gewonnen!");
 		}
 
 	}
@@ -1129,10 +1125,12 @@ public class Spiel implements iBediener, Serializable {
 	}
 
 	@Override
-	public void mail() { //Sendet Email mit PDF als Anhang! -> Sollte Fehler werfen wenn keine PDF vorhanden
+	public void mail(String pfad) { //Sendet Email mit PDF als Anhang! -> Sollte Fehler werfen wenn keine PDF vorhanden
 		this.speichern("savegame/Dame.pdf");
 		String empf = JOptionPane.showInputDialog(null,"Bitte geben Sie die E-Mail-Adresse des Empfängers ein.", "Empfänger E-Mail eingeben", JOptionPane.QUESTION_MESSAGE);
-		Mail m = new Mail(empf, "Aktuelle Spielbelegung", "Guten Tag,\n\ndiese E-Mail enthält eine PDF mit der aktuellen Spielbrettbelegung und anderen essentiellen Infos des Spiels.\n\nMit freundlichen Grüßen\n\nGruppe A3\n\n", "savegame/Dame.pdf", "Dame.pdf", null, null);
+		String splitter[] = pfad.split("/");
+		String dateiname = splitter[splitter.length-1];
+		Mail m = new Mail(empf, "Aktuelle Spielbelegung", "Guten Tag,\n\ndiese E-Mail enthält eine PDF oder ein Savegame mit der aktuellen Spielbrettbelegung und anderen essentiellen Infos des Spiels.\n\nMit freundlichen Grüßen\n\nGruppe A3\n\n",pfad, dateiname, null, null);
 	}
 
 	@Override
@@ -1231,7 +1229,7 @@ public class Spiel implements iBediener, Serializable {
 				Spieler spielerC = new Spieler("spielerA", null);
 
 				spielerC.setFarbe(this.toFarbEnum(irgendwas[x++]));
-				spielerC.setName(irgendwas[++x]);
+				spielerC.setName(irgendwas[x++]);
 				spielerC.setMussSpringen(toBoolean(irgendwas[x++]));
 				if (toBoolean(irgendwas[x++]) == true) {
 					KI ki = new KI_Dame(spielerC);
@@ -1246,7 +1244,7 @@ public class Spiel implements iBediener, Serializable {
 				Spieler spielerD = new Spieler("spielerB", null);
 
 				spielerD.setFarbe(this.toFarbEnum(irgendwas[x++]));
-				spielerD.setName(irgendwas[++x]);
+				spielerD.setName(irgendwas[x++]);
 				spielerD.setMussSpringen(toBoolean(irgendwas[x++]));
 				if (toBoolean(irgendwas[x++]) == true) {
 					KI ki = new KI_Dame(spielerD);
@@ -1301,6 +1299,12 @@ public class Spiel implements iBediener, Serializable {
 
 		String s = c + d;
 		return s;
+	}
+
+	@Override
+	public String[] kiZug() {
+		String[] zug = spielerAktiv.getKi().wasMacheIch(brett);
+		return zug;
 	}
 
 }

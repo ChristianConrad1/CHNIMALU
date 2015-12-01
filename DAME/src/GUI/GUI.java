@@ -48,6 +48,7 @@ public class GUI extends JFrame implements iMessage, Runnable{
 	
 	private JTextField eingabe;
 	private JButton bSubmit;
+	private JButton bKi;
 	
 	private JScrollPane jsp;
 	private JTextArea jta;
@@ -249,6 +250,8 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	
 	bSubmit = new JButton("Zug durchführen");
 	bSubmit.addActionListener(eh);
+	bKi = new JButton("KI Zug bestätigen");
+	bKi.addActionListener(eh);
 	datenSpielerAktiv = new JLabel();
 	datenSpielerAktiv.setHorizontalAlignment(SwingConstants.CENTER);
 	datenSpielerAktiv.setBackground(Color.CYAN);
@@ -263,8 +266,9 @@ public void setupLayout(){	//Hier wird das Layout angepasst. Das ist der Kern un
 	eastPanel.add(ueberschrift);
 	eastPanel.add(eingabe);	
 	eastPanel.add(bSubmit);
+	eastPanel.add(bKi);
 	eastPanel.setPreferredSize(new Dimension(200, 975));
-	eastPanel.setLayout(new GridLayout(3,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
+	eastPanel.setLayout(new GridLayout(4,1)); //Gebe dem jeweiligen Panel ein dafuer sinnvolles Layout (je nachdem ,wie wir das realisieren)
 	
 	northPanel.setLayout(new GridLayout(1,1));
 	northPanel.add(datenSpielerAktiv);
@@ -332,6 +336,10 @@ public JMenuItem getMenuItemLoad() {
 public JMenuItem getSendMail() {
 	return sendMail;
 }
+public JButton getbKi() {
+	return bKi;
+}
+
 public  void bewegeSpielfigur(String eingabe, String ausgabe) {
 	String s1=eingabe; String s2=ausgabe;
 	ibediener.bewegeSpielfigur(s1, s2);

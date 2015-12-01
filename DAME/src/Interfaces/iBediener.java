@@ -9,7 +9,8 @@ public interface iBediener {
 	public void speichern(String pfad);
 	public void laden(String pfad);
 	public void neuesSpiel();
-	public void mail();
+	public void mail(String pfad);
 	public void init(Object view);
+	public String[] kiZug();
 	
 }

@@ -48,7 +48,10 @@ public EventHandler(SpielfeldMapped f){
 	              } catch(Exception ex) {
 	                ex.printStackTrace();
 	              }
-				b.mail();
+			    JFileChooser jfc = new JFileChooser("savegame");
+				jfc.showOpenDialog(null);
+				
+				b.mail(jfc.getSelectedFile().getAbsolutePath());
 			}
 			
 			if (e.getSource() == g.getMenuItemStart()) {
@@ -88,6 +91,10 @@ public EventHandler(SpielfeldMapped f){
 				else{
 					JOptionPane.showMessageDialog(null, "Eingabe entspricht nicht den vorgaben!");
 				}
+			}
+			if(e.getSource() == g.getbKi()){
+			String[] zug = b.kiZug();
+			b.bewegeSpielfigur(zug[0], zug[1]);
 			}
 		}
 		
